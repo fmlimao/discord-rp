@@ -47,7 +47,7 @@ client.on('message', async message => {
         isCommand,
         isValidCommand,
         // author,
-        // channel,
+        channel,
         // guild,
         messageContent,
         // messageMentions,
@@ -93,16 +93,16 @@ client.on('message', async message => {
         return await callCommand(message);
     }
 
-    // // canal WHITELIST
-    // if (!isBot && channel.id === process.env.BOT_CHANNEL_WHITELIST) {
+    // canal WHITELIST
+    if (!isBot && channel.id === process.env.BOT_CHANNEL_WHITELIST) {
 
-    //     if (isValidCommand === 'wl') {
-    //         return await commands['wl'].callback(message, messageContent, messageCommand, messageArgs);
-    //     }
+        if (isValidCommand === 'wl') {
+            return await callCommand(message);
+        }
 
-    //     message.delete();
-    //     return;
-    // }
+        message.delete();
+        return;
+    }
 
 
 

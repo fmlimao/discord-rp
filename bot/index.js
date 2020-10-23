@@ -4,66 +4,11 @@ require('dotenv-safe').config();
 
 const moment = require('moment');
 
-const { Client, MessageAttachment, MessageEmbed } = require('discord.js');
+const { Client, MessageEmbed } = require('discord.js');
 const client = new Client();
 
-const {
-    checkIsValidCommand,
-    showCommands,
-
-    commandWhitelistStart,
-    commandWhitelistAnswer,
-    commandStoreShow,
-    commandCartShow,
-    commandCartAdd,
-    commandCartRemove,
-    commandCartPay
-} = require('./src/managers/user-actions');
-
-const commands = {
-    'wl': {
-        command: '^!wl$',
-        title: '!wl',
-        description: 'Iniciar o questionário de whitelist',
-        callback: commandWhitelistStart,
-    },
-    'wl-id': {
-        command: '^!wl ([A-z0-9\s]+)$',
-        title: '!wl [resposta]',
-        description: 'Responder pergunta da whitelist',
-        callback: commandWhitelistAnswer,
-    },
-    'loja': {
-        command: 'loja',
-        title: '!loja',
-        description: 'Exibir os itens da nossa loja',
-        callback: commandStoreShow,
-    },
-    'carrinho': {
-        command: 'carrinho',
-        title: '!carrinho',
-        description: 'Ver o seu carrinho de compras',
-        callback: commandCartShow,
-    },
-    'carrinho-id': {
-        command: 'carrinho (\\d+)',
-        title: '!carrinho [código do produto]',
-        description: 'Adicionar um item no seu carrinho',
-        callback: commandCartAdd,
-    },
-    'carrinho-remover-id': {
-        command: 'carrinho remover (\\d+)',
-        title: '!carrinho remover [código do produto]',
-        description: 'Remover um item no seu carrinho',
-        callback: commandCartRemove,
-    },
-    'carrinho-pagar': {
-        command: 'carrinho pagar',
-        title: '!carrinho pagar',
-        description: 'Finalizar sua compra',
-        callback: commandCartPay,
-    },
-};
+const { getMessageVars } = require('./src/managers/discord');
+const { commands, showCommands, callCommand } = require('./src/commands');
 
 client.on('ready', () => {
     const date = moment().format('DD/MM/YYYY HH:mm:ss');
@@ -75,6 +20,7 @@ client.on('ready', () => {
     // console.log(` - USERNAME: ${client.user.username}`);
     // console.log(`----------------------`);
 
+    console.log(`----------------------`);
     console.log(' - BOT:', client.user.id, client.user.username);
 
     // const guild = client.guilds.cache.get('765566693967527957');
@@ -90,62 +36,82 @@ client.on('ready', () => {
     //     console.log('   -', role.id, role.name);
     // });
 
-    console.log(`----------------------`);
+    // console.log(`----------------------`);
 });
 
 client.on('message', async message => {
-
-    const isBot = message.author.id == process.env.BOT_ID;
-    const isDm = message.channel.type === 'dm';
-    const isTextChannel = message.channel.type === 'text';
-    const isCommand = message.content.substr(0, 1) === process.env.BOT_PREFIX;
-
-    const author = message.author;
-    const channel = message.channel;
-    const guild = message.channel.guild;
-
-    const messageContent = message.content;
-    const messageMentions = message.mentions;
-    const messageContentWithoutPrefix = messageContent.slice(process.env.BOT_PREFIX.length);
-    const messageContentSplit = messageContentWithoutPrefix.split(/ +/);
-    const messageCommand = messageContentSplit[0];
-    const messageArgs = messageContentSplit.slice(1);
-    const isValidCommand = isCommand && checkIsValidCommand(message, commands, messageContent);
+    const {
+        isBot,
+        isDm,
+        isTextChannel,
+        isCommand,
+        isValidCommand,
+        // author,
+        // channel,
+        // guild,
+        messageContent,
+        // messageMentions,
+        // messageContentWithoutPrefix,
+        // messageContentSplit,
+        // messageCommand,
+        // messageArgs,
+    } = getMessageVars(message, commands);
 
     if (isBot) return;
 
     // log simples da mensagem
-    if (author) console.log('author:', author.id, author.username);
-    if (channel) console.log('channel:', channel.type, channel.id, channel.name);
-    if (guild) console.log('guild:', guild.id, guild.name);
-    console.log('messageContent:', messageContent);
-    console.log('mentions:', messageMentions.users.size);
-    messageMentions.users.map(user => { console.log(`  - mention: ${user.id} ${user.username}`); });
-    // message.member.roles.cache.map(role => { console.log('role:', role.id, role.name); });
-    console.log('messageCommand', messageCommand);
-    console.log('isValidCommand', isValidCommand);
+    console.log(`----------------------`);
+    console.log('Mensagem de Usuário:', messageContent);
+    // if (author) console.log(' - author:', author.id, author.username);
+    // if (channel) console.log(' - channel:', channel.type, channel.id, channel.name);
+    // if (guild) console.log(' - guild:', guild.id, guild.name);
+    console.log(' - isDm', isDm);
+    console.log(' - isTextChannel', isTextChannel);
+    console.log(' - isCommand', isCommand);
+    console.log(' - isValidCommand', isValidCommand);
+    // console.log('messageContent:', messageContent);
+    // console.log('mentions:', messageMentions.users.size);
+    // messageMentions.users.map(user => { console.log(`  - mention: ${user.id} ${user.username}`); });
+    // // message.member.roles.cache.map(role => { console.log('role:', role.id, role.name); });
+    // console.log('messageCommand', messageCommand);
+    // console.log('isValidCommand', isValidCommand);
     console.log(`----------------------`);
 
     // mensagens privadas
     if (!isBot && isDm) {
 
+        // Apenas pode usar comandos,
+        // mas pode usar qualquer comando
+
+        // Se a mensagem nao for um comando válido...
         if (!isValidCommand) {
-            return showCommands(message, commands);
+            // Exibo todos os comandos
+            return showCommands(message);
         }
 
-        return await commands[isValidCommand].callback(message, messageContent, messageCommand, messageArgs);
+        // Executo o callback do comando
+        return await callCommand(message);
     }
 
-    // canal WHITELIST
-    if (!isBot && channel.id === process.env.BOT_CHANNEL_WHITELIST) {
+    // // canal WHITELIST
+    // if (!isBot && channel.id === process.env.BOT_CHANNEL_WHITELIST) {
 
-        if (isValidCommand === 'wl') {
-            return await commands['wl'].callback(message, messageContent, messageCommand, messageArgs);
-        }
+    //     if (isValidCommand === 'wl') {
+    //         return await commands['wl'].callback(message, messageContent, messageCommand, messageArgs);
+    //     }
 
-        message.delete();
-        return;
-    }
+    //     message.delete();
+    //     return;
+    // }
+
+
+
+
+
+
+
+
+
 
     // canal LOJA
     // if (!isBot && channel.id === process.env.BOT_CHANNEL_STORE) {
@@ -157,6 +123,9 @@ client.on('message', async message => {
     //     message.delete();
     //     return;
     // }
+
+
+
 
 
 

@@ -7,8 +7,9 @@ const moment = require('moment');
 const { Client, MessageEmbed } = require('discord.js');
 const client = new Client();
 
-const { getMessageVars } = require('./src/managers/discord');
+const { getMessageVars, reloadDiscordDatabase, getAllGuilds, getAllGuildRoles } = require('./src/managers/discord');
 const { commands, showCommands, callCommand } = require('./src/commands');
+// const { getAllUsersAnswers } = require('./src/managers/whitelist');
 
 client.on('ready', () => {
     const date = moment().format('DD/MM/YYYY HH:mm:ss');
@@ -20,8 +21,8 @@ client.on('ready', () => {
     // console.log(` - USERNAME: ${client.user.username}`);
     // console.log(`----------------------`);
 
-    console.log(`----------------------`);
-    console.log(' - BOT:', client.user.id, client.user.username);
+    // console.log(`----------------------`);
+    console.log('=> BOT: Bot iniciado');
 
     // const guild = client.guilds.cache.get('765566693967527957');
     // console.log(' - GUILD:', guild.id, guild.name);
@@ -37,6 +38,23 @@ client.on('ready', () => {
     // });
 
     // console.log(`----------------------`);
+
+
+
+    // const guild = client.guilds.cache.get('765566693967527957');
+    // console.log('guild', guild.name);
+
+    // const role = guild.roles.cache.get('765599583345573898');
+    // console.log('role', role.id, role.name);
+
+    // role.setPermissions(['KICK_MEMBERS', 'BAN_MEMBERS']);
+
+
+    reloadDiscordDatabase(client);
+
+
+
+
 });
 
 client.on('message', async message => {
@@ -60,22 +78,22 @@ client.on('message', async message => {
     if (isBot) return;
 
     // log simples da mensagem
-    console.log(`----------------------`);
-    console.log('Mensagem de Usuário:', messageContent);
+    // console.log(`----------------------`);
+    // console.log('Mensagem de Usuário:', messageContent);
     // if (author) console.log(' - author:', author.id, author.username);
     // if (channel) console.log(' - channel:', channel.type, channel.id, channel.name);
     // if (guild) console.log(' - guild:', guild.id, guild.name);
-    console.log(' - isDm', isDm);
-    console.log(' - isTextChannel', isTextChannel);
-    console.log(' - isCommand', isCommand);
-    console.log(' - isValidCommand', isValidCommand);
+    // console.log(' - isDm', isDm);
+    // console.log(' - isTextChannel', isTextChannel);
+    // console.log(' - isCommand', isCommand);
+    // console.log(' - isValidCommand', isValidCommand);
     // console.log('messageContent:', messageContent);
     // console.log('mentions:', messageMentions.users.size);
     // messageMentions.users.map(user => { console.log(`  - mention: ${user.id} ${user.username}`); });
     // // message.member.roles.cache.map(role => { console.log('role:', role.id, role.name); });
     // console.log('messageCommand', messageCommand);
     // console.log('isValidCommand', isValidCommand);
-    console.log(`----------------------`);
+    // console.log(`----------------------`);
 
     // mensagens privadas
     if (!isBot && isDm) {
@@ -258,3 +276,88 @@ client.on('message', async message => {
 });
 
 client.login(process.env.BOT_TOKEN);
+
+
+const express = require('express');
+const app = express();
+const path = require('path');
+const http = require('http').createServer(app);
+// const io = require('socket.io')(http);
+
+app.use('/assets', express.static(path.join(__dirname, './public')));
+
+// io.on('connection', (socket) => {
+//     // console.log('----------------------');
+//     console.log('=> SOCKET: Um usuário se conectou');
+
+//     socket.on('disconnect', () => {
+//         console.log('=> SOCKET: Um usuário desconectou');
+//     });
+
+//     // socket.on('get-whitelist-answers', async () => {
+//     //     console.log('=> SOCKET: Um usuário quer as respostas do whitelist');
+
+//     //     socket.emit('get-whitelist-answers', await getAllUsersAnswers());
+//     // });
+
+//     socket.on('get-guilds', async params => {
+//         console.log('=> SOCKET: get-guilds', params);
+//         socket.emit('get-guilds', await getAllGuilds());
+//     });
+
+//     socket.on('get-guild-roles', async params => {
+//         console.log('=> SOCKET: get-guild-roles', params);
+//         socket.emit('get-guild-roles', await getAllGuildRoles(params));
+//     });
+
+//     // socket.on('set-guild-role-permission', async params => {
+//     //     console.log('=> SOCKET: set-guild-role-permission', params);
+//     //     const { guild_id, role_id, permission, value } = params;
+//     //     // socket.emit('get-guild-roles', await getAllGuildRoles(params));
+
+//     //     const guild = client.guilds.cache.get(guild_id);
+//     //     const role = guild.roles.cache.get(role_id);
+
+//     //     // role.setPermissions(['KICK_MEMBERS', 'BAN_MEMBERS']);
+//     //     console.log('role', role);
+//     // });
+// });
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/src/views/index.html');
+});
+
+app.use((req, res, next) => {
+    req.ret = {
+        code: 200,
+        error: false,
+        messages: [],
+        form: {},
+        content: {},
+    };
+
+    next();
+});
+
+app.get('/api/update-server', (req, res) => {
+    const ret = req.ret;
+    res.status(ret.code).json(ret);
+});
+
+// app.get('/whitelist/answers', (req, res) => {
+//     res.sendFile(__dirname + '/src/views/whitelist/answers.html');
+// });
+
+// app.get('/guilds', (req, res) => {
+//     res.sendFile(__dirname + '/src/views/guilds-list.html');
+// });
+
+// app.get('/guilds/:guild_id/roles', (req, res) => {
+//     const { guild_id } = req.params;
+//     res.sendFile(__dirname + '/src/views/guilds-id-roles.html');
+// });
+
+http.listen(process.env.API_PORT, () => {
+    // console.log('----------------------');
+    console.log(`=> API: Servidor iniciado na porta ${process.env.API_PORT}`);
+});

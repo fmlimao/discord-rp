@@ -3,6 +3,7 @@ const { MessageEmbed } = require('discord.js');
 const { getMessageVars } = require('./managers/discord');
 
 const whitelistManager = require('./managers/whitelist');
+const storeManager = require('./managers/store');
 
 const commands = {
     'wl': {
@@ -12,17 +13,17 @@ const commands = {
         callback: commandWhitelistStart,
     },
     'wl-id': {
-        command: '^!wl ([A-z0-9\\s]+)$',
+        command: '^!wl (.*)$',
         title: '!wl [resposta]',
         description: 'Responder pergunta da whitelist',
         callback: commandWhitelistAnswer,
     },
-    // 'loja': {
-    //     command: 'loja',
-    //     title: '!loja',
-    //     description: 'Exibir os itens da nossa loja',
-    //     callback: commandStoreShow,
-    // },
+    'loja': {
+        command: '^!loja$',
+        title: '!loja',
+        description: 'Exibir os itens da nossa loja',
+        callback: commandStoreShow,
+    },
     // 'carrinho': {
     //     command: 'carrinho',
     //     title: '!carrinho',
@@ -74,36 +75,38 @@ async function callCommand(message) {
 }
 
 async function commandWhitelistStart(message, messageContent, messageCommand, messageArgs) {
-    console.log(' -> commandWhitelistStart()', messageContent);
+    console.log('=> BOT: - commandWhitelistStart()', messageContent);
 
     whitelistManager.start(message, messageContent, messageCommand, messageArgs);
 }
 
 async function commandWhitelistAnswer(message, messageContent, messageCommand, messageArgs) {
-    console.log(' -> commandWhitelistAnswer()', messageContent);
+    console.log('=> BOT: - commandWhitelistAnswer()', messageContent);
 
     whitelistManager.setAnswer(message, messageContent, messageCommand, messageArgs);
 
 }
 
-// async function commandStoreShow(message, messageContent, messageCommand, messageArgs) {
-//     console.log(' -> commandStoreShow()', messageContent);
-// }
+async function commandStoreShow(message, messageContent, messageCommand, messageArgs) {
+    console.log('=> BOT: - commandStoreShow()', messageContent);
+
+    storeManager.showProducts(message);
+}
 
 // async function commandCartShow(message, messageContent, messageCommand, messageArgs) {
-//     console.log(' -> commandCartShow()', messageContent);
+//     console.log('=> BOT: - commandCartShow()', messageContent);
 // }
 
 // async function commandCartAdd(message, messageContent, messageCommand, messageArgs) {
-//     console.log(' -> commandCartAdd()', messageContent);
+//     console.log('=> BOT: - commandCartAdd()', messageContent);
 // }
 
 // async function commandCartRemove(message, messageContent, messageCommand, messageArgs) {
-//     console.log(' -> commandCartRemove()', messageContent);
+//     console.log('=> BOT: - commandCartRemove()', messageContent);
 // }
 
 // async function commandCartPay(message, messageContent, messageCommand, messageArgs) {
-//     console.log(' -> commandCartPay()', messageContent);
+//     console.log('=> BOT: - commandCartPay()', messageContent);
 // }
 
 module.exports = {

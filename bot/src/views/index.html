@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord RP</title>
+</head>
+
+<body>
+    <div id="AppVue">
+
+        <h1>Discord RP</h1>
+
+        <ul>
+            <!-- <li><a href="/whitelist/answers">Respostas da Whitelist</a></li> -->
+            <li><a href="/#/">Home</a></li>
+            <li><a href="/#/guilds">Servidores</a></li>
+        </ul>
+
+        <hr>
+
+        <div v-if="currentPage === 'home'">
+            <h2>Home</h2>
+
+            <p>
+                Antes de iniciar o uso do sistema, é necessário atualizar a base de dados.
+            </p>
+
+            <p>
+                <button @click.prevent="updateServer()" :disabled="server.loading">Atualizar Banco de Dados</button>
+            </p>
+
+            <div v-if="server.started">
+                <div v-if="server.loading">Carregando...</div>
+                <div v-if="server.messages.length">
+                    <p v-for="message in server.messages">{{ message }}</p>
+                </div>
+            </div>
+
+            <pre>{{ server }}</pre>
+        </div>
+
+        <div v-if="currentPage === 'guilds'">
+            <h2>Servidores</h2>
+
+            <!--
+            <table border="1" cellspacing="0" cellpadding="5">
+                <thead>
+                    <tr>
+                        <th>Servidor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="guild in guilds">
+                        <td>
+                            {{ guild.name }}
+                        </td>
+                        <td>
+                            <a :href="'/#/guilds/' + guild.guild_id + '/roles'">
+                                Cargos
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            -->
+        </div>
+
+        <div v-if="currentPage === 'guilds-id-roles'">
+            <h2>Servidor "{{ guild.name }}"</h2>
+
+            <h2>Cargos</h2>
+
+            <!--
+            <table border="1" cellspacing="0" cellpadding="5">
+                <thead>
+                    <tr>
+                        <th>Cargo</th>
+                        <th v-for="permission in permissions">
+                            {{ permission }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="role in roles">
+                        <td nowrap>
+                            {{ role.name }}
+                        </td>
+                        <td v-for="permission in permissions" align="center">
+                            <!-- <input type="checkbox" v-model="role[permission]" @change="updateRolePermission(role, permission)"> -->
+                            <!-- {{ role[permission] }} -->
+                            <span v-if="role[permission]">X</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            -->
+        </div>
+
+    </div>
+
+    <script src="/assets/fmroute.min.js"></script>
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js"></script>
+    <script src="/assets/app.js"></script>
+
+</body>
+
+</html>

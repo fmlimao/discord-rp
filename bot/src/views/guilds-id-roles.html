@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord RP</title>
+</head>
+
+<body>
+
+    <h1>Discord RP</h1>
+
+    <ul>
+        <!-- <li><a href="/whitelist/answers">Respostas da Whitelist</a></li> -->
+        <li><a href="/guilds">Servidores</a></li>
+    </ul>
+
+    <div id="AppVue">
+        <h2>Servidores</h2>
+
+        <table border="1" cellspacing="0" cellpadding="5">
+            <thead>
+                <tr>
+                    <th>Servidor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="guild in guilds">
+                    <td>
+                        {{ guild.name }}
+                    </td>
+                    <td>
+                        <a :href="'/guilds/' + guild.guild_id + '/roles'">
+                            Cargos
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- <pre>{{usersAnswers}}</pre> -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = null;
+
+        var App = new Vue({
+            el: '#AppVue',
+            data: {
+                guilds: [],
+            },
+            methods: {
+                init: function () {
+
+                    socket = io();
+
+                    socket.on('connect', () => {
+                        socket.emit('get-guilds', null);
+                    });
+
+                    socket.on('get-guilds', ret => {
+                        console.log('ret', ret);
+                        App.guilds = ret.guilds;
+                    });
+
+                },
+            },
+        });
+
+        App.init();
+
+    </script>
+
+</body>
+
+</html>

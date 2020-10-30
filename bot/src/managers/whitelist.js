@@ -1,4 +1,5 @@
 const discordManager = require('./discord');
+const utf8 = require('utf8');
 const knex = require('../database/connection');
 
 function sendMessage(to, body) {
@@ -23,7 +24,7 @@ async function getUserWhitelist(user_id) {
     const userWhitelist = await knex('wl_users')
         .where('wl_users.deleted_at', null)
         .where('wl_users.user_id', user_id)
-        .select('wl_users.user_id', 'wl_users.player_id', 'wl_users.finished_at')
+        .select('wl_users.user_id', 'wl_users.user_name', 'wl_users.user_email', 'wl_users.user_born', 'wl_users.player_name', 'wl_users.player_id', 'wl_users.finished_at')
         .first();
 
     return userWhitelist;
@@ -35,12 +36,30 @@ async function showWhitelistQuestion(message) {
     // buscando estagio do whitelist
     const userWhitelist = await getUserWhitelist(user_id);
 
-    // e não tem o player_id, solicitamos ele
-    if (!userWhitelist.player_id) {
-        return sendMessage(message.author, 'Para iniciar o questionário, nos informe o seu ID de jogador do nosso servidor:');
+    // solicitar o nome do usuario
+    if (!userWhitelist.user_name) {
+        return sendMessage(message.author, 'Para iniciar o questionário, nos informe o seu nome completo:');
     }
 
-    // se já tiver o player_id...
+    // solicitar email do usuario
+    if (!userWhitelist.user_email) {
+        return sendMessage(message.author, 'Nos informe o seu e-mail:');
+    }
+
+    // solicitar a data de nascimento do usuario
+    if (!userWhitelist.user_born) {
+        return sendMessage(message.author, 'Nos informe sua data de nascimento:');
+    }
+
+    // solicitar id do personagem
+    if (!userWhitelist.player_id) {
+        return sendMessage(message.author, 'Nos informe o seu ID de jogador do nosso servidor:');
+    }
+
+    // solicitar nome do personagem
+    if (!userWhitelist.player_name) {
+        return sendMessage(message.author, 'Nos informe o seu nome que terá o seu personagem:');
+    }
 
     // buscando as perguntas e respostas
     const { questionsList, questionIdWithoutAnswer } = await getUserQuestionsAndAnswers(user_id);
@@ -57,14 +76,14 @@ async function showWhitelistQuestion(message) {
         return sendSuccessMessage(message.author, 'Parabéns! Você já finalizou o whitelist!!!');
     }
 
-    console.log(' - EXIBINDO PERGUNTA ' + questionIdWithoutAnswer);
-    console.log('   - ' + questionsList[questionIdWithoutAnswer].question_id + '] ' + questionsList[questionIdWithoutAnswer].description);
+    console.log('=> BOT: - EXIBINDO PERGUNTA ' + questionIdWithoutAnswer);
+    console.log('=> BOT:   - ' + questionsList[questionIdWithoutAnswer].question_id + '] ' + questionsList[questionIdWithoutAnswer].description);
 
     let msg = `${questionsList[questionIdWithoutAnswer].question_id} - ${questionsList[questionIdWithoutAnswer].description}\n`;
 
     if (questionsList[questionIdWithoutAnswer].type === 'options') {
         for (let i in questionsList[questionIdWithoutAnswer].answers) {
-            console.log('     - [' + questionsList[questionIdWithoutAnswer].answers[i].option + '] ' + questionsList[questionIdWithoutAnswer].answers[i].description);
+            console.log('=> BOT:     - [' + questionsList[questionIdWithoutAnswer].answers[i].option + '] ' + questionsList[questionIdWithoutAnswer].answers[i].description);
             msg += `\n    [${questionsList[questionIdWithoutAnswer].answers[i].option}] - ${questionsList[questionIdWithoutAnswer].answers[i].description}`;
         }
     }
@@ -146,9 +165,20 @@ async function getUserQuestionsAndAnswers(user_id) {
     };
 }
 
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
+function validateBorn(born) {
+    const re = /(\d){2}\/(\d){2}\/(\d){4}/;
+    return re.test(born);
+}
+
 async function start(message, messageContent, messageCommand, messageArgs) {
 
     const user_id = message.author.id;
+    const username = message.author.username;
 
     // buscando estagio do whitelist
     const userWhitelist = await getUserWhitelist(user_id);
@@ -157,9 +187,10 @@ async function start(message, messageContent, messageCommand, messageArgs) {
     if (!userWhitelist) {
         await knex('wl_users').insert({
             user_id: user_id,
+            ds_username: utf8.encode(username),
         });
 
-        sendMessage(message.author, 'Iremos iniciar um pequeno questionário para te habilitar em nossos servidores. Serão apenas 5 perguntas, para saber se você conhece nossas regras, ou seja, é importante que você leia todo o conteúdo do canal Regras, ok?');
+        sendMessage(message.author, 'Iremos iniciar um pequeno questionário para te habilitar em nossos servidores. Serão poucas perguntas, para saber se você conhece nossas regras, ou seja, é importante que você leia todo o conteúdo do canal Regras, ok?');
 
         return await showWhitelistQuestion(message);
     }
@@ -187,6 +218,60 @@ async function setAnswer(message, messageContent, messageCommand, messageArgs) {
 
     const currentAnswer = messageArgs.join(' ');
 
+    // solicitar o nome do usuario
+    if (!userWhitelist.user_name) {
+        const currentAnswerString = String(currentAnswer);
+        const max = 100;
+
+        if (currentAnswerString.length > max) {
+            sendErrorAnswer(message.author, `Sua resposta precisa ter menos de ${max} caracteres`);
+            return await showWhitelistQuestion(message);
+        } else {
+            await knex('wl_users')
+                .where('wl_users.deleted_at', null)
+                .where('wl_users.user_id', user_id)
+                .update({
+                    user_name: currentAnswer,
+                });
+
+            return await showWhitelistQuestion(message);
+        }
+    }
+
+    // solicitar email do usuario
+    if (!userWhitelist.user_email) {
+        if (!validateEmail(currentAnswer)) {
+            sendErrorAnswer(message.author, `E-mail inválido!`);
+            return await showWhitelistQuestion(message);
+        } else {
+            await knex('wl_users')
+                .where('wl_users.deleted_at', null)
+                .where('wl_users.user_id', user_id)
+                .update({
+                    user_email: currentAnswer,
+                });
+
+            return await showWhitelistQuestion(message);
+        }
+    }
+
+    // solicitar a data de nascimento do usuario
+    if (!userWhitelist.user_born) {
+        if (!validateBorn(currentAnswer)) {
+            sendErrorAnswer(message.author, `Data inválida!`);
+            return await showWhitelistQuestion(message);
+        } else {
+            await knex('wl_users')
+                .where('wl_users.deleted_at', null)
+                .where('wl_users.user_id', user_id)
+                .update({
+                    user_born: currentAnswer.split('/').reverse().join('-'),
+                });
+
+            return await showWhitelistQuestion(message);
+        }
+    }
+
     // e não tem o player_id, recebemos ele
     if (!userWhitelist.player_id) {
 
@@ -208,6 +293,26 @@ async function setAnswer(message, messageContent, messageCommand, messageArgs) {
         }
     }
 
+    // solicitar nome do personagem
+    if (!userWhitelist.player_name) {
+        const currentAnswerString = String(currentAnswer);
+        const max = 100;
+
+        if (currentAnswerString.length > max) {
+            sendErrorAnswer(message.author, `Sua resposta precisa ter menos de ${max} caracteres`);
+            return await showWhitelistQuestion(message);
+        } else {
+            await knex('wl_users')
+                .where('wl_users.deleted_at', null)
+                .where('wl_users.user_id', user_id)
+                .update({
+                    player_name: currentAnswer,
+                });
+
+            return await showWhitelistQuestion(message);
+        }
+    }
+
     // se já tiver o player_id...
 
     // buscando as perguntas e respostas
@@ -218,7 +323,7 @@ async function setAnswer(message, messageContent, messageCommand, messageArgs) {
         return sendSuccessMessage(message.author, 'Parabéns! Você já finalizou o whitelist!!!');
     }
 
-    console.log(`Respondendo a pergunta ${questionIdWithoutAnswer}:`, currentAnswer);
+    console.log(`=> BOT: Respondendo a pergunta ${questionIdWithoutAnswer}:`, currentAnswer);
 
     const answerInsertOption = {
         user_id: user_id,
@@ -267,7 +372,59 @@ async function setAnswer(message, messageContent, messageCommand, messageArgs) {
     }
 }
 
+async function getAllUsersAnswers() {
+    const questions = await knex('wl_questions')
+        .where('wl_questions.deleted_at', null)
+        .orderBy('wl_questions.order')
+        .select('wl_questions.question_id', 'wl_questions.type', 'wl_questions.description');
+
+    const answers = await knex('wl_users')
+        .leftJoin('wl_user_answers', 'wl_users.user_id', 'wl_user_answers.user_id')
+        .leftJoin('wl_answers', 'wl_user_answers.answer_id', 'wl_answers.answer_id')
+        .where('wl_users.deleted_at', null)
+        .orderBy(['wl_users.username', 'wl_user_answers.question_id'])
+        .select(
+            'wl_users.user_id',
+            'wl_users.username',
+            'wl_users.player_id',
+            'wl_users.finished_at',
+            'wl_user_answers.question_id',
+            'wl_user_answers.value',
+            'wl_answers.description'
+        );
+
+    const usersAnswers = {};
+    for (let i in answers) {
+        const answer = answers[i];
+
+        if (!usersAnswers[answer.user_id]) {
+            usersAnswers[answer.user_id] = {
+                user_id: answer.user_id,
+                username: answer.username,
+                player_id: answer.player_id,
+                finished_at: answer.finished_at,
+                answers: {},
+            };
+        }
+
+        if (answer.question_id) {
+            if (!usersAnswers[answer.user_id].answers[answer.question_id]) {
+                usersAnswers[answer.user_id].answers[answer.question_id] = {
+                    question_id: answer.question_id,
+                    value: answer.description ? answer.description : answer.value,
+                };
+            }
+        }
+    }
+
+    return {
+        questions,
+        usersAnswers,
+    };
+}
+
 module.exports = {
     start,
     setAnswer,
+    getAllUsersAnswers,
 };

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord RP</title>
+</head>
+
+<body>
+
+    <h1>Discord RP</h1>
+
+    <ul>
+        <li><a href="/whitelist/answers">Respostas da Whitelist</a></li>
+    </ul>
+
+    <div id="AppVue">
+        <h2>Respostas da Whitelist</h2>
+
+        <table border="1" cellspacing="0" cellpadding="5">
+            <thead>
+                <tr>
+                    <th>Usuário</th>
+                    <th>Finalizado</th>
+                    <th>Player ID</th>
+                    <th v-for="question in questions">{{ question.description }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="user in usersAnswers">
+                    <td>{{user.username}}</td>
+                    <td>{{user.finished_at}}</td>
+                    <td>{{user.player_id}}</td>
+                    <td v-for="question in questions">
+                        <div v-if="user.answers[question.question_id]">
+                            {{ user.answers[question.question_id].value }}
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- <pre>{{usersAnswers}}</pre> -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = null;
+
+        var App = new Vue({
+            el: '#AppVue',
+            data: {
+                questions: [],
+                usersAnswers: {},
+            },
+            methods: {
+                init: function () {
+
+                    socket = io();
+
+                    socket.on('connect', () => {
+                        socket.emit('get-whitelist-answers', null);
+                    });
+
+                    socket.on('get-whitelist-answers', answers => {
+                        App.questions = answers.questions;
+                        App.usersAnswers = answers.usersAnswers;
+                    });
+
+                },
+            },
+        });
+
+        App.init();
+
+    </script>
+
+</body>
+
+</html>

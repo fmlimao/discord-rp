@@ -1,0 +1,177 @@
+<%- contentFor('body') %>
+
+<div v-if="currentPage === '/dashboard'">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Dashboard
+        </h1>
+        <ol class="breadcrumb">
+            <li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+    </section>
+</div>
+
+<div v-if="currentPage === '/users'">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Usuários
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/#/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li class="active"><i class="fa fa-users"></i> Usuários</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="alert" :class="{'alert-danger': lists.users.error, 'alert-success': !lists.users.error}"
+            v-if="lists.users.messages.length" v-html="lists.users.messages.join('<br>')"></div>
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Lista de Usuários</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" v-if="lists.users.loading || (lists.users.started && !lists.users.loading && !lists.users.data.length)">
+                <div class="alert alert-info" v-if="lists.users.loading">Carregando...</div>
+                <div class="alert alert-warning" v-if="lists.users.started && !lists.users.loading && !lists.users.data.length">Nenhum usuário cadastrado</div>
+            </div>
+            <div class="box-body table-responsive no-padding" v-if="lists.users.started && !lists.users.loading && lists.users.data.length">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                        </tr>
+                        <tr v-for="user in lists.users.data">
+                            <td>
+                                {{ user.user_id }}
+                            </td>
+                            <td>
+                                {{ user.name }}
+                            </td>
+                            <td>
+                                {{ user.email }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+    </section>
+</div>
+
+
+
+<%- contentFor('scripts') %>
+
+<script>
+
+    var apiPath = '<%- apiPath %>';
+    var token = '<%- token %>';
+
+    var route = new FMRoute();
+
+    route.get('/', function (vars, next) {
+        route.go('/dashboard');
+    });
+
+    route.get('/dashboard', function (vars, next) {
+        console.log('dashboard');
+        App.currentPage = '/dashboard';
+        next();
+    });
+
+    route.get('/users', function (vars, next) {
+        console.log('users');
+        App.currentPage = '/users';
+
+        App.getUsers();
+
+        next();
+    });
+
+    mixins.push({
+        data: {
+            lists: {
+                users: {
+                    started: false,
+                    loading: false,
+                    error: false,
+                    messages: [],
+                    data: [],
+                },
+            },
+        },
+        methods: {
+            init: function () {
+                route.run();
+            },
+
+            clearlist: function (listName) {
+                App.lists[listName].started = false;
+                App.lists[listName].loading = false;
+                App.lists[listName].error = false;
+                App.lists[listName].messages = [];
+                App.lists[listName].data = [];
+            },
+
+            clearForm: function (formName) {
+                App.forms[formName].error = false;
+                App.forms[formName].loading = false;
+                App.forms[formName].messages = [];
+
+                for (let field in App.forms[formName].fields) {
+                    App.forms[formName].fields[field].value = App.forms[formName].fields[field].value.trim();
+                    App.forms[formName].fields[field].error = false;
+                    App.forms[formName].fields[field].messages = [];
+                }
+            },
+
+            getUsers: function () {
+                var ajaxCb = (response) => {
+                    App.lists.users.error = response.error;
+                    App.lists.users.messages = response.messages;
+
+                    console.log('response.content', response.content);
+
+                    for (var i in response.content.users) {
+                        App.lists.users.data.push(response.content.users[i]);
+                    }
+
+                    App.lists.users.loading = false;
+                };
+
+                App.clearlist('users');
+                App.lists.users.started = true;
+                App.lists.users.loading = true;
+
+                axios.get(`${apiPath}/users`, {
+                    headers: {
+                        'x-access-token': token,
+                    },
+                })
+                    .then(function (response) {
+                        ajaxCb(response.data);
+                    })
+                    .catch(function (error) {
+                        ajaxCb(error.response.data);
+                    });
+
+            },
+        },
+    });
+
+</script>

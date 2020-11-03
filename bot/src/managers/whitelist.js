@@ -21,10 +21,10 @@ function sendSuccessMessage(to, body) {
 }
 
 async function getUserWhitelist(user_id) {
-    const userWhitelist = await knex('wl_users')
-        .where('wl_users.deleted_at', null)
-        .where('wl_users.user_id', user_id)
-        .select('wl_users.user_id', 'wl_users.user_name', 'wl_users.user_email', 'wl_users.user_born', 'wl_users.player_name', 'wl_users.player_id', 'wl_users.finished_at')
+    const userWhitelist = await knex('discord_whitelist')
+        .where('discord_whitelist.deleted_at', null)
+        .where('discord_whitelist.user_id', user_id)
+        .select('discord_whitelist.user_id', 'discord_whitelist.user_name', 'discord_whitelist.user_email', 'discord_whitelist.user_birth', 'discord_whitelist.player_name', 'discord_whitelist.player_id', 'discord_whitelist.finished_at')
         .first();
 
     return userWhitelist;
@@ -47,7 +47,7 @@ async function showWhitelistQuestion(message) {
     }
 
     // solicitar a data de nascimento do usuario
-    if (!userWhitelist.user_born) {
+    if (!userWhitelist.user_birth) {
         return sendMessage(message.author, 'Nos informe sua data de nascimento:');
     }
 
@@ -66,9 +66,9 @@ async function showWhitelistQuestion(message) {
 
     // se todas as pergutas já foram respondidas, finalizo o processo
     if (!questionIdWithoutAnswer) {
-        await knex('wl_users')
-            .where('wl_users.deleted_at', null)
-            .where('wl_users.user_id', user_id)
+        await knex('discord_whitelist')
+            .where('discord_whitelist.deleted_at', null)
+            .where('discord_whitelist.user_id', user_id)
             .update({
                 finished_at: knex.fn.now(),
             });
@@ -92,60 +92,58 @@ async function showWhitelistQuestion(message) {
 }
 
 async function getUserQuestionsAndAnswers(user_id) {
-    const questionsAndAnswers = await knex('wl_questions')
-        .leftJoin('wl_answers', function () {
-            this.onNull('wl_answers.deleted_at')
-                .andOn('wl_answers.question_id', '=', 'wl_questions.question_id')
+    const questionsAndAnswers = await knex('discord_whitelist_questions')
+        .leftJoin('discord_whitelist_question_answers', function () {
+            this.onNull('discord_whitelist_question_answers.deleted_at')
+                .andOn('discord_whitelist_question_answers.question_id', '=', 'discord_whitelist_questions.question_id')
         })
-        .leftJoin('wl_user_answers', function () {
-            this.onNull('wl_user_answers.deleted_at')
-                .andOn('wl_user_answers.question_id', '=', 'wl_questions.question_id')
-                .andOn(knex.raw('wl_user_answers.user_id = ?', [user_id]))
+        .leftJoin('discord_whitelist_user_answers', function () {
+            this.onNull('discord_whitelist_user_answers.deleted_at')
+                .andOn('discord_whitelist_user_answers.question_id', '=', 'discord_whitelist_questions.question_id')
+                .andOn(knex.raw('discord_whitelist_user_answers.user_id = ?', [user_id]))
         })
-        .where('wl_questions.deleted_at', null)
+        .where('discord_whitelist_questions.deleted_at', null)
         .select(
-            'wl_questions.question_id AS wl_questions_question_id'
-            , 'wl_questions.type AS wl_questions_type'
-            , 'wl_questions.description AS wl_questions_description'
-            , 'wl_questions.order AS wl_questions_order'
-
-            , 'wl_answers.answer_id AS wl_answers_answer_id'
-            , 'wl_answers.description AS wl_answers_description'
-            , 'wl_answers.is_correct AS wl_answers_is_correct'
-            , 'wl_answers.option AS wl_answers_option'
-
-            , 'wl_user_answers.answer_id AS wl_user_answers_answer_id'
-            , 'wl_user_answers.value AS wl_user_answers_value'
+            'discord_whitelist_questions.question_id        as discord_whitelist_questions_question_id',
+            'discord_whitelist_questions.type               as discord_whitelist_questions_type',
+            'discord_whitelist_questions.description        as discord_whitelist_questions_description',
+            'discord_whitelist_questions.order              as discord_whitelist_questions_order',
+            'discord_whitelist_question_answers.answer_id   as discord_whitelist_question_answers_answer_id',
+            'discord_whitelist_question_answers.description as discord_whitelist_question_answers_description',
+            'discord_whitelist_question_answers.is_correct  as discord_whitelist_question_answers_is_correct',
+            'discord_whitelist_question_answers.option      as discord_whitelist_question_answers_option',
+            'discord_whitelist_user_answers.answer_id       as discord_whitelist_user_answers_answer_id',
+            'discord_whitelist_user_answers.value           as discord_whitelist_user_answers_value'
         )
-        .orderBy('wl_questions.order', 'wl_answers.order');
+        .orderBy('discord_whitelist_questions.order', 'discord_whitelist_question_answers.order');
 
     const questionsList = {};
     for (let i in questionsAndAnswers) {
         const row = questionsAndAnswers[i];
 
-        if (typeof questionsList[row.wl_questions_question_id] == 'undefined') {
-            questionsList[row.wl_questions_question_id] = {
-                question_id: row.wl_questions_question_id,
-                type: row.wl_questions_type,
-                description: row.wl_questions_description,
-                order: row.wl_questions_order,
+        if (typeof questionsList[row.discord_whitelist_questions_question_id] == 'undefined') {
+            questionsList[row.discord_whitelist_questions_question_id] = {
+                question_id: row.discord_whitelist_questions_question_id,
+                type: row.discord_whitelist_questions_type,
+                description: row.discord_whitelist_questions_description,
+                order: row.discord_whitelist_questions_order,
             };
 
-            if (row.wl_questions_type === 'options') {
-                questionsList[row.wl_questions_question_id].userAnswer = row.wl_user_answers_answer_id;
-                questionsList[row.wl_questions_question_id].answers = {};
+            if (row.discord_whitelist_questions_type === 'options') {
+                questionsList[row.discord_whitelist_questions_question_id].userAnswer = row.discord_whitelist_user_answers_answer_id;
+                questionsList[row.discord_whitelist_questions_question_id].answers = {};
             } else {
-                questionsList[row.wl_questions_question_id].userAnswer = row.wl_user_answers_value;
+                questionsList[row.discord_whitelist_questions_question_id].userAnswer = row.discord_whitelist_user_answers_value;
             }
         }
 
-        if (row.wl_answers_answer_id) {
-            if (typeof questionsList[row.wl_questions_question_id].answers[row.wl_answers_answer_id] == 'undefined') {
-                questionsList[row.wl_questions_question_id].answers[row.wl_answers_answer_id] = {
-                    answer_id: row.wl_answers_answer_id,
-                    description: row.wl_answers_description,
-                    is_correct: row.wl_answers_is_correct,
-                    option: row.wl_answers_option,
+        if (row.discord_whitelist_question_answers_answer_id) {
+            if (typeof questionsList[row.discord_whitelist_questions_question_id].answers[row.discord_whitelist_question_answers_answer_id] == 'undefined') {
+                questionsList[row.discord_whitelist_questions_question_id].answers[row.discord_whitelist_question_answers_answer_id] = {
+                    answer_id: row.discord_whitelist_question_answers_answer_id,
+                    description: row.discord_whitelist_question_answers_description,
+                    is_correct: row.discord_whitelist_question_answers_is_correct,
+                    option: row.discord_whitelist_question_answers_option,
                 };
             }
         }
@@ -170,24 +168,29 @@ function validateEmail(email) {
     return re.test(email);
 }
 
-function validateBorn(born) {
+function validateBirth(birth) {
     const re = /(\d){2}\/(\d){2}\/(\d){4}/;
-    return re.test(born);
+    return re.test(birth);
 }
 
 async function start(message, messageContent, messageCommand, messageArgs) {
-
     const user_id = message.author.id;
     const username = message.author.username;
+    const avatar = message.author.avatarURL();
 
     // buscando estagio do whitelist
     const userWhitelist = await getUserWhitelist(user_id);
 
     // se o usuário ainda nao tem o registro, criamos um
     if (!userWhitelist) {
-        await knex('wl_users').insert({
+        await knex('discord_users').insert({
             user_id: user_id,
-            ds_username: utf8.encode(username),
+            username: utf8.encode(username),
+            avatar: avatar,
+        });
+
+        await knex('discord_whitelist').insert({
+            user_id: user_id,
         });
 
         sendMessage(message.author, 'Iremos iniciar um pequeno questionário para te habilitar em nossos servidores. Serão poucas perguntas, para saber se você conhece nossas regras, ou seja, é importante que você leia todo o conteúdo do canal Regras, ok?');
@@ -227,9 +230,9 @@ async function setAnswer(message, messageContent, messageCommand, messageArgs) {
             sendErrorAnswer(message.author, `Sua resposta precisa ter menos de ${max} caracteres`);
             return await showWhitelistQuestion(message);
         } else {
-            await knex('wl_users')
-                .where('wl_users.deleted_at', null)
-                .where('wl_users.user_id', user_id)
+            await knex('discord_whitelist')
+                .where('discord_whitelist.deleted_at', null)
+                .where('discord_whitelist.user_id', user_id)
                 .update({
                     user_name: currentAnswer,
                 });
@@ -244,9 +247,9 @@ async function setAnswer(message, messageContent, messageCommand, messageArgs) {
             sendErrorAnswer(message.author, `E-mail inválido!`);
             return await showWhitelistQuestion(message);
         } else {
-            await knex('wl_users')
-                .where('wl_users.deleted_at', null)
-                .where('wl_users.user_id', user_id)
+            await knex('discord_whitelist')
+                .where('discord_whitelist.deleted_at', null)
+                .where('discord_whitelist.user_id', user_id)
                 .update({
                     user_email: currentAnswer,
                 });
@@ -256,16 +259,16 @@ async function setAnswer(message, messageContent, messageCommand, messageArgs) {
     }
 
     // solicitar a data de nascimento do usuario
-    if (!userWhitelist.user_born) {
-        if (!validateBorn(currentAnswer)) {
+    if (!userWhitelist.user_birth) {
+        if (!validateBirth(currentAnswer)) {
             sendErrorAnswer(message.author, `Data inválida!`);
             return await showWhitelistQuestion(message);
         } else {
-            await knex('wl_users')
-                .where('wl_users.deleted_at', null)
-                .where('wl_users.user_id', user_id)
+            await knex('discord_whitelist')
+                .where('discord_whitelist.deleted_at', null)
+                .where('discord_whitelist.user_id', user_id)
                 .update({
-                    user_born: currentAnswer.split('/').reverse().join('-'),
+                    user_birth: currentAnswer.split('/').reverse().join('-'),
                 });
 
             return await showWhitelistQuestion(message);
@@ -282,9 +285,9 @@ async function setAnswer(message, messageContent, messageCommand, messageArgs) {
             sendErrorAnswer(message.author, 'Player ID inválido!');
             return await showWhitelistQuestion(message);
         } else {
-            await knex('wl_users')
-                .where('wl_users.deleted_at', null)
-                .where('wl_users.user_id', user_id)
+            await knex('discord_whitelist')
+                .where('discord_whitelist.deleted_at', null)
+                .where('discord_whitelist.user_id', user_id)
                 .update({
                     player_id: currentAnswer,
                 });
@@ -302,9 +305,9 @@ async function setAnswer(message, messageContent, messageCommand, messageArgs) {
             sendErrorAnswer(message.author, `Sua resposta precisa ter menos de ${max} caracteres`);
             return await showWhitelistQuestion(message);
         } else {
-            await knex('wl_users')
-                .where('wl_users.deleted_at', null)
-                .where('wl_users.user_id', user_id)
+            await knex('discord_whitelist')
+                .where('discord_whitelist.deleted_at', null)
+                .where('discord_whitelist.user_id', user_id)
                 .update({
                     player_name: currentAnswer,
                 });
@@ -367,64 +370,64 @@ async function setAnswer(message, messageContent, messageCommand, messageArgs) {
         answerInsertOption.answer_id
         || answerInsertOption.value
     ) {
-        await knex('wl_user_answers').insert(answerInsertOption);
+        await knex('discord_whitelist_user_answers').insert(answerInsertOption);
         return await showWhitelistQuestion(message);
     }
 }
 
 async function getAllUsersAnswers() {
-    const questions = await knex('wl_questions')
-        .where('wl_questions.deleted_at', null)
-        .orderBy('wl_questions.order')
-        .select('wl_questions.question_id', 'wl_questions.type', 'wl_questions.description');
+    //     const questions = await knex('discord_questions')
+    //         .where('discord_questions.deleted_at', null)
+    //         .orderBy('discord_questions.order')
+    //         .select('discord_questions.question_id', 'discord_questions.type', 'discord_questions.description');
 
-    const answers = await knex('wl_users')
-        .leftJoin('wl_user_answers', 'wl_users.user_id', 'wl_user_answers.user_id')
-        .leftJoin('wl_answers', 'wl_user_answers.answer_id', 'wl_answers.answer_id')
-        .where('wl_users.deleted_at', null)
-        .orderBy(['wl_users.username', 'wl_user_answers.question_id'])
-        .select(
-            'wl_users.user_id',
-            'wl_users.username',
-            'wl_users.player_id',
-            'wl_users.finished_at',
-            'wl_user_answers.question_id',
-            'wl_user_answers.value',
-            'wl_answers.description'
-        );
+    //     const answers = await knex('discord_whitelist')
+    //         .leftJoin('discord_whitelist_user_answers', 'discord_whitelist.user_id', 'discord_whitelist_user_answers.user_id')
+    //         .leftJoin('discord_questions_answers', 'discord_whitelist_user_answers.answer_id', 'discord_questions_answers.answer_id')
+    //         .where('discord_whitelist.deleted_at', null)
+    //         .orderBy(['discord_whitelist.username', 'discord_whitelist_user_answers.question_id'])
+    //         .select(
+    //             'discord_whitelist.user_id',
+    //             'discord_whitelist.username',
+    //             'discord_whitelist.player_id',
+    //             'discord_whitelist.finished_at',
+    //             'discord_whitelist_user_answers.question_id',
+    //             'discord_whitelist_user_answers.value',
+    //             'discord_questions_answers.description'
+    //         );
 
-    const usersAnswers = {};
-    for (let i in answers) {
-        const answer = answers[i];
+    //     const usersAnswers = {};
+    //     for (let i in answers) {
+    //         const answer = answers[i];
 
-        if (!usersAnswers[answer.user_id]) {
-            usersAnswers[answer.user_id] = {
-                user_id: answer.user_id,
-                username: answer.username,
-                player_id: answer.player_id,
-                finished_at: answer.finished_at,
-                answers: {},
-            };
-        }
+    //         if (!usersAnswers[answer.user_id]) {
+    //             usersAnswers[answer.user_id] = {
+    //                 user_id: answer.user_id,
+    //                 username: answer.username,
+    //                 player_id: answer.player_id,
+    //                 finished_at: answer.finished_at,
+    //                 answers: {},
+    //             };
+    //         }
 
-        if (answer.question_id) {
-            if (!usersAnswers[answer.user_id].answers[answer.question_id]) {
-                usersAnswers[answer.user_id].answers[answer.question_id] = {
-                    question_id: answer.question_id,
-                    value: answer.description ? answer.description : answer.value,
-                };
-            }
-        }
-    }
+    //         if (answer.question_id) {
+    //             if (!usersAnswers[answer.user_id].answers[answer.question_id]) {
+    //                 usersAnswers[answer.user_id].answers[answer.question_id] = {
+    //                     question_id: answer.question_id,
+    //                     value: answer.description ? answer.description : answer.value,
+    //                 };
+    //             }
+    //         }
+    //     }
 
-    return {
-        questions,
-        usersAnswers,
-    };
+    //     return {
+    //         questions,
+    //         usersAnswers,
+    //     };
 }
 
 module.exports = {
     start,
     setAnswer,
-    getAllUsersAnswers,
+    // getAllUsersAnswers,
 };

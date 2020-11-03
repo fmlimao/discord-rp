@@ -4,11 +4,11 @@ module.exports = async (req, res) => {
     let ret = req.ret;
 
     try {
-        const users = await knex('bot_users')
-            .where('bot_users.deleted_at', null)
-            .where('bot_users.active', 1)
-            .orderBy('bot_users.name')
-            .select('bot_users.user_id', 'bot_users.name', 'bot_users.email', 'bot_users.active');
+        const users = await knex('discord_system_users')
+            .where('deleted_at', null)
+            .where('active', 1)
+            .orderBy('name')
+            .select('user_id', 'name', 'email', 'active');
 
         ret.addContent('users', users);
     } catch (err) {

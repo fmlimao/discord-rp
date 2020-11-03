@@ -40,11 +40,15 @@
                 <h3 class="box-title">Lista de Usuários</h3>
             </div>
             <!-- /.box-header -->
-            <div class="box-body" v-if="lists.users.loading || (lists.users.started && !lists.users.loading && !lists.users.data.length)">
+            <div class="box-body"
+                v-if="lists.users.loading || (lists.users.started && !lists.users.loading && !lists.users.data.length)">
                 <div class="alert alert-info" v-if="lists.users.loading">Carregando...</div>
-                <div class="alert alert-warning" v-if="lists.users.started && !lists.users.loading && !lists.users.data.length">Nenhum usuário cadastrado</div>
+                <div class="alert alert-warning"
+                    v-if="lists.users.started && !lists.users.loading && !lists.users.data.length">Nenhum usuário
+                    cadastrado</div>
             </div>
-            <div class="box-body table-responsive no-padding" v-if="lists.users.started && !lists.users.loading && lists.users.data.length">
+            <div class="box-body table-responsive no-padding"
+                v-if="lists.users.started && !lists.users.loading && lists.users.data.length">
                 <table class="table table-hover">
                     <tbody>
                         <tr>
@@ -73,6 +77,190 @@
     </section>
 </div>
 
+<div v-if="currentPage === '/whitelist/questions'">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Perguntas
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/#/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li class="active"><i class="fa fa-list-ol"></i> Perguntas</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="alert" :class="{'alert-danger': lists.questions.error, 'alert-success': !lists.questions.error}"
+            v-if="lists.questions.messages.length" v-html="lists.questions.messages.join('<br>')"></div>
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Lista de Perguntas</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body"
+                v-if="lists.questions.loading || (lists.questions.started && !lists.questions.loading && !lists.questions.data.length)">
+                <div class="alert alert-info" v-if="lists.questions.loading">Carregando...</div>
+                <div class="alert alert-warning"
+                    v-if="lists.questions.started && !lists.questions.loading && !lists.questions.data.length">Nenhuma pergunta
+                    cadastrada</div>
+            </div>
+            <div class="box-body table-responsive no-padding"
+                v-if="lists.questions.started && !lists.questions.loading && lists.questions.data.length">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <th>ID</th>
+                            <th>Pergunta</th>
+                            <th>Tipo</th>
+                            <th>Opções</th>
+                        </tr>
+                        <tr v-for="question in lists.questions.data">
+                            <td>
+                                {{ question.question_id }}
+                            </td>
+                            <td>
+                                {{ question.description }}
+                            </td>
+                            <td>
+                                <span v-if="question.type === 'text'">Texto</span>
+                                <span v-if="question.type === 'options'">Opções</span>
+                            </td>
+                            <td>
+                                <div v-if="question.type === 'text'">---</div>
+                                <div v-if="question.type === 'options'">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr v-for="answer in question.answers" :class="{'text-success': answer.is_correct, 'text-danger': !answer.is_correct}">
+                                                <td width="30">
+                                                    [{{ answer.option }}]
+                                                </td>
+                                                <td>
+                                                    {{ answer.description }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+    </section>
+</div>
+
+<div v-if="currentPage === '/whitelist/answers'">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Perguntas
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/#/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li class="active"><i class="fa fa-list-ol"></i> Perguntas</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="alert" :class="{'alert-danger': lists.questions.error, 'alert-success': !lists.questions.error}"
+            v-if="lists.questions.messages.length" v-html="lists.questions.messages.join('<br>')"></div>
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Lista de Perguntas</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body"
+                v-if="lists.questions.loading || (lists.questions.started && !lists.questions.loading && !lists.questions.data.length)">
+                <div class="alert alert-info" v-if="lists.questions.loading">Carregando...</div>
+                <div class="alert alert-warning"
+                    v-if="lists.questions.started && !lists.questions.loading && !lists.questions.data.length">Nenhuma pergunta
+                    cadastrada</div>
+            </div>
+            <div class="box-body table-responsive no-padding"
+                v-if="lists.questions.started && !lists.questions.loading && lists.questions.data.length">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <th>ID</th>
+                            <th>Pergunta</th>
+                            <th>Tipo</th>
+                            <th>Opções</th>
+                        </tr>
+                        <tr v-for="question in lists.questions.data">
+                            <td>
+                                {{ question.question_id }}
+                            </td>
+                            <td>
+                                {{ question.description }}
+                            </td>
+                            <td>
+                                <span v-if="question.type === 'text'">Texto</span>
+                                <span v-if="question.type === 'options'">Opções</span>
+                            </td>
+                            <td>
+                                <div v-if="question.type === 'text'">---</div>
+                                <div v-if="question.type === 'options'">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr v-for="answer in question.answers" :class="{'text-success': answer.is_correct, 'text-danger': !answer.is_correct}">
+                                                <td width="30">
+                                                    [{{ answer.option }}]
+                                                </td>
+                                                <td>
+                                                    {{ answer.description }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+    </section>
+</div>
+
+<div v-if="currentPage === '/404'">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            404 - Página não encontrada
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/#/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li class="active">404 - Página não encontrada</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="error-page">
+            <h2 class="headline text-yellow"> 404</h2>
+
+            <div class="error-content">
+                <h3><i class="fa fa-warning text-yellow"></i> Oops! Página não encontrada!</h3>
+            </div>
+            <!-- /.error-content -->
+        </div>
+        <!-- /.error-page -->
+    </section>
+</div>
+
 
 
 <%- contentFor('scripts') %>
@@ -89,16 +277,36 @@
     });
 
     route.get('/dashboard', function (vars, next) {
-        console.log('dashboard');
         App.currentPage = '/dashboard';
         next();
     });
 
     route.get('/users', function (vars, next) {
-        console.log('users');
         App.currentPage = '/users';
 
         App.getUsers();
+
+        next();
+    });
+
+    route.get('/whitelist/questions', function (vars, next) {
+        App.currentPage = '/whitelist/questions';
+
+        App.getQuestions();
+
+        next();
+    });
+
+    route.get('/whitelist/answers', function (vars, next) {
+        App.currentPage = '/whitelist/answers';
+
+        App.getQuestions();
+
+        next();
+    });
+
+    route.error('404', function (vars, next) {
+        App.currentPage = '/404';
 
         next();
     });
@@ -113,9 +321,17 @@
                     messages: [],
                     data: [],
                 },
+                questions: {
+                    started: false,
+                    loading: false,
+                    error: false,
+                    messages: [],
+                    data: [],
+                },
             },
         },
         methods: {
+
             init: function () {
                 route.run();
             },
@@ -145,10 +361,10 @@
                     App.lists.users.error = response.error;
                     App.lists.users.messages = response.messages;
 
-                    console.log('response.content', response.content);
-
-                    for (var i in response.content.users) {
-                        App.lists.users.data.push(response.content.users[i]);
+                    if (!response.error) {
+                        for (var i in response.content.users) {
+                            App.lists.users.data.push(response.content.users[i]);
+                        }
                     }
 
                     App.lists.users.loading = false;
@@ -171,6 +387,39 @@
                     });
 
             },
+
+            getQuestions: function () {
+                var ajaxCb = (response) => {
+                    App.lists.questions.error = response.error;
+                    App.lists.questions.messages = response.messages;
+
+                    if (!response.error) {
+                        for (var i in response.content.questions) {
+                            App.lists.questions.data.push(response.content.questions[i]);
+                        }
+                    }
+
+                    App.lists.questions.loading = false;
+                };
+
+                App.clearlist('questions');
+                App.lists.questions.started = true;
+                App.lists.questions.loading = true;
+
+                axios.get(`${apiPath}/whitelist/questions`, {
+                    headers: {
+                        'x-access-token': token,
+                    },
+                })
+                    .then(function (response) {
+                        ajaxCb(response.data);
+                    })
+                    .catch(function (error) {
+                        ajaxCb(error.response.data);
+                    });
+
+            },
+
         },
     });
 

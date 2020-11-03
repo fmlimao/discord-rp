@@ -69,6 +69,7 @@ app.get('/', middlewareIsLogges('/login', null), (req, res) => {
     return res.render('app', {
         token: req.cookies.login,
         apiPath: process.env.API_PATH,
+        appVersion: process.env.APP_VERSION,
     });
 });
 

@@ -15,11 +15,11 @@ module.exports = async (req, res, next) => {
         const key = process.env.TOKEN_SECRET;
         const decodedToken = jwt.verify(token, key);
 
-        const user = await knex('bot_users')
-            .where('bot_users.deleted_at', null)
-            .where('bot_users.active', 1)
-            .where('bot_users.user_id', decodedToken.id)
-            .select('bot_users.user_id', 'bot_users.name', 'bot_users.email', 'bot_users.active')
+        const user = await knex('discord_system_users')
+            .where('deleted_at', null)
+            .where('active', 1)
+            .where('user_id', decodedToken.id)
+            .select('user_id', 'name', 'email', 'active')
             .first();
 
         if (!user) {

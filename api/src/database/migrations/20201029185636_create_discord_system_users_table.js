@@ -1,9 +1,8 @@
 module.exports = {
 
     up: function (knex) {
-        return knex.schema.createTable('bot_users', table => {
+        return knex.schema.createTable('discord_system_users', table => {
             table.increments('user_id').primary();
-            table.increments('ds_member_id').primary();
 
             table.string('name').notNullable();
             table.string('email').notNullable();
@@ -18,7 +17,7 @@ module.exports = {
     },
 
     down: async function (knex) {
-        return knex.schema.dropTable('bot_users');
+        return knex.schema.dropTable('discord_system_users');
     },
 
 };

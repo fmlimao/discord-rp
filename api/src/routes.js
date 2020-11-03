@@ -15,5 +15,6 @@ router.get('/users', middlewareAuth, require('./controllers/users/list'));
 // router.get('/users/:user_id', middlewareAuth, middlewareCheckIfUserExists, require('./controllers/users/show'));
 
 router.get('/whitelist/questions', middlewareAuth, require('./controllers/whitelist/questions/list'));
+router.get('/whitelist/answers', middlewareAuth, require('./controllers/whitelist/answers/list'));
 
 module.exports = router;

@@ -1,0 +1,88 @@
+body::-webkit-scrollbar {
+  width: 8px;
+}
+body::-webkit-scrollbar-track {
+  background-color: #36393F;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: #923CCF;
+}
+.btn {
+  outline: none;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+body {
+  background-color: #202225;
+  color: #fff;
+}
+header {
+  background-color: #36393F;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAANUlEQVQYV2M0s7T/zwAFfPwCDIzmlvb/QSL8/AIMHz9+gAiAZD59/ABWx+ji4f8fxGGEagMAGjMQ6Haee2EAAAAASUVORK5CYII=');
+}
+header .logo {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.menu {
+  background-color: #2F3136;
+  border-top: 1px solid #202225;
+}
+.menu ul.nav-pills li a {
+  outline: none;
+  border-radius: 0;
+  padding: 0 15px;
+  height: 60px;
+  line-height: 60px;
+  color: #fff;
+}
+.menu ul.nav-pills li a:hover,
+.menu ul.nav-pills li a:focus {
+  background-color: #36393F;
+}
+.menu ul.nav-pills li.active a {
+  background-color: #923CCF;
+}
+.menu nav.navbar {
+  background-color: transparent;
+  border: 0;
+  margin: 0;
+}
+.menu nav.navbar button.navbar-toggle {
+  background-color: #36393F;
+  border-color: #202225;
+}
+.menu nav.navbar div.navbar-collapse {
+  border: 0;
+}
+.menu nav.navbar ul.navbar-nav li a {
+  text-align: right;
+  color: #fff;
+}
+.menu nav.navbar ul.navbar-nav li a:hover {
+  background-color: #36393F;
+}
+.menu nav.navbar ul.navbar-nav li.active a {
+  background-color: #923CCF;
+}
+.site-content {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAL0lEQVQYV2M0s7T//+rlMwZGBghgVFBS/Q/j/IcJgGTExKUYwCoVlVRBEmAAYgAA/gQNnlK88bUAAAAASUVORK5CYII=');
+  padding-top: 30px;
+  box-shadow: inset 0 4px 6px -6px rgba(0, 0, 0, 0.6);
+}
+.site-content .panel-list {
+  background-color: #36393F;
+  border: 0;
+  box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.6);
+}
+.site-content .panel-list img {
+  margin: auto;
+}
+.site-content .panel-list .panel-footer {
+  background-color: #2F3136;
+  border: 0;
+}

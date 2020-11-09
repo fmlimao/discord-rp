@@ -86,3 +86,9 @@ header .logo {
   background-color: #2F3136;
   border: 0;
 }
+.page {
+  display: none;
+}
+.page.active {
+  display: block;
+}

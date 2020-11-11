@@ -29,6 +29,11 @@ app.get('/', (req, res) => {
     });
 });
 
+app.get('/robots.txt', (req, res) => {
+    return res.send(`User-Agent: *
+Disallow:`);
+});
+
 app.listen(process.env.APP_PORT, () => {
     console.log(`Servidor rodando na porta ${process.env.APP_PORT}`);
 });

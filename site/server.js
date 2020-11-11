@@ -19,8 +19,11 @@ app.use(logger('dev'));
 app.use(helmet());
 // app.use(cookieParser());
 
-
 app.get('/', (req, res) => {
+    if (process.env.MAINTENANCE == 1) {
+        return res.render('maintenance');
+    }
+
     return res.render('index', {
         apiPath: process.env.API_PATH,
     });

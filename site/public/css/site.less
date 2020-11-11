@@ -1,8 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap');
+
+.font-nunito {
+    font-family: 'Nunito', sans-serif;
+}
+
 @color-ds-1: #36393F;
 @color-ds-2: #2F3136;
 @color-ds-3: #202225;
 @color-ds-4: #40444B;
 @color-logo-1: #923CCF;
+
+.color-logo-1 {
+    color: @color-logo-1;
+}
 
 body::-webkit-scrollbar {
     width: 8px;
@@ -20,6 +30,14 @@ body::-webkit-scrollbar-thumb {
     outline: none;
 }
 
+.pattern-1 {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAL0lEQVQYV2M0s7T//+rlMwZGBghgVFBS/Q/j/IcJgGTExKUYwCoVlVRBEmAAYgAA/gQNnlK88bUAAAAASUVORK5CYII=');
+}
+
+.pattern-2 {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAANUlEQVQYV2M0s7T/zwAFfPwCDIzmlvb/QSL8/AIMHz9+gAiAZD59/ABWx+ji4f8fxGGEagMAGjMQ6Haee2EAAAAASUVORK5CYII=');
+}
+
 html,
 body {
     margin: 0;
@@ -30,67 +48,98 @@ body {
 body {
     background-color: @color-ds-3;
     color: #fff;
-}
+    .font-nunito;
 
-header {
-    background-color: @color-ds-1;
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAANUlEQVQYV2M0s7T/zwAFfPwCDIzmlvb/QSL8/AIMHz9+gAiAZD59/ABWx+ji4f8fxGGEagMAGjMQ6Haee2EAAAAASUVORK5CYII=');
+    &.maintenance {
+        .pattern-2;
+    }
 
-    .logo {
-        margin-top: 30px;
-        margin-bottom: 30px;
+    &.site {
+        .pattern-1;
     }
 }
 
-.menu {
-    background-color: @color-ds-2;
-    border-top: 1px solid @color-ds-3;
+.maintenance {
+    .box-maintenance {
+        padding: 15px;
+        text-align: center;
+        text-transform: uppercase;
+        text-shadow: 0 4px 4px rgba(0, 0, 0, .8);
 
-    ul.nav-pills {
-        li {
-            a {
-                outline: none;
-                border-radius: 0;
-                padding: 0 15px;
-                height: 60px;
-                line-height: 60px;
-                color: #fff;
+        h1 {
+            font-size: 14px;
+        }
 
-                &:hover,
-                &:focus {
-                    background-color: @color-ds-1;
-                }
+        h2 {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 14px;
+        }
+
+        a {
+            color: @color-logo-1;
+            text-decoration: underline;
+            text-shadow: 0 2px 2px rgba(255, 255, 255, .3),
+                0 3px 4px rgba(0, 0, 0, .8);
+        }
+
+        @media screen and (min-width: 768px) {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+
+            padding: 0;
+            margin-top: -210px;
+            margin-left: -300px;
+
+            width: 600px;
+            height: 420px;
+
+            h1 {
+                font-size: 24px;
             }
 
-            &.active {
-                a {
-                    background-color: @color-logo-1;
-                }
+            h2 {
+                font-size: 48px;
+            }
+
+            p {
+                font-size: 18px;
             }
         }
     }
+}
 
-    nav.navbar {
-        background-color: transparent;
-        border: 0;
-        margin: 0;
+.site {
+    header {
+        background-color: @color-ds-1;
+        .pattern-2;
 
-        button.navbar-toggle {
-            background-color: @color-ds-1;
-            border-color: @color-ds-3;
+        .logo {
+            margin-top: 30px;
+            margin-bottom: 30px;
         }
+    }
 
-        div.navbar-collapse {
-            border: 0;
-        }
+    .menu {
+        background-color: @color-ds-2;
+        border-top: 1px solid @color-ds-3;
 
-        ul.navbar-nav {
+        ul.nav-pills {
             li {
                 a {
-                    text-align: right;
+                    outline: none;
+                    border-radius: 0;
+                    padding: 0 15px;
+                    height: 60px;
+                    line-height: 60px;
                     color: #fff;
 
-                    &:hover {
+                    &:hover,
+                    &:focus {
                         background-color: @color-ds-1;
                     }
                 }
@@ -102,34 +151,96 @@ header {
                 }
             }
         }
-    }
-}
 
-.site-content {
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAL0lEQVQYV2M0s7T//+rlMwZGBghgVFBS/Q/j/IcJgGTExKUYwCoVlVRBEmAAYgAA/gQNnlK88bUAAAAASUVORK5CYII=');
-    padding-top: 30px;
-    box-shadow: inset 0 4px 6px -6px rgba(0, 0, 0, .6);
-
-    .panel-list {
-        background-color: @color-ds-1;
-        border: 0;
-        box-shadow: 0 4px 6px -2px rgba(0, 0, 0, .6);
-
-        img {
-            margin: auto;
-        }
-
-        .panel-footer {
-            background-color: @color-ds-2;
+        nav.navbar {
+            background-color: transparent;
             border: 0;
+            margin: 0;
+
+            button.navbar-toggle {
+                background-color: @color-ds-1;
+                border-color: @color-ds-3;
+            }
+
+            div.navbar-collapse {
+                border: 0;
+            }
+
+            ul.navbar-nav {
+                li {
+                    a {
+                        text-align: right;
+                        color: #fff;
+
+                        &:hover {
+                            background-color: @color-ds-1;
+                        }
+                    }
+
+                    &.active {
+                        a {
+                            background-color: @color-logo-1;
+                        }
+                    }
+                }
+            }
         }
     }
-}
 
-.page {
-    display: none;
+    .site-content {
+        padding-top: 30px;
+        box-shadow: inset 0 4px 6px -6px rgba(0, 0, 0, .6);
 
-    &.active {
-        display: block;
+        .panel-list {
+            background-color: @color-ds-1;
+            border: 0;
+            box-shadow: 0 4px 6px -2px rgba(0, 0, 0, .6);
+
+            img {
+                margin: auto;
+            }
+
+            .panel-footer {
+                background-color: @color-ds-2;
+                border: 0;
+            }
+        }
+    }
+
+    .page {
+        display: none;
+
+        &.active {
+            display: block;
+        }
+    }
+
+    .modal-content {
+        background-color: @color-ds-1;
+
+        .modal-header {
+            border-bottom: 1px solid @color-ds-3;
+        }
+
+        .modal-body {
+            a {
+                color: @color-logo-1;
+            }
+        }
+
+        .modal-footer {
+            border-top: 1px solid @color-ds-3;
+        }
+
+        .close {
+            color: @color-ds-3;
+            text-shadow: none;
+            filter: alpha(opacity=90);
+            opacity: .9;
+        }
+    }
+
+    blockquote {
+        border-left: 5px solid @color-logo-1;
     }
 }

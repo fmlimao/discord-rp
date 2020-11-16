@@ -1,65 +1,94 @@
-/*
-
-Planos
-
-
-
-Bronze
-    Salario a mais
-    Bonus na primeira compra
-    Carro VIP
-
-Prata
-    Salario a mais
-    Bonus na primeira compra
-    Carro VIP
-
-Ouro
-    Salario a mais
-    Bonus na primeira compra
-    Carro VIP
-
-Planita
-    Salario a mais
-    Bonus na primeira compra
-    Carro VIP
-    Limpa todos as multas acumuladas
-    1 ADV
-
-Diamante
-    Salario a mais
-    Bonus na primeira compra
-    Carro VIP
-    Carro Loja
-    Moto Loja
-    Limpa todos as multas acumuladas
-    2 ADV
-
-Obsidian
-    Salario a mais
-    Bonus na primeira compra
-    Carro VIP
-    Carro Loja
-    Moto Loja
-    Limpa todos as multas acumuladas
-    Remove Ban e todas ADV's
-
-*/
-
 var data = {
     pages: {
         'planos-vips': {
             items: {
-                '3001': { code: '3001', title: 'Plano 1', description: '<p>Descrição do plano 1</p><p>Cupidatat adipisicing culpa quis fugiat duis ipsum nostrud quis amet culpa aliqua aliqua irure.</p><p>Ut tempor irure tempor commodo.</p>', price: 'R$ 19,99/mês', image: '/assets/img/vips/bronze.png' },
-                '3002': { code: '3002', title: 'Plano 2', description: '<p>Descrição do plano 2</p><p>Est eiusmod do nostrud in ut fugiat.</p><p>Anim ea voluptate anim magna voluptate ipsum quis ea dolor.</p>', price: 'R$ 29,99/mês', image: '/assets/img/vips/bronze.png' },
-                '3003': { code: '3003', title: 'Plano 3', description: '<p>Descrição do plano 3</p><p>Nostrud irure esse sit nisi minim enim culpa.</p><p>Et sunt sint ex sint dolore do do adipisicing magna aliquip eu consectetur.</p>', price: 'R$ 39,99/mês', image: '/assets/img/vips/bronze.png' },
-                '3004': { code: '3004', title: 'Plano 4', description: '<p>Descrição do plano 4</p><p>Occaecat aliquip labore dolore exercitation tempor non consequat elit elit occaecat irure dolor.</p><p>Ut sit esse nulla qui ea labore incididunt ullamco qui velit.</p>', price: 'R$ 49,99/mês', image: '/assets/img/vips/bronze.png' },
-                '3005': { code: '3005', title: 'Plano 5', description: '<p>Descrição do plano 5</p><p>Aute non ex cupidatat do consectetur esse nulla aute.</p><p>Incididunt mollit exercitation sit consectetur commodo aliquip enim eu qui.</p>', price: 'R$ 59,99/mês', image: '/assets/img/vips/bronze.png' },
-                '3006': { code: '3006', title: 'Plano 6', description: '<p>Descrição do plano 6</p><p>Veniam consequat in Lorem do qui.</p><p>Fugiat pariatur tempor irure est.</p>', price: 'R$ 69,99/mês', image: '/assets/img/vips/bronze.png' },
-                '3007': { code: '3007', title: 'Plano 7', description: '<p>Descrição do plano 7</p><p>Esse quis amet fugiat eu officia quis fugiat consectetur amet incididunt incididunt.</p><p>Et et cupidatat dolor nisi.</p>', price: 'R$ 79,99/mês', image: '/assets/img/vips/bronze.png' },
-                '3008': { code: '3008', title: 'Plano 8', description: '<p>Descrição do plano 8</p><p>Laborum sit nisi enim magna qui qui proident reprehenderit fugiat in laboris duis adipisicing.</p><p>Anim enim quis do aliqua pariatur excepteur in in minim dolor officia.</p>', price: 'R$ 89,99/mês', image: '/assets/img/vips/bronze.png' },
-                '3009': { code: '3009', title: 'Plano 9', description: '<p>Descrição do plano 9</p><p>Ullamco voluptate duis adipisicing laboris proident pariatur.</p><p>Dolore cupidatat Lorem laboris officia consectetur cupidatat cillum enim culpa anim veniam cupidatat.</p>', price: 'R$ 99,99/mês', image: '/assets/img/vips/bronze.png' },
-                '3010': { code: '3010', title: 'Plano 10', description: '<p>Descrição do plano 10</p><p>Irure anim anim laboris eiusmod veniam.</p><p>Duis consequat nulla eiusmod non do occaecat velit adipisicing.</p>', price: 'R$ 109,99/mês', image: '/assets/img/vips/bronze.png' },
+                '1001': {
+                    code: '1001',
+                    title: 'VIP Bronze',
+                    description: `
+                        <ul>
+                            <li>Salário: $ 2.000 (durante 30 dias)</li>
+                            <li>Bonus: $ 250.000 (apenas no primeiro donate)</li>
+                            <li>Bonus: Carro VIP (apenas no primeiro donate)</li>
+                        </ul>
+                    `,
+                    price: 'R$ 25',
+                    image: '/assets/img/vips/bronze.png'
+                },
+                '1002': {
+                    code: '1002',
+                    title: 'VIP Prata',
+                    description: `
+                        <ul>
+                            <li>Salário: $ 5.000 (durante 30 dias)</li>
+                            <li>Bonus: $ 500.000 (apenas no primeiro donate)</li>
+                            <li>Bonus: Carro VIP (apenas no primeiro donate)</li>
+                        </ul>
+                    `,
+                    price: 'R$ 50',
+                    image: '/assets/img/vips/bronze.png'
+                },
+                '1003': {
+                    code: '1003',
+                    title: 'VIP Ouro',
+                    description: `
+                        <ul>
+                            <li>Salário: $ 10.000 (durante 30 dias)</li>
+                            <li>Bonus: $ 1.000.000 (apenas no primeiro donate)</li>
+                            <li>Bonus: Carro VIP (apenas no primeiro donate)</li>
+                        </ul>
+                    `,
+                    price: 'R$ 100',
+                    image: '/assets/img/vips/bronze.png'
+                },
+                '1004': {
+                    code: '1004',
+                    title: 'VIP Platina',
+                    description: `
+                        <ul>
+                            <li>Salário: $ 15.000 (durante 30 dias)</li>
+                            <li>Bonus: $ 1.500.000 (apenas no primeiro donate)</li>
+                            <li>Bonus: Carro VIP (apenas no primeiro donate)</li>
+                            <li>Bonus: Limpa todos as multas acumuladas (no ato do donate)</li>
+                            <li>Bonus: Limpa 1 ADV (no ato do donate)</li>
+                        </ul>
+                    `,
+                    price: 'R$ 150',
+                    image: '/assets/img/vips/bronze.png'
+                },
+                '1005': {
+                    code: '1005',
+                    title: 'VIP Diamante',
+                    description: `
+                        <ul>
+                            <li>Salário: $ 20.000 (durante 30 dias)</li>
+                            <li>Bonus: $ 2.000.000 (apenas no primeiro donate)</li>
+                            <li>Bonus: Carro VIP (apenas no primeiro donate)</li>
+                            <li>Bonus: Carro Loja (apenas no primeiro donate)</li>
+                            <li>Bonus: Limpa todos as multas acumuladas (no ato do donate)</li>
+                            <li>Bonus: Limpa 2 ADV (no ato do donate)</li>
+                        </ul>
+                    `,
+                    price: 'R$ 200',
+                    image: '/assets/img/vips/bronze.png'
+                },
+                '1006': {
+                    code: '1006',
+                    title: 'VIP Obsidian',
+                    description: `
+                        <ul>
+                            <li>Salário: $ 30.000 (durante 30 dias)</li>
+                            <li>Bonus: $ 3.000.000 (apenas no primeiro donate)</li>
+                            <li>Bonus: Carro VIP (apenas no primeiro donate)</li>
+                            <li>Bonus: Carro Loja (apenas no primeiro donate)</li>
+                            <li>Bonus: Moto Loja (apenas no primeiro donate)</li>
+                            <li>Bonus: Limpa todos as multas acumuladas (no ato do donate)</li>
+                            <li>Bonus: Remove Ban e todas ADV's (no ato do donate)</li>
+                        </ul>
+                    `,
+                    price: 'R$ 300',
+                    image: '/assets/img/vips/bronze.png'
+                },
             },
         },
         'veiculos-vips': {
@@ -143,12 +172,8 @@ $(function () {
 
                     <div class="panel-footer">
                         <div class="row">
-                            <div class="col-xs-12 col-sm-6">
-                                <button class="btn btn-dark-3 btn-block act-open-details" data-page="${page_id}" data-code="${item.code}">Detalhes</button>
-                                <div class="hidden-sm hidden-md hidden-lg"><br></div>
-                            </div>
-                            <div class="col-xs-12 col-sm-6">
-                                <button class="btn btn-purple btn-block">Eu quero</button>
+                            <div class="col-xs-12">
+                                <button class="btn btn-purple btn-block act-open-details" data-page="${page_id}" data-code="${item.code}">Detalhes</button>
                             </div>
                         </div>
                     </div>
@@ -181,6 +206,8 @@ $(function () {
         $('#modalDetailsLabel').text(`${item.title} - Código ${code}`);
 
         $('#modalDetailsBody').html(`
+            <h3 style="margin-bottom: 20px">Ao escolher este plano, você recebe:</h3>
+
             ${item.description}
 
             <br>
@@ -200,7 +227,7 @@ $(function () {
             <br>
 
             <p>
-                Exemplo de mensagem:
+                Copie a mensagem abaixo e cole no canal <a href="https://discord.com/channels/765235242600103936/775896151198269450" target="_blank">DONATES</a>:
             </p>
 
             <blockquote>
@@ -209,6 +236,7 @@ $(function () {
         `);
 
         $('#modalDetails').modal();
-    }).eq(10).trigger('click');
+    })
+    ;//.eq(3).trigger('click');
 
 });

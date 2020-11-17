@@ -3,7 +3,7 @@
   font-style: normal;
   font-weight: 300;
   font-display: swap;
-  src: local('Nunito Light'), local('Nunito-Light'), url(https://fonts.gstatic.com/s/nunito/v14/XRXW3I6Li01BKofAnsSkZg.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/nunito/v14/XRXW3I6Li01BKofAnsSkZg.ttf) format('truetype');
 }
 .font-nunito {
   font-family: 'Nunito', sans-serif;
@@ -168,6 +168,28 @@ body.site {
     font-size: 18px;
   }
 }
+.site .invite {
+  background-color: #3f175b;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 16px;
+  color: #fff;
+  -webkit-transition: all 300ms ease;
+  -moz-transition: all 300ms ease;
+  -ms-transition: all 300ms ease;
+  -o-transition: all 300ms ease;
+  transition: all 300ms ease;
+}
+.site .invite:hover {
+  background-color: #202225;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.site .invite a {
+  color: #fff;
+}
 .site header {
   position: relative;
   background-color: #36393F;
@@ -180,7 +202,7 @@ body.site {
   width: 100%;
   height: 100%;
   opacity: 0.5;
-  background-color: transparent;
+  background-color: #4d1c70;
   -webkit-transition: all 500ms ease;
   -moz-transition: all 500ms ease;
   -ms-transition: all 500ms ease;
@@ -200,7 +222,7 @@ body.site {
   transition: all 500ms ease;
 }
 .site header:hover .bg-animated {
-  background-color: #4d1c70;
+  background-color: transparent;
 }
 .site header:hover img {
   -moz-transform: scale(1.05);
@@ -290,7 +312,35 @@ body.site {
   filter: alpha(opacity=90);
   opacity: 0.9;
 }
-.site blockquote {
+.site .modal-content blockquote {
   border-left: 5px solid #923CCF;
   background-color: #2F3136;
+}
+.site footer {
+  background-color: #141517;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #fff;
+}
+.site footer a {
+  color: #923CCF;
+  font-weight: bold;
+}
+.site .loading {
+  z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAL0lEQVQYV2M0s7T//+rlMwZGBghgVFBS/Q/j/IcJgGTExKUYwCoVlVRBEmAAYgAA/gQNnlK88bUAAAAASUVORK5CYII=');
+}
+.site .loading img {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -100px;
+  margin-left: -100px;
 }

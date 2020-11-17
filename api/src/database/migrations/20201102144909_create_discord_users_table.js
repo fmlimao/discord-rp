@@ -2,7 +2,7 @@ module.exports = {
 
     up: function (knex) {
         return knex.schema.createTable('discord_users', table => {
-            table.bigInteger('user_id');
+            table.varchar('user_id');
             table.varchar('username');
             table.varchar('avatar');
 

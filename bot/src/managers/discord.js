@@ -30,7 +30,7 @@ const knex = require('../database/connection');
 //     }
 // }
 
-function getMessageVars(message, commands) {
+function getMessageVars(message/*, commands*/) {
     const isBot = message.author.id == process.env.BOT_ID;
     const isDm = message.channel.type === 'dm';
     const isTextChannel = message.channel.type === 'text';
@@ -46,7 +46,7 @@ function getMessageVars(message, commands) {
     const messageContentSplit = messageContentWithoutPrefix.split(/ +/);
     const messageCommand = messageContentSplit[0];
     const messageArgs = messageContentSplit.slice(1);
-    const isValidCommand = isCommand && checkIsValidCommand(message, commands, messageContent);
+    // const isValidCommand = isCommand && checkIsValidCommand(message, commands, messageContent);
 
     return {
         isBot,
@@ -62,7 +62,7 @@ function getMessageVars(message, commands) {
         // messageContentSplit,
         messageCommand,
         messageArgs,
-        isValidCommand,
+        // isValidCommand,
     };
 }
 

@@ -32,8 +32,9 @@
     <!-- Main content -->
     <section class="content">
 
-        <div class="alert" :class="{'alert-danger': pages.users.lists.users.error, 'alert-success': !pages.users.lists.users.error}"
-            v-if="pages.users.lists.users.messages.length" v-html="pages.users.lists.users.messages.join('<br>')"></div>
+        <div class="alert"
+            :class="{'alert-danger': pageUsers.lists.users.error, 'alert-success': !pageUsers.lists.users.error}"
+            v-if="pageUsers.lists.users.messages.length" v-html="pageUsers.lists.users.messages.join('<br>')"></div>
 
         <div class="box">
             <div class="box-header">
@@ -41,14 +42,15 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body"
-                v-if="pages.users.lists.users.loading || (pages.users.lists.users.started && !pages.users.lists.users.loading && !pages.users.lists.users.data.length)">
-                <div class="alert alert-info" v-if="pages.users.lists.users.loading">Carregando...</div>
+                v-if="pageUsers.lists.users.loading || (pageUsers.lists.users.started && !pageUsers.lists.users.loading && !pageUsers.lists.users.data.length)">
+                <div class="alert alert-info" v-if="pageUsers.lists.users.loading">Carregando...</div>
                 <div class="alert alert-warning"
-                    v-if="pages.users.lists.users.started && !pages.users.lists.users.loading && !pages.users.lists.users.data.length">Nenhum usuário
+                    v-if="pageUsers.lists.users.started && !pageUsers.lists.users.loading && !pageUsers.lists.users.data.length">
+                    Nenhum usuário
                     cadastrado</div>
             </div>
             <div class="box-body table-responsive no-padding"
-                v-if="pages.users.lists.users.started && !pages.users.lists.users.loading && pages.users.lists.users.data.length">
+                v-if="pageUsers.lists.users.started && !pageUsers.lists.users.loading && pageUsers.lists.users.data.length">
                 <table class="table table-hover">
                     <tbody>
                         <tr>
@@ -56,7 +58,7 @@
                             <th>Nome</th>
                             <th>Email</th>
                         </tr>
-                        <tr v-for="user in pages.users.lists.users.data">
+                        <tr v-for="user in pageUsers.lists.users.data">
                             <td>
                                 {{ user.user_id }}
                             </td>
@@ -93,8 +95,10 @@
     <!-- Main content -->
     <section class="content">
 
-        <div class="alert" :class="{'alert-danger': pages.whitelistQuestions.lists.questions.error, 'alert-success': !pages.whitelistQuestions.lists.questions.error}"
-            v-if="pages.whitelistQuestions.lists.questions.messages.length" v-html="pages.whitelistQuestions.lists.questions.messages.join('<br>')"></div>
+        <div class="alert"
+            :class="{'alert-danger': pageWhitelistQuestions.lists.questions.error, 'alert-success': !pageWhitelistQuestions.lists.questions.error}"
+            v-if="pageWhitelistQuestions.lists.questions.messages.length"
+            v-html="pageWhitelistQuestions.lists.questions.messages.join('<br>')"></div>
 
         <div class="box">
             <div class="box-header">
@@ -102,15 +106,16 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body"
-                v-if="pages.whitelistQuestions.lists.questions.loading || (pages.whitelistQuestions.lists.questions.started && !pages.whitelistQuestions.lists.questions.loading && !pages.whitelistQuestions.lists.questions.data.length)">
-                <div class="alert alert-info" v-if="pages.whitelistQuestions.lists.questions.loading">Carregando...</div>
+                v-if="pageWhitelistQuestions.lists.questions.loading || (pageWhitelistQuestions.lists.questions.started && !pageWhitelistQuestions.lists.questions.loading && !pageWhitelistQuestions.lists.questions.data.length)">
+                <div class="alert alert-info" v-if="pageWhitelistQuestions.lists.questions.loading">Carregando...</div>
                 <div class="alert alert-warning"
-                    v-if="pages.whitelistQuestions.lists.questions.started && !pages.whitelistQuestions.lists.questions.loading && !pages.whitelistQuestions.lists.questions.data.length">Nenhuma
+                    v-if="pageWhitelistQuestions.lists.questions.started && !pageWhitelistQuestions.lists.questions.loading && !pageWhitelistQuestions.lists.questions.data.length">
+                    Nenhuma
                     pergunta
                     cadastrada</div>
             </div>
             <div class="box-body table-responsive no-padding"
-                v-if="pages.whitelistQuestions.lists.questions.started && !pages.whitelistQuestions.lists.questions.loading && pages.whitelistQuestions.lists.questions.data.length">
+                v-if="pageWhitelistQuestions.lists.questions.started && !pageWhitelistQuestions.lists.questions.loading && pageWhitelistQuestions.lists.questions.data.length">
                 <table class="table table-hover">
                     <tbody>
                         <tr>
@@ -119,7 +124,7 @@
                             <th>Tipo</th>
                             <th>Opções</th>
                         </tr>
-                        <tr v-for="question in pages.whitelistQuestions.lists.questions.data">
+                        <tr v-for="question in pageWhitelistQuestions.lists.questions.data">
                             <td>
                                 {{ question.question_id }}
                             </td>
@@ -175,8 +180,10 @@
     <!-- Main content -->
     <section class="content">
 
-        <div class="alert" :class="{'alert-danger': pages.whitelistAnswers.lists.answers.error, 'alert-success': !pages.whitelistAnswers.lists.answers.error}"
-            v-if="pages.whitelistAnswers.lists.answers.messages.length" v-html="pages.whitelistAnswers.lists.answers.messages.join('<br>')"></div>
+        <div class="alert"
+            :class="{'alert-danger': pageWhitelistAnswers.lists.answers.error, 'alert-success': !pageWhitelistAnswers.lists.answers.error}"
+            v-if="pageWhitelistAnswers.lists.answers.messages.length"
+            v-html="pageWhitelistAnswers.lists.answers.messages.join('<br>')"></div>
 
         <div class="box">
             <div class="box-header">
@@ -184,15 +191,16 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body"
-                v-if="pages.whitelistAnswers.lists.answers.loading || (pages.whitelistAnswers.lists.answers.started && !pages.whitelistAnswers.lists.answers.loading && !pages.whitelistAnswers.lists.answers.data.length)">
-                <div class="alert alert-info" v-if="pages.whitelistAnswers.lists.answers.loading">Carregando...</div>
+                v-if="pageWhitelistAnswers.lists.answers.loading || (pageWhitelistAnswers.lists.answers.started && !pageWhitelistAnswers.lists.answers.loading && !pageWhitelistAnswers.lists.answers.data.length)">
+                <div class="alert alert-info" v-if="pageWhitelistAnswers.lists.answers.loading">Carregando...</div>
                 <div class="alert alert-warning"
-                    v-if="pages.whitelistAnswers.lists.answers.started && !pages.whitelistAnswers.lists.answers.loading && !pages.whitelistAnswers.lists.answers.data.length">Nenhuma
+                    v-if="pageWhitelistAnswers.lists.answers.started && !pageWhitelistAnswers.lists.answers.loading && !pageWhitelistAnswers.lists.answers.data.length">
+                    Nenhuma
                     pergunta
                     cadastrada</div>
             </div>
             <div class="box-body table-responsive no-padding"
-                v-if="pages.whitelistAnswers.lists.answers.started && !pages.whitelistAnswers.lists.answers.loading && pages.whitelistAnswers.lists.answers.data.length">
+                v-if="pageWhitelistAnswers.lists.answers.started && !pageWhitelistAnswers.lists.answers.loading && pageWhitelistAnswers.lists.answers.data.length">
                 <table class="table table-hover">
                     <tbody>
                         <tr>
@@ -201,7 +209,7 @@
                             <th>Tipo</th>
                             <th>Opções</th>
                         </tr>
-                        <tr v-for="answer in pages.whitelistAnswers.lists.answers.data">
+                        <tr v-for="answer in pageWhitelistAnswers.lists.answers.data">
                             <td>
                                 {{ answer.question_id }}
                             </td>
@@ -319,38 +327,36 @@
 
     mixins.push({
         data: {
-            pages: {
-                users: {
-                    lists: {
-                        users: {
-                            started: false,
-                            loading: false,
-                            error: false,
-                            messages: [],
-                            data: [],
-                        },
+            pageUsers: {
+                lists: {
+                    users: {
+                        started: false,
+                        loading: false,
+                        error: false,
+                        messages: [],
+                        data: [],
                     },
                 },
-                whitelistQuestions: {
-                    lists: {
-                        questions: {
-                            started: false,
-                            loading: false,
-                            error: false,
-                            messages: [],
-                            data: [],
-                        },
+            },
+            pageWhitelistQuestions: {
+                lists: {
+                    questions: {
+                        started: false,
+                        loading: false,
+                        error: false,
+                        messages: [],
+                        data: [],
                     },
                 },
-                whitelistAnswers: {
-                    lists: {
-                        answers: {
-                            started: false,
-                            loading: false,
-                            error: false,
-                            messages: [],
-                            data: [],
-                        },
+            },
+            pageWhitelistAnswers: {
+                lists: {
+                    answers: {
+                        started: false,
+                        loading: false,
+                        error: false,
+                        messages: [],
+                        data: [],
                     },
                 },
             },
@@ -362,42 +368,42 @@
             },
 
             clearPageList: function (pageName, listName) {
-                App.pages[pageName].lists[listName].started = false;
-                App.pages[pageName].lists[listName].loading = false;
-                App.pages[pageName].lists[listName].error = false;
-                App.pages[pageName].lists[listName].messages = [];
-                App.pages[pageName].lists[listName].data = [];
+                App[pageName].lists[listName].started = false;
+                App[pageName].lists[listName].loading = false;
+                App[pageName].lists[listName].error = false;
+                App[pageName].lists[listName].messages = [];
+                App[pageName].lists[listName].data = [];
             },
 
             clearPageForm: function (pageName, formName) {
-                App.pages[pageName].forms[formName].error = false;
-                App.pages[pageName].forms[formName].loading = false;
-                App.pages[pageName].forms[formName].messages = [];
+                App[pageName].forms[formName].error = false;
+                App[pageName].forms[formName].loading = false;
+                App[pageName].forms[formName].messages = [];
 
-                for (let field in App.pages[pageName].forms[formName].fields) {
-                    App.pages[pageName].forms[formName].fields[field].value = App.pages[pageName].forms[formName].fields[field].value.trim();
-                    App.pages[pageName].forms[formName].fields[field].error = false;
-                    App.pages[pageName].forms[formName].fields[field].messages = [];
+                for (let field in App[pageName].forms[formName].fields) {
+                    App[pageName].forms[formName].fields[field].value = App[pageName].forms[formName].fields[field].value.trim();
+                    App[pageName].forms[formName].fields[field].error = false;
+                    App[pageName].forms[formName].fields[field].messages = [];
                 }
             },
 
             getUsers: function () {
                 var ajaxCb = (response) => {
-                    App.pages.users.lists.users.error = response.error;
-                    App.pages.users.lists.users.messages = response.messages;
+                    App.pageUsers.lists.users.error = response.error;
+                    App.pageUsers.lists.users.messages = response.messages;
 
                     if (!response.error) {
                         for (var i in response.content.users) {
-                            App.pages.users.lists.users.data.push(response.content.users[i]);
+                            App.pageUsers.lists.users.data.push(response.content.users[i]);
                         }
                     }
 
-                    App.pages.users.lists.users.loading = false;
+                    App.pageUsers.lists.users.loading = false;
                 };
 
                 App.clearPageList('users', 'users');
-                App.pages.users.lists.users.started = true;
-                App.pages.users.lists.users.loading = true;
+                App.pageUsers.lists.users.started = true;
+                App.pageUsers.lists.users.loading = true;
 
                 axios.get(`${apiPath}/users`, {
                     headers: {
@@ -415,21 +421,21 @@
 
             getQuestions: function () {
                 var ajaxCb = (response) => {
-                    App.pages.whitelistQuestions.lists.questions.error = response.error;
-                    App.pages.whitelistQuestions.lists.questions.messages = response.messages;
+                    App.pageWhitelistQuestions.lists.questions.error = response.error;
+                    App.pageWhitelistQuestions.lists.questions.messages = response.messages;
 
                     if (!response.error) {
                         for (var i in response.content.questions) {
-                            App.pages.whitelistQuestions.lists.questions.data.push(response.content.questions[i]);
+                            App.pageWhitelistQuestions.lists.questions.data.push(response.content.questions[i]);
                         }
                     }
 
-                    App.pages.whitelistQuestions.lists.questions.loading = false;
+                    App.pageWhitelistQuestions.lists.questions.loading = false;
                 };
 
                 App.clearPageList('whitelistQuestions', 'questions');
-                App.pages.whitelistQuestions.lists.questions.started = true;
-                App.pages.whitelistQuestions.lists.questions.loading = true;
+                App.pageWhitelistQuestions.lists.questions.started = true;
+                App.pageWhitelistQuestions.lists.questions.loading = true;
 
                 axios.get(`${apiPath}/whitelist/questions`, {
                     headers: {
@@ -447,21 +453,21 @@
             getAnswers: function () {
                 var ajaxCb = (response) => {
                     console.log('response', response);
-                    App.pages.whitelistAnswers.lists.answers.error = response.error;
-                    App.pages.whitelistAnswers.lists.answers.messages = response.messages;
+                    App.pageWhitelistAnswers.lists.answers.error = response.error;
+                    App.pageWhitelistAnswers.lists.answers.messages = response.messages;
 
                     if (!response.error) {
                         for (var i in response.content.answers) {
-                            App.pages.whitelistAnswers.lists.answers.data.push(response.content.answers[i]);
+                            App.pageWhitelistAnswers.lists.answers.data.push(response.content.answers[i]);
                         }
                     }
 
-                    App.pages.whitelistAnswers.lists.answers.loading = false;
+                    App.pageWhitelistAnswers.lists.answers.loading = false;
                 };
 
                 App.clearPageList('whitelistAnswers', 'answers');
-                App.pages.whitelistAnswers.lists.answers.started = true;
-                App.pages.whitelistAnswers.lists.answers.loading = true;
+                App.pageWhitelistAnswers.lists.answers.started = true;
+                App.pageWhitelistAnswers.lists.answers.loading = true;
 
                 axios.get(`${apiPath}/whitelist/answers`, {
                     headers: {

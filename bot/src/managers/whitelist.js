@@ -2,67 +2,407 @@ const discordManager = require('./discord');
 const utf8 = require('utf8');
 const knex = require('../database/connection');
 
+// REVISADO
+function reset(message, messageContent, messageCommand, messageArgs) {
+    return new Promise(async resolve => {
+        const user_id = message.author.id;
+
+        // buscando estagio do whitelist
+        const userWhitelist = await getUserWhitelist(user_id);
+
+        // apagando os dados da whitelist do usuario
+        deleteUserChannel(message, userWhitelist);
+        deleteUserWhitelist(message, userWhitelist);
+        disableRoleWhitelist(message);
+
+
+        return resolve(message);
+    });
+}
+
+// REVISADO
+function start(message, messageContent, messageCommand, messageArgs) {
+    /**
+     * - se ja iniciou, exibir proxima pergunta no canal de respostas
+     * - se nao iniciou
+     *   - criar o canal de respostas
+     *   - criar o registro da whitelist
+     *   - exibir proxima pergunta no canal de respostas
+     */
+
+    return new Promise(async resolve => {
+        const {
+            messageArgs,
+        } = discordManager.getMessageVars(message);
+
+        const user_id = message.author.id;
+        const username = message.author.username;
+
+        // buscando estagio do whitelist
+        const userWhitelist = await getUserWhitelist(user_id);
+
+        if (!userWhitelist) {
+            const channel = await createUserChannel(message);
+
+            if (channel) {
+                await createUserWhitelist(message, channel);
+                sendMessage(channel, `Olá \`${username}\`, iremos iniciar um pequeno questionário para te habilitar em nossos servidores. Serão poucas perguntas, para saber se você conhece nossas regras, ou seja, é importante que você leia todo o conteúdo do canal Regras, ok?`);
+            }
+        }
+
+        await showWhitelistQuestion(message);
+
+        if (messageArgs.length) {
+            setTimeout(function () {
+                reset(message, messageContent, messageCommand, messageArgs)
+            }, messageArgs[0]);
+        }
+
+        return resolve(message);
+    });
+}
+
+// REVISADO
+async function setAnswer(message, messageContent, messageCommand, messageArgs) {
+    const user_id = message.author.id;
+
+    // buscando estagio do whitelist
+    const userWhitelist = await getUserWhitelist(user_id);
+
+    if (!userWhitelist) {
+        return sendErrorAnswer(message.channel, 'Você ainda não iniciou o whitelist. Para iniciar, vá ao canal "iniciar-aqui" e mande o comando `!iniciar`.');
+    }
+
+    const currentAnswer = messageContent.trim();
+
+    // se ja finalizou
+    if (userWhitelist.finished_at) {
+        return message.delete();
+    }
+
+    // solicitar o nome do usuario
+    if (!userWhitelist.user_name) {
+        const currentAnswerString = String(currentAnswer);
+        const max = 100;
+
+        if (currentAnswerString.length > max) {
+            sendErrorAnswer(message.channel, `Sua resposta precisa ter menos de ${max} caracteres`);
+            return await showWhitelistQuestion(message);
+        } else {
+            await knex('discord_whitelist')
+                .where('discord_whitelist.deleted_at', null)
+                .where('discord_whitelist.user_id', user_id)
+                .update({
+                    user_name: currentAnswer,
+                });
+
+            return await showWhitelistQuestion(message);
+        }
+    }
+
+    // solicitar email do usuario
+    if (!userWhitelist.user_email) {
+        if (!validateEmail(currentAnswer)) {
+            sendErrorAnswer(message.channel, `E-mail inválido!`);
+            return await showWhitelistQuestion(message);
+        } else {
+            await knex('discord_whitelist')
+                .where('discord_whitelist.deleted_at', null)
+                .where('discord_whitelist.user_id', user_id)
+                .update({
+                    user_email: currentAnswer,
+                });
+
+            return await showWhitelistQuestion(message);
+        }
+    }
+
+    // solicitar a data de nascimento do usuario
+    if (!userWhitelist.user_birth) {
+        if (!validateBirth(currentAnswer)) {
+            sendErrorAnswer(message.channel, `Data inválida!`);
+            return await showWhitelistQuestion(message);
+        } else {
+            await knex('discord_whitelist')
+                .where('discord_whitelist.deleted_at', null)
+                .where('discord_whitelist.user_id', user_id)
+                .update({
+                    user_birth: currentAnswer.split('/').reverse().join('-'),
+                });
+
+            return await showWhitelistQuestion(message);
+        }
+    }
+
+    // e não tem o player_id, recebemos ele
+    if (!userWhitelist.player_id) {
+
+        // analisar resposta do usuário
+        const currentAnswerClean = currentAnswer.replace(/\D+/g, '');
+
+        if (currentAnswer !== currentAnswerClean) {
+            sendErrorAnswer(message.channel, 'Player ID inválido!');
+            return await showWhitelistQuestion(message);
+        } else {
+            await knex('discord_whitelist')
+                .where('discord_whitelist.deleted_at', null)
+                .where('discord_whitelist.user_id', user_id)
+                .update({
+                    player_id: currentAnswer,
+                });
+
+            return await showWhitelistQuestion(message);
+        }
+    }
+
+    // solicitar nome do personagem
+    if (!userWhitelist.player_name) {
+        const currentAnswerString = String(currentAnswer);
+        const max = 100;
+
+        if (currentAnswerString.length > max) {
+            sendErrorAnswer(message.channel, `Sua resposta precisa ter menos de ${max} caracteres`);
+            return await showWhitelistQuestion(message);
+        } else {
+            await knex('discord_whitelist')
+                .where('discord_whitelist.deleted_at', null)
+                .where('discord_whitelist.user_id', user_id)
+                .update({
+                    player_name: currentAnswer,
+                });
+
+            return await showWhitelistQuestion(message);
+        }
+    }
+
+    // se já tiver o player_id...
+
+    // buscando as perguntas e respostas
+    const {
+        questionsList,
+        questionIdWithoutAnswer,
+    } = await getUserQuestionsAndAnswers(user_id);
+
+    // se todas as pergutas já foram respondidas, aviso o usuário
+    if (!questionIdWithoutAnswer) {
+        return await showWhitelistQuestion(message);
+        // return sendSuccessMessage(message.channel, 'Parabéns! Você já finalizou o whitelist!!!');
+    }
+
+    const answerInsertOption = {
+        user_id: user_id,
+        question_id: questionsList[questionIdWithoutAnswer].question_id,
+    };
+
+    if (questionsList[questionIdWithoutAnswer].type === 'options') {
+        const currentAnswerClean = currentAnswer.replace(/\D+/g, '');
+
+        if (currentAnswer !== currentAnswerClean) {
+            sendErrorAnswer(message.channel, 'Sua resposta precisa ser uma das listadas acima!');
+            return await showWhitelistQuestion(message);
+        } else {
+            let isValidAnswer = false;
+            for (let i in questionsList[questionIdWithoutAnswer].answers) {
+                if (questionsList[questionIdWithoutAnswer].answers[i].option == currentAnswer) {
+                    isValidAnswer = true;
+                }
+            }
+
+            if (!isValidAnswer) {
+                sendErrorAnswer(message.channel, 'Sua resposta precisa ser uma das listadas acima!');
+                return await showWhitelistQuestion(message);
+            } else {
+                answerInsertOption.answer_id = currentAnswer;
+            }
+        }
+    } else {
+        const currentAnswerString = String(currentAnswer);
+        const max = 100;
+
+        if (currentAnswerString.length > max) {
+            sendErrorAnswer(message.channel, `Sua resposta precisa ter menos de ${max} caracteres`);
+            return await showWhitelistQuestion(message);
+        } else {
+            answerInsertOption.value = currentAnswer;
+        }
+    }
+
+    if (
+        answerInsertOption.answer_id
+        || answerInsertOption.value
+    ) {
+        await knex('discord_whitelist_user_answers').insert(answerInsertOption);
+        return await showWhitelistQuestion(message);
+    }
+}
+
+// REVISADO
 function sendMessage(to, body) {
     const title = 'Questionário de Whitelist';
     const color = 0x0000ff;
     discordManager.sendMessage(to, title, body, color);
 }
 
+// REVISADO
 function sendErrorAnswer(to, body) {
     const title = 'Resposta Errada';
     const color = 0xff0000;
     discordManager.sendMessage(to, title, body, color);
 }
 
+// REVISADO
 function sendSuccessMessage(to, body) {
     const title = 'Sucesso!!!';
     const color = 0x00ff00;
     discordManager.sendMessage(to, title, body, color);
 }
 
-async function getUserWhitelist(user_id) {
-    const userWhitelist = await knex('discord_whitelist')
-        .where('discord_whitelist.deleted_at', null)
-        .where('discord_whitelist.user_id', user_id)
-        .select('discord_whitelist.user_id', 'discord_whitelist.user_name', 'discord_whitelist.user_email', 'discord_whitelist.user_birth', 'discord_whitelist.player_name', 'discord_whitelist.player_id', 'discord_whitelist.finished_at')
-        .first();
-
-    return userWhitelist;
+// REVISADO
+function sendAlertMessage(to, body) {
+    const title = 'Alerta!';
+    const color = 0xffff00;
+    discordManager.sendMessage(to, title, body, color);
 }
 
+// REVISADO
+async function getUserWhitelist(user_id) {
+    return await knex('discord_whitelist')
+        .where('discord_whitelist.deleted_at', null)
+        .where('discord_whitelist.user_id', user_id)
+        .select('discord_whitelist.user_id', 'discord_whitelist.channel_id', 'discord_whitelist.user_name', 'discord_whitelist.user_email', 'discord_whitelist.user_birth', 'discord_whitelist.player_name', 'discord_whitelist.player_id', 'discord_whitelist.finished_at')
+        .first();
+}
+
+// REVISADO
+async function createUserChannel(message) {
+    const user_id = message.author.id;
+
+    return await message.channel.guild.channels.create('Responda Aqui', {
+        type: 'text',
+        parent: process.env.DS_CATEGORY_WHITELIST,
+        permissionOverwrites: [
+            {
+                // todo mundo
+                id: message.channel.guild.roles.everyone,
+                deny: ['VIEW_CHANNEL'],
+            },
+            {
+                // usuario atual
+                id: user_id,
+                allow: ['VIEW_CHANNEL'],
+            },
+            {
+                // bot
+                id: process.env.BOT_ID,
+                allow: ['VIEW_CHANNEL'],
+            },
+        ],
+    });
+}
+
+// REVISADO
+function deleteUserChannel(message, userWhitelist) {
+    if (userWhitelist && userWhitelist.channel_id) {
+        const channel = message.channel.guild.channels.cache.get(userWhitelist.channel_id);
+        if (channel) {
+            channel.delete();
+        }
+    }
+}
+
+// REVISADO
+async function createUserWhitelist(message, channel) {
+    const user_id = message.author.id;
+    const username = message.author.username;
+    const avatar = message.author.avatarURL();
+
+    await knex('discord_users').insert({
+        user_id: user_id,
+        username: utf8.encode(username),
+        avatar: avatar,
+    });
+
+    await knex('discord_whitelist').insert({
+        user_id: user_id,
+        channel_id: channel.id,
+    });
+}
+
+// REVISADO
+async function deleteUserWhitelist(message, userWhitelist) {
+    const user_id = message.author.id;
+
+    if (userWhitelist) {
+        await knex('discord_whitelist')
+            .where('discord_whitelist.deleted_at', null)
+            .where('discord_whitelist.user_id', user_id)
+            .delete();
+
+        await knex('discord_whitelist_user_answers')
+            .where('discord_whitelist_user_answers.deleted_at', null)
+            .where('discord_whitelist_user_answers.user_id', user_id)
+            .delete();
+    }
+}
+
+// REVISADO
+function enableRoleWhitelist(message) {
+    message.member.roles.add(process.env.DS_ROLE_WHITELIST);
+    message.member.roles.remove(process.env.DS_ROLE_TESTERS);
+}
+
+// REVISADO
+function disableRoleWhitelist(message) {
+    message.member.roles.add(process.env.DS_ROLE_TESTERS);
+    message.member.roles.remove(process.env.DS_ROLE_WHITELIST);
+}
+
+// REVISADO
 async function showWhitelistQuestion(message) {
     const user_id = message.author.id;
 
     // buscando estagio do whitelist
     const userWhitelist = await getUserWhitelist(user_id);
 
+    const channel = message.channel.guild.channels.cache.get(userWhitelist.channel_id);
+
+    // se ja finalizou
+    if (userWhitelist.finished_at) {
+        return message.delete();
+    }
+
     // solicitar o nome do usuario
     if (!userWhitelist.user_name) {
-        return sendMessage(message.author, 'Para iniciar o questionário, nos informe o seu nome completo:');
+        return sendMessage(channel, 'Para iniciar o questionário, nos informe o seu nome completo:');
     }
 
     // solicitar email do usuario
     if (!userWhitelist.user_email) {
-        return sendMessage(message.author, 'Nos informe o seu e-mail:');
+        return sendMessage(channel, 'Nos informe o seu e-mail:');
     }
 
     // solicitar a data de nascimento do usuario
     if (!userWhitelist.user_birth) {
-        return sendMessage(message.author, 'Nos informe sua data de nascimento:');
+        return sendMessage(channel, 'Nos informe sua data de nascimento:');
     }
 
     // solicitar id do personagem
     if (!userWhitelist.player_id) {
-        return sendMessage(message.author, 'Nos informe o seu ID de jogador do nosso servidor:');
+        return sendMessage(channel, 'Nos informe o seu ID de jogador do nosso servidor:');
     }
 
     // solicitar nome do personagem
     if (!userWhitelist.player_name) {
-        return sendMessage(message.author, 'Nos informe o seu nome que terá o seu personagem:');
+        return sendMessage(channel, 'Nos informe o seu nome que terá o seu personagem:');
     }
 
     // buscando as perguntas e respostas
-    const { questionsList, questionIdWithoutAnswer } = await getUserQuestionsAndAnswers(user_id);
+    const {
+        questionsList,
+        questionIdWithoutAnswer,
+        minTaxCorrectAnswers,
+        currentTaxCorrectAnswers,
+    } = await getUserQuestionsAndAnswers(user_id);
 
     // se todas as pergutas já foram respondidas, finalizo o processo
     if (!questionIdWithoutAnswer) {
@@ -73,24 +413,61 @@ async function showWhitelistQuestion(message) {
                 finished_at: knex.fn.now(),
             });
 
-        return sendSuccessMessage(message.author, 'Parabéns! Você já finalizou o whitelist!!!');
-    }
+        if (currentTaxCorrectAnswers >= minTaxCorrectAnswers) {
+            enableRoleWhitelist(message);
+            sendSuccessMessage(channel, 'Parabéns! Você já finalizou o whitelist!!!\n\nAgora você já esta liberado para jogar. Aproveite e se divirta!\n\nE não se preocupe, em breve este canal deixará de existir.');
 
-    console.log('=> BOT: - EXIBINDO PERGUNTA ' + questionIdWithoutAnswer);
-    console.log('=> BOT:   - ' + questionsList[questionIdWithoutAnswer].question_id + '] ' + questionsList[questionIdWithoutAnswer].description);
+            setTimeout(function () {
+                deleteUserChannel(message, userWhitelist);
+            }, 60000);
+        } else {
+            sendSuccessMessage(channel, 'Parabéns! Você já finalizou o whitelist!!!\n\nPorém você não atingiu a pontuação mínima com suas respostas. Por isso um @Staff noso entrará em contato com você =). Caso você não seja chamado em 1 hora, por favor entre em contato em nosso canal se suporte.');
+
+            const channelCall = message.channel.guild.channels.cache.get(process.env.DS_CHANNEL_WHITELIST_CALL);
+
+            const channelName = `respostas-${userWhitelist.player_id}`;
+            channel.setName(channelName);
+
+            sendAlertMessage(channelCall, `Atenção, um jogador precisa ser entrevistado no canal de Whitelist.
+
+            username: \`${message.author.username}\`
+            nickname: \`${message.member.nickname}\`
+
+            Nome do jogador: \`${userWhitelist.user_name}\`
+            ID no jogo: \`${userWhitelist.player_id}\`
+            Nome no jogo: \`${userWhitelist.player_name}\`
+
+            Canal: \`${channelName}\`
+            `);
+        }
+
+        return;
+    }
 
     let msg = `${questionsList[questionIdWithoutAnswer].question_id} - ${questionsList[questionIdWithoutAnswer].description}\n`;
 
     if (questionsList[questionIdWithoutAnswer].type === 'options') {
         for (let i in questionsList[questionIdWithoutAnswer].answers) {
-            console.log('=> BOT:     - [' + questionsList[questionIdWithoutAnswer].answers[i].option + '] ' + questionsList[questionIdWithoutAnswer].answers[i].description);
             msg += `\n    [${questionsList[questionIdWithoutAnswer].answers[i].option}] - ${questionsList[questionIdWithoutAnswer].answers[i].description}`;
         }
     }
 
-    return sendMessage(message.author, msg);
+    return sendMessage(channel, msg);
 }
 
+// REVISADO
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
+// REVISADO
+function validateBirth(birth) {
+    const re = /(\d){2}\/(\d){2}\/(\d){4}/;
+    return re.test(birth);
+}
+
+// REVISADO
 async function getUserQuestionsAndAnswers(user_id) {
     const questionsAndAnswers = await knex('discord_whitelist_questions')
         .leftJoin('discord_whitelist_question_answers', function () {
@@ -157,277 +534,35 @@ async function getUserQuestionsAndAnswers(user_id) {
         }
     }
 
+    let minTaxCorrectAnswers = .7;
+    let questionsAmount = 0;
+    let correctAnswersAmount = 0;
+    for (let i in questionsList) {
+        questionsAmount++;
+
+        if (questionsList[i].userAnswer) {
+            for (let j in questionsList[i].answers) {
+                if (
+                    questionsList[i].answers[j].option == questionsList[i].userAnswer
+                    && questionsList[i].answers[j].is_correct
+                ) correctAnswersAmount++;
+            }
+        }
+    }
+    let currentTaxCorrectAnswers = correctAnswersAmount / questionsAmount;
+
     return {
         questionsList,
         questionIdWithoutAnswer,
+        minTaxCorrectAnswers,
+        currentTaxCorrectAnswers,
+        questionsAmount,
+        correctAnswersAmount,
     };
-}
-
-function validateEmail(email) {
-    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-}
-
-function validateBirth(birth) {
-    const re = /(\d){2}\/(\d){2}\/(\d){4}/;
-    return re.test(birth);
-}
-
-async function start(message, messageContent, messageCommand, messageArgs) {
-    const user_id = message.author.id;
-    const username = message.author.username;
-    const avatar = message.author.avatarURL();
-
-    // buscando estagio do whitelist
-    const userWhitelist = await getUserWhitelist(user_id);
-
-    // se o usuário ainda nao tem o registro, criamos um
-    if (!userWhitelist) {
-        await knex('discord_users').insert({
-            user_id: user_id,
-            username: utf8.encode(username),
-            avatar: avatar,
-        });
-
-        await knex('discord_whitelist').insert({
-            user_id: user_id,
-        });
-
-        sendMessage(message.author, 'Iremos iniciar um pequeno questionário para te habilitar em nossos servidores. Serão poucas perguntas, para saber se você conhece nossas regras, ou seja, é importante que você leia todo o conteúdo do canal Regras, ok?');
-
-        return await showWhitelistQuestion(message);
-    }
-
-    // se o usuário ja tem o registro...
-
-    // e se já está finalizado, avisamos o usuário
-    if (userWhitelist.finished_at) {
-        return sendSuccessMessage(message.author, 'Parabéns! Você já finalizou o whitelist!!!');
-    }
-
-    // se ainda não está finalizada...
-    return await showWhitelistQuestion(message);
-}
-
-async function setAnswer(message, messageContent, messageCommand, messageArgs) {
-    const user_id = message.author.id;
-
-    // buscando estagio do whitelist
-    const userWhitelist = await getUserWhitelist(user_id);
-
-    if (!userWhitelist) {
-        return sendErrorAnswer(message.author, 'Você ainda não iniciou o whitelist. Para iniciar, responda com `!wl`.');
-    }
-
-    const currentAnswer = messageArgs.join(' ');
-
-    // solicitar o nome do usuario
-    if (!userWhitelist.user_name) {
-        const currentAnswerString = String(currentAnswer);
-        const max = 100;
-
-        if (currentAnswerString.length > max) {
-            sendErrorAnswer(message.author, `Sua resposta precisa ter menos de ${max} caracteres`);
-            return await showWhitelistQuestion(message);
-        } else {
-            await knex('discord_whitelist')
-                .where('discord_whitelist.deleted_at', null)
-                .where('discord_whitelist.user_id', user_id)
-                .update({
-                    user_name: currentAnswer,
-                });
-
-            return await showWhitelistQuestion(message);
-        }
-    }
-
-    // solicitar email do usuario
-    if (!userWhitelist.user_email) {
-        if (!validateEmail(currentAnswer)) {
-            sendErrorAnswer(message.author, `E-mail inválido!`);
-            return await showWhitelistQuestion(message);
-        } else {
-            await knex('discord_whitelist')
-                .where('discord_whitelist.deleted_at', null)
-                .where('discord_whitelist.user_id', user_id)
-                .update({
-                    user_email: currentAnswer,
-                });
-
-            return await showWhitelistQuestion(message);
-        }
-    }
-
-    // solicitar a data de nascimento do usuario
-    if (!userWhitelist.user_birth) {
-        if (!validateBirth(currentAnswer)) {
-            sendErrorAnswer(message.author, `Data inválida!`);
-            return await showWhitelistQuestion(message);
-        } else {
-            await knex('discord_whitelist')
-                .where('discord_whitelist.deleted_at', null)
-                .where('discord_whitelist.user_id', user_id)
-                .update({
-                    user_birth: currentAnswer.split('/').reverse().join('-'),
-                });
-
-            return await showWhitelistQuestion(message);
-        }
-    }
-
-    // e não tem o player_id, recebemos ele
-    if (!userWhitelist.player_id) {
-
-        // analisar resposta do usuário
-        const currentAnswerClean = currentAnswer.replace(/\D+/g, '');
-
-        if (currentAnswer !== currentAnswerClean) {
-            sendErrorAnswer(message.author, 'Player ID inválido!');
-            return await showWhitelistQuestion(message);
-        } else {
-            await knex('discord_whitelist')
-                .where('discord_whitelist.deleted_at', null)
-                .where('discord_whitelist.user_id', user_id)
-                .update({
-                    player_id: currentAnswer,
-                });
-
-            return await showWhitelistQuestion(message);
-        }
-    }
-
-    // solicitar nome do personagem
-    if (!userWhitelist.player_name) {
-        const currentAnswerString = String(currentAnswer);
-        const max = 100;
-
-        if (currentAnswerString.length > max) {
-            sendErrorAnswer(message.author, `Sua resposta precisa ter menos de ${max} caracteres`);
-            return await showWhitelistQuestion(message);
-        } else {
-            await knex('discord_whitelist')
-                .where('discord_whitelist.deleted_at', null)
-                .where('discord_whitelist.user_id', user_id)
-                .update({
-                    player_name: currentAnswer,
-                });
-
-            return await showWhitelistQuestion(message);
-        }
-    }
-
-    // se já tiver o player_id...
-
-    // buscando as perguntas e respostas
-    const { questionsList, questionIdWithoutAnswer } = await getUserQuestionsAndAnswers(user_id);
-
-    // se todas as pergutas já foram respondidas, aviso o usuário
-    if (!questionIdWithoutAnswer) {
-        return sendSuccessMessage(message.author, 'Parabéns! Você já finalizou o whitelist!!!');
-    }
-
-    console.log(`=> BOT: Respondendo a pergunta ${questionIdWithoutAnswer}:`, currentAnswer);
-
-    const answerInsertOption = {
-        user_id: user_id,
-        question_id: questionsList[questionIdWithoutAnswer].question_id,
-    };
-
-    if (questionsList[questionIdWithoutAnswer].type === 'options') {
-        const currentAnswerClean = currentAnswer.replace(/\D+/g, '');
-
-        if (currentAnswer !== currentAnswerClean) {
-            sendErrorAnswer(message.author, 'Sua resposta precisa ser uma das listadas acima!');
-            return await showWhitelistQuestion(message);
-        } else {
-            let isValidAnswer = false;
-            for (let i in questionsList[questionIdWithoutAnswer].answers) {
-                if (questionsList[questionIdWithoutAnswer].answers[i].option == currentAnswer) {
-                    isValidAnswer = true;
-                }
-            }
-
-            if (!isValidAnswer) {
-                sendErrorAnswer(message.author, 'Sua resposta precisa ser uma das listadas acima!');
-                return await showWhitelistQuestion(message);
-            } else {
-                answerInsertOption.answer_id = currentAnswer;
-            }
-        }
-    } else {
-        const currentAnswerString = String(currentAnswer);
-        const max = 100;
-
-        if (currentAnswerString.length > max) {
-            sendErrorAnswer(message.author, `Sua resposta precisa ter menos de ${max} caracteres`);
-            return await showWhitelistQuestion(message);
-        } else {
-            answerInsertOption.value = currentAnswer;
-        }
-    }
-
-    if (
-        answerInsertOption.answer_id
-        || answerInsertOption.value
-    ) {
-        await knex('discord_whitelist_user_answers').insert(answerInsertOption);
-        return await showWhitelistQuestion(message);
-    }
-}
-
-async function getAllUsersAnswers() {
-    //     const questions = await knex('discord_questions')
-    //         .where('discord_questions.deleted_at', null)
-    //         .orderBy('discord_questions.order')
-    //         .select('discord_questions.question_id', 'discord_questions.type', 'discord_questions.description');
-
-    //     const answers = await knex('discord_whitelist')
-    //         .leftJoin('discord_whitelist_user_answers', 'discord_whitelist.user_id', 'discord_whitelist_user_answers.user_id')
-    //         .leftJoin('discord_questions_answers', 'discord_whitelist_user_answers.answer_id', 'discord_questions_answers.answer_id')
-    //         .where('discord_whitelist.deleted_at', null)
-    //         .orderBy(['discord_whitelist.username', 'discord_whitelist_user_answers.question_id'])
-    //         .select(
-    //             'discord_whitelist.user_id',
-    //             'discord_whitelist.username',
-    //             'discord_whitelist.player_id',
-    //             'discord_whitelist.finished_at',
-    //             'discord_whitelist_user_answers.question_id',
-    //             'discord_whitelist_user_answers.value',
-    //             'discord_questions_answers.description'
-    //         );
-
-    //     const usersAnswers = {};
-    //     for (let i in answers) {
-    //         const answer = answers[i];
-
-    //         if (!usersAnswers[answer.user_id]) {
-    //             usersAnswers[answer.user_id] = {
-    //                 user_id: answer.user_id,
-    //                 username: answer.username,
-    //                 player_id: answer.player_id,
-    //                 finished_at: answer.finished_at,
-    //                 answers: {},
-    //             };
-    //         }
-
-    //         if (answer.question_id) {
-    //             if (!usersAnswers[answer.user_id].answers[answer.question_id]) {
-    //                 usersAnswers[answer.user_id].answers[answer.question_id] = {
-    //                     question_id: answer.question_id,
-    //                     value: answer.description ? answer.description : answer.value,
-    //                 };
-    //             }
-    //         }
-    //     }
-
-    //     return {
-    //         questions,
-    //         usersAnswers,
-    //     };
 }
 
 module.exports = {
+    reset,
     start,
     setAnswer,
-    // getAllUsersAnswers,
 };

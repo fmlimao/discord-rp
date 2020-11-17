@@ -2,14 +2,16 @@ module.exports = {
 
     up: function (knex) {
         return knex.schema.createTable('discord_whitelist', table => {
-            table.bigInteger('user_id');
+            table.varchar('user_id');
+
+            table.varchar('channel_id');
 
             table.varchar('user_name');
             table.varchar('user_email');
             table.varchar('user_birth');
 
             table.varchar('player_name');
-            table.bigInteger('player_id');
+            table.varchar('player_id');
 
             table.datetime('finished_at');
 

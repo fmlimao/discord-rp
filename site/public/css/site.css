@@ -11,6 +11,9 @@
 .color-logo-1 {
   color: #923CCF;
 }
+.color-logo-2 {
+  color: #FAAA0E;
+}
 body::-webkit-scrollbar {
   width: 8px;
 }
@@ -301,7 +304,7 @@ body.site {
   border-bottom: 1px solid #202225;
 }
 .site .modal-content .modal-body a {
-  color: #923CCF;
+  color: #FAAA0E;
 }
 .site .modal-content .modal-footer {
   border-top: 1px solid #202225;
@@ -313,7 +316,7 @@ body.site {
   opacity: 0.9;
 }
 .site .modal-content blockquote {
-  border-left: 5px solid #923CCF;
+  border-left: 5px solid #FAAA0E;
   background-color: #2F3136;
 }
 .site footer {

@@ -144,6 +144,26 @@ async function setAnswer(message, messageContent, messageCommand, messageArgs) {
             sendErrorAnswer(message.channel, 'Player ID inválido!');
             return await showWhitelistQuestion(message);
         } else {
+
+            const playerData = await checkPlayerId(currentAnswer);
+
+            if (!playerData) {
+                sendErrorAnswer(message.channel, 'Player ID não encontrado!');
+                return await showWhitelistQuestion(message);
+            }
+
+            if (playerData.banned) {
+                sendErrorAnswer(message.channel, 'Player ID banido do jogo!');
+                return await showWhitelistQuestion(message);
+            }
+
+            if (playerData.whitelisted) {
+                sendSuccessMessage(message.channel, 'Player ID já liberado!');
+                sendSuccessMessage(message.channel, 'Tire um print desta tela e mande em nosso canal de suporte para continuar o seu processo.');
+                sendSuccessMessage(message.channel, 'Mas caso você tenha errado o ID, nos informe o ID correto.');
+                return await showWhitelistQuestion(message);
+            }
+
             await knex('discord_whitelist')
                 .where('discord_whitelist.deleted_at', null)
                 .where('discord_whitelist.user_id', user_id)
@@ -274,10 +294,19 @@ async function getUserWhitelist(user_id) {
 }
 
 // REVISADO
+async function checkPlayerId(player_id) {
+    return await knex('vrp_users')
+        .where('vrp_users.id', player_id)
+        .select('vrp_users.id', 'vrp_users.whitelisted', 'vrp_users.banned')
+        .first();
+}
+
+// REVISADO
 async function createUserChannel(message) {
     const user_id = message.author.id;
 
-    return await message.channel.guild.channels.create('Responda Aqui', {
+    // return await message.channel.guild.channels.create('Responda Aqui', {
+    return await message.channel.guild.channels.create('⬜🔹ʀᴇꜱᴘᴏɴᴅᴇʀ-ᴀqᴜɪ', {
         type: 'text',
         parent: process.env.DS_CATEGORY_WHITELIST,
         permissionOverwrites: [
@@ -353,7 +382,8 @@ function enableRoleWhitelist(message) {
 
 // REVISADO
 function disableRoleWhitelist(message) {
-    message.member.roles.add(process.env.DS_ROLE_TESTERS);
+    // message.member.roles.add(process.env.DS_ROLE_TESTERS);
+    message.member.roles.remove(process.env.DS_ROLE_TESTERS);
     message.member.roles.remove(process.env.DS_ROLE_WHITELIST);
 }
 
@@ -413,6 +443,12 @@ async function showWhitelistQuestion(message) {
                 finished_at: knex.fn.now(),
             });
 
+        await knex('vrp_users')
+            .where('vrp_users.id', userWhitelist.player_id)
+            .update({
+                whitelisted: 1,
+            });
+
         if (currentTaxCorrectAnswers >= minTaxCorrectAnswers) {
             enableRoleWhitelist(message);
             sendSuccessMessage(channel, 'Parabéns! Você já finalizou o whitelist!!!\n\nAgora você já esta liberado para jogar. Aproveite e se divirta!\n\nE não se preocupe, em breve este canal deixará de existir.');
@@ -425,7 +461,7 @@ async function showWhitelistQuestion(message) {
 
             const channelCall = message.channel.guild.channels.cache.get(process.env.DS_CHANNEL_WHITELIST_CALL);
 
-            const channelName = `respostas-${userWhitelist.player_id}`;
+            const channelName = `⬜🔹ʀᴇꜱᴘᴏꜱᴛᴀꜱ-${userWhitelist.player_id}`;
             channel.setName(channelName);
 
             sendAlertMessage(channelCall, `Atenção, um jogador precisa ser entrevistado no canal de Whitelist.

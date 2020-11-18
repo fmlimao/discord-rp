@@ -193,7 +193,7 @@ client.on('message', async message => {
 
 
     // canal de resposta de WHITELIST
-    if (channel.name == 'responda-aqui') {
+    if (channel.name == '⬜🔹ʀᴇꜱᴘᴏɴᴅᴇʀ-ᴀqᴜɪ') {
         if (messageCommand === 'delete') {
             console.log('message.channel', message.channel.id, message.channel.name);
             message.channel.delete();
@@ -204,7 +204,7 @@ client.on('message', async message => {
     }
 
     // canal de resposta de WHITELIST
-    if (channel.name.indexOf('respostas') !== -1) {
+    if (channel.name.indexOf('⬜🔹ʀᴇꜱᴘᴏꜱᴛᴀꜱ') !== -1) {
         message.delete();
         return;
     }

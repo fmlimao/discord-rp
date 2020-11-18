@@ -5,6 +5,10 @@ const knex = require('../database/connection');
 // REVISADO
 function reset(message, messageContent, messageCommand, messageArgs) {
     return new Promise(async resolve => {
+        const {
+            messageArgs,
+        } = discordManager.getMessageVars(message);
+
         const user_id = message.author.id;
 
         // buscando estagio do whitelist
@@ -13,7 +17,7 @@ function reset(message, messageContent, messageCommand, messageArgs) {
         // apagando os dados da whitelist do usuario
         deleteUserChannel(message, userWhitelist);
         deleteUserWhitelist(message, userWhitelist);
-        disableRoleWhitelist(message);
+        disableRoleWhitelist(message, messageArgs.length);
 
 
         return resolve(message);
@@ -381,9 +385,12 @@ function enableRoleWhitelist(message) {
 }
 
 // REVISADO
-function disableRoleWhitelist(message) {
-    // message.member.roles.add(process.env.DS_ROLE_TESTERS);
-    message.member.roles.remove(process.env.DS_ROLE_TESTERS);
+function disableRoleWhitelist(message, test) {
+    if (test) {
+        message.member.roles.add(process.env.DS_ROLE_TESTERS);
+    } else {
+        message.member.roles.remove(process.env.DS_ROLE_TESTERS);
+    }
     message.member.roles.remove(process.env.DS_ROLE_WHITELIST);
 }
 
@@ -443,13 +450,13 @@ async function showWhitelistQuestion(message) {
                 finished_at: knex.fn.now(),
             });
 
-        await knex('vrp_users')
-            .where('vrp_users.id', userWhitelist.player_id)
-            .update({
-                whitelisted: 1,
-            });
-
         if (currentTaxCorrectAnswers >= minTaxCorrectAnswers) {
+            await knex('vrp_users')
+                .where('vrp_users.id', userWhitelist.player_id)
+                .update({
+                    whitelisted: 1,
+                });
+
             enableRoleWhitelist(message);
             sendSuccessMessage(channel, 'Parabéns! Você já finalizou o whitelist!!!\n\nAgora você já esta liberado para jogar. Aproveite e se divirta!\n\nE não se preocupe, em breve este canal deixará de existir.');
 

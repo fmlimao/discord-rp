@@ -140,7 +140,7 @@ client.on('message', async message => {
         return;
     }
 
-    if (/*isCreator && */messageCommand === 'clear') {
+    if (isCreator && messageCommand === 'clear') {
         console.log('=> COMMAND: !clear');
         console.log('-----------------------');
         fetched = await message.channel.messages.fetch({ limit: 100 });
@@ -152,20 +152,20 @@ client.on('message', async message => {
 
         return;
     }
+    if (messageCommand === 'reset') {
+        console.log('=> COMMAND: !reset');
+        console.log('-----------------------');
+
+        WhitelistManager.reset(message, messageContent, messageCommand, messageArgs)
+            .then(msg => {
+                msg.delete();
+            });
+
+        return;
+    }
 
     // canal WHITELIST
     if (channel.id == process.env.DS_CHANNEL_WHITELIST) {
-        if (messageCommand === 'reset') {
-            console.log('=> COMMAND: !reset');
-            console.log('-----------------------');
-
-            WhitelistManager.reset(message, messageContent, messageCommand, messageArgs)
-                .then(msg => {
-                    msg.delete();
-                });
-
-            return;
-        }
 
         if (isWhitelist) {
             // sendMessage(message.channel, 'WHITELIST', `Olá ${message.author.username}, você já esta liberado em nossa Whitelist =)`, 0x0000ff);
@@ -205,7 +205,19 @@ client.on('message', async message => {
 
     // canal de resposta de WHITELIST
     if (channel.name.indexOf('⬜🔹ʀᴇꜱᴘᴏꜱᴛᴀꜱ') !== -1) {
-        message.delete();
+        if (messageCommand === 'liberar') {
+            console.log('=> COMMAND: !liberar');
+            console.log('-----------------------');
+
+            WhitelistManager.release(message, messageContent, messageCommand, messageArgs)
+                .then(msg => {
+                    msg.delete();
+                });
+
+            return;
+        }
+
+        // message.delete();
         return;
     }
 

@@ -1,5 +1,6 @@
 const discordManager = require('./discord');
 const utf8 = require('utf8');
+const md5 = require('md5');
 const knex = require('../database/connection');
 
 // REVISADO
@@ -17,7 +18,7 @@ function reset(message, messageContent, messageCommand, messageArgs) {
         // apagando os dados da whitelist do usuario
         deleteUserChannel(message, userWhitelist);
         deleteUserWhitelist(message, userWhitelist);
-        disableRoleWhitelist(message, messageArgs.length);
+        disableRoleWhitelist(message, messageArgs);
 
 
         return resolve(message);
@@ -74,7 +75,7 @@ async function setAnswer(message, messageContent, messageCommand, messageArgs) {
     const userWhitelist = await getUserWhitelist(user_id);
 
     if (!userWhitelist) {
-        return sendErrorAnswer(message.channel, 'Você ainda não iniciou o whitelist. Para iniciar, vá ao canal "iniciar-aqui" e mande o comando `!iniciar`.');
+        return sendAlertMessage(message.channel, 'Você ainda não iniciou o whitelist. Para iniciar, vá ao canal "iniciar-aqui" e mande o comando `!iniciar`.');
     }
 
     const currentAnswer = messageContent.trim();
@@ -162,9 +163,9 @@ async function setAnswer(message, messageContent, messageCommand, messageArgs) {
             }
 
             if (playerData.whitelisted) {
-                sendSuccessMessage(message.channel, 'Player ID já liberado!');
-                sendSuccessMessage(message.channel, 'Tire um print desta tela e mande em nosso canal de suporte para continuar o seu processo.');
-                sendSuccessMessage(message.channel, 'Mas caso você tenha errado o ID, nos informe o ID correto.');
+                sendAlertMessage(message.channel, 'Player ID já liberado!');
+                sendAlertMessage(message.channel, 'Tire um print desta tela e mande em nosso canal de suporte para continuar o seu processo.');
+                sendAlertMessage(message.channel, 'Mas caso você tenha errado o ID, nos informe o ID correto.');
                 return await showWhitelistQuestion(message);
             }
 
@@ -283,7 +284,7 @@ function sendSuccessMessage(to, body) {
 
 // REVISADO
 function sendAlertMessage(to, body) {
-    const title = 'Alerta!';
+    const title = 'Atenção!';
     const color = 0xffff00;
     discordManager.sendMessage(to, title, body, color);
 }
@@ -327,6 +328,11 @@ async function createUserChannel(message) {
             {
                 // bot
                 id: process.env.BOT_ID,
+                allow: ['VIEW_CHANNEL'],
+            },
+            {
+                // staff
+                id: process.env.DS_ROLE_STAFF,
                 allow: ['VIEW_CHANNEL'],
             },
         ],
@@ -381,17 +387,23 @@ async function deleteUserWhitelist(message, userWhitelist) {
 // REVISADO
 function enableRoleWhitelist(message) {
     message.member.roles.add(process.env.DS_ROLE_WHITELIST);
+    message.member.roles.remove(process.env.DS_ROLE_WHITELIST_TEST);
+    message.member.roles.remove(process.env.DS_ROLE_WHITELIST_CALL);
     message.member.roles.remove(process.env.DS_ROLE_TESTERS);
 }
 
 // REVISADO
-function disableRoleWhitelist(message, test) {
-    if (test) {
-        message.member.roles.add(process.env.DS_ROLE_TESTERS);
-    } else {
-        message.member.roles.remove(process.env.DS_ROLE_TESTERS);
-    }
+function disableRoleWhitelist(message, args) {
     message.member.roles.remove(process.env.DS_ROLE_WHITELIST);
+    message.member.roles.remove(process.env.DS_ROLE_WHITELIST_TEST);
+    message.member.roles.remove(process.env.DS_ROLE_WHITELIST_CALL);
+    message.member.roles.remove(process.env.DS_ROLE_TESTERS);
+
+    if (typeof args[0] !== 'undefined' && args[0] == 1) message.member.roles.add(process.env.DS_ROLE_WHITELIST_TEST);
+    if (typeof args[1] !== 'undefined' && args[1] == 1) message.member.roles.add(process.env.DS_ROLE_WHITELIST_CALL);
+    if (typeof args[2] !== 'undefined' && args[2] == 1) message.member.roles.add(process.env.DS_ROLE_TESTERS);
+
+    // !reset 1 1 1
 }
 
 // REVISADO
@@ -462,16 +474,30 @@ async function showWhitelistQuestion(message) {
 
             setTimeout(function () {
                 deleteUserChannel(message, userWhitelist);
-            }, 60000);
+            }, 20000);
         } else {
-            sendSuccessMessage(channel, 'Parabéns! Você já finalizou o whitelist!!!\n\nPorém você não atingiu a pontuação mínima com suas respostas. Por isso um @Staff noso entrará em contato com você =). Caso você não seja chamado em 1 hora, por favor entre em contato em nosso canal se suporte.');
+            message.member.roles.add(process.env.DS_ROLE_WHITELIST_CALL);
+            message.member.roles.remove(process.env.DS_ROLE_WHITELIST_TEST);
+            sendSuccessMessage(channel, `Parabéns! Você já finalizou o whitelist!!!
+
+            Porém você não atingiu a pontuação mínima com suas respostas.
+
+            Por isso um @Staff nosso entrará em contato com você =). Caso você não seja chamado em 1 hora, por favor entre em contato em nosso canal se suporte.
+
+            Para aguardar ser chamado, entre na sala de voz "SALA DE ESPERA".`);
 
             const channelCall = message.channel.guild.channels.cache.get(process.env.DS_CHANNEL_WHITELIST_CALL);
 
             const channelName = `⬜🔹ʀᴇꜱᴘᴏꜱᴛᴀꜱ-${userWhitelist.player_id}`;
             channel.setName(channelName);
 
+            const hash = md5(userWhitelist.user_id);
+
             sendAlertMessage(channelCall, `Atenção, um jogador precisa ser entrevistado no canal de Whitelist.
+
+            ***Entre no canal de voz "SALA DE ESPERA" para chamar ele a uma de nossas salas de entrevista.***
+
+            Não se esqueça de colocar uma reação nesta mensagem pra sinalizar que ele esta sendo atendida, ok?
 
             username: \`${message.author.username}\`
             nickname: \`${message.member.nickname}\`
@@ -481,6 +507,9 @@ async function showWhitelistQuestion(message) {
             Nome no jogo: \`${userWhitelist.player_name}\`
 
             Canal: \`${channelName}\`
+            Código de liberação: \`!liberar ${hash}\`
+
+            *** Use crases antes e depois da mensagem quando for enviar o comando para o usuário ***
             `);
         }
 
@@ -604,8 +633,42 @@ async function getUserQuestionsAndAnswers(user_id) {
     };
 }
 
+// REVISADO
+async function release(message, messageContent, messageCommand, messageArgs) {
+    return new Promise(async resolve => {
+        const {
+            messageArgs,
+        } = discordManager.getMessageVars(message);
+
+        const user_id = message.author.id;
+
+        const hash = messageArgs[0] || '';
+
+        if (hash == md5(user_id)) {
+            const userWhitelist = await getUserWhitelist(user_id);
+            const channel = message.channel.guild.channels.cache.get(userWhitelist.channel_id);
+
+            await knex('vrp_users')
+                .where('vrp_users.id', userWhitelist.player_id)
+                .update({
+                    whitelisted: 1,
+                });
+
+            enableRoleWhitelist(message);
+            sendSuccessMessage(channel, 'Parabéns! Você já finalizou o whitelist!!!\n\nAgora você já esta liberado para jogar. Aproveite e se divirta!\n\nE não se preocupe, em breve este canal deixará de existir.');
+
+            setTimeout(function () {
+                deleteUserChannel(message, userWhitelist);
+            }, 60000);
+        }
+
+        return resolve(message);
+    });
+}
+
 module.exports = {
     reset,
     start,
     setAnswer,
+    release,
 };

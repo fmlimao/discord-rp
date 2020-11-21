@@ -152,6 +152,7 @@ client.on('message', async message => {
 
         return;
     }
+
     if (messageCommand === 'reset') {
         console.log('=> COMMAND: !reset');
         console.log('-----------------------');

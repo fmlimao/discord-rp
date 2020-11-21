@@ -125,7 +125,7 @@ async function setAnswer(message, messageContent, messageCommand, messageArgs) {
     // solicitar a data de nascimento do usuario
     if (!userWhitelist.user_birth) {
         if (!validateBirth(currentAnswer)) {
-            sendErrorAnswer(message.channel, `Data inválida!`);
+            sendErrorAnswer(message.channel, `Data inválida! Formato correto: DD/MM/AAAA`);
             return await showWhitelistQuestion(message);
         } else {
             await knex('discord_whitelist')

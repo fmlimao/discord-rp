@@ -34,6 +34,12 @@ app.get('/robots.txt', (req, res) => {
 Disallow:`);
 });
 
+app.use((req, res, next) => {
+    return res.render('error-404', {
+        apiPath: process.env.API_PATH,
+    });
+});
+
 app.listen(process.env.APP_PORT, () => {
     console.log(`Servidor rodando na porta ${process.env.APP_PORT}`);
 });

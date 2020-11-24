@@ -3,7 +3,7 @@
   font-style: normal;
   font-weight: 300;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/nunito/v14/XRXW3I6Li01BKofAnsSkZg.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/nunito/v15/XRXW3I6Li01BKofAnsSkZg.ttf) format('truetype');
 }
 .font-nunito {
   font-family: 'Nunito', sans-serif;
@@ -346,4 +346,9 @@ body.site {
   left: 50%;
   margin-top: -100px;
   margin-left: -100px;
+}
+.site .title-404 {
+  margin-bottom: 400px;
+  text-align: center;
+  text-transform: uppercase;
 }

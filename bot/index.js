@@ -147,7 +147,13 @@ client.on('message', async message => {
         message.channel.bulkDelete(fetched);
 
         if (channel.id == process.env.DS_CHANNEL_WHITELIST) {
-            sendMessage(message.channel, 'WHITELIST', 'Neste canal você pode iniciar o seu questionário da Whitelist. Para isso, basta copiar e inserir o comando `!iniciar`, assim criaremos um canal exclusivo para você continuar o processo.', 0x00ff00);
+            setTimeout(function () {
+                sendMessage(message.channel, 'WHITELIST', `Neste canal você pode iniciar o seu questionário da Whitelist.
+
+                Para isso, basta copiar e inserir o comando \`!iniciar\`, assim criaremos um canal exclusivo para você continuar o processo.
+
+                ***As Whitelists que não forem terminadas em 6 horas serão excluídas, mas poderão ser iniciadas novamente =).***`, 0x00ff00);
+            }, 2000);
         }
 
         return;
@@ -223,97 +229,26 @@ client.on('message', async message => {
     }
 
 
-    // // console.log('channel.id', channel.id);
-    // // console.log('messageCommand', messageCommand);
-
-    // // canal NICKNAME
-    // if (channel.id == '776870862287667220') {
-    //     if (messageCommand === 'nick') {
-    //         // apagar mensagens
-    //         // fetched = await message.channel.messages.fetch({ limit: 100 });
-    //         // message.channel.bulkDelete(fetched);
 
 
+    // // canal BOT CONFIG
+    // if (channel.id == process.env.DS_CHANNEL_BOT_CONFIG) {
+
+    //     if (messageCommand === 'limpar-whitelist') {
+    //         console.log('=> COMMAND: !limpar-whitelist');
     //         console.log('-----------------------');
-    //         console.log(message.content.includes('changeNick'));
-    //         console.log(message.guild.me.hasPermission('MANAGE_NICKNAMES'));
-    //         // if (message.content.includes('changeNick')) {
-    //             // if (!message.guild.me.hasPermission('MANAGE_NICKNAMES'))
-    //             //     return message.channel.send('I don\'t have permission to change your nickname!');
-    //             // else
-    //             //     message.channel.send('OK!');
-    //             // message.member.setNickname(message.content.replace('changeNick ', ''));
-    //         // }
 
+    //         WhitelistManager.clear(message, messageContent, messageCommand, messageArgs)
+    //             .then(msg => {
+    //                 msg.delete();
+    //             });
 
-
-    //         if (
-    //             message.guild.members.cache.get(process.env.BOT_ID).hasPermission("MANAGE_NICKNAMES")
-    //             && message.guild.members.cache.get(process.env.BOT_ID).hasPermission("CHANGE_NICKNAME")
-    //         ) {
-    //             // message.guild.members.cache.get(process.env.BOT_ID).setNickname("BOT LEGAL 2");
-    //             // message.guild.members.cache.get(author.id).user.setActivity(`Teste`);
-
-    //             // console.log('author.username', author.username);
-    //             // console.log('author', message.guild.members.cache.get(author.id));
-
-
-    //             message.guild.members.cache.get(author.id).setNickname(`${messageArgs.join(' ')}`);
-
-
-
-    //             // const member = message.guild.members.cache.get(author.id);
-
-    //             // const isCreator = !!member.roles.cache.filter(role => role.name.indexOf('Criadores') >= 0).size;
-    //             // const isModerator = !!member.roles.cache.filter(role => role.name.indexOf('Moderador') >= 0).size;
-    //             // const isSuport = !!member.roles.cache.filter(role => role.name.indexOf('Suporte') >= 0).size;
-
-    //             // console.log('isCreator', isCreator);
-    //             // console.log('isModerator', isModerator);
-    //             // console.log('isSuport', isSuport);
-
-    //             // let nickname = '';
-
-    //             // if (isCreator) nickname = '🤴🏻';
-    //             // else if (isModerator) nickname = '🦸🏻‍♂️';
-    //             // else if (isSuport) nickname = '👨🏻‍💻';
-
-    //             // member.setNickname(`${nickname} ${messageArgs.join(' ')}`);
-
-
-
-
-
-
-    //         } else {
-    //             message.channel.sendMessage("I dont have the permissons to change my nickname in this server.");
-    //         }
-
-
-
-
-
-    //         console.log('-----------------------');
-    //         console.log('author', author.id, author.username);
-    //         console.log('channel', channel.id, channel.name);
-    //         console.log('messageCommand', messageCommand);
-    //         // console.log('messageMentions', messageMentions);
-    //         // console.log('memberToChange', memberToChange);
-
+    //         return;
     //     }
 
     //     message.delete();
     //     return;
     // }
-
-
-
-    // // console.log('-----------------------');
-    // // console.log('author', author.id, author.username);
-    // // console.log('channel', channel.id, channel.name);
-    // // console.log('messageCommand', messageCommand);
-    // // console.log('message', message);
-
 
 
 

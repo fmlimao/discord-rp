@@ -369,18 +369,29 @@ async function createUserWhitelist(message, channel) {
 
 // REVISADO
 async function deleteUserWhitelist(message, userWhitelist) {
-    const user_id = message.author.id;
+    const user_id = userWhitelist.user_id;
 
     if (userWhitelist) {
-        await knex('discord_whitelist')
+        const discord_users = await knex('discord_users')
+            .where('discord_users.deleted_at', null)
+            .where('discord_users.user_id', user_id)
+            .update({
+                deleted_at: knex.fn.now(),
+            });
+
+        const discord_whitelist = await knex('discord_whitelist')
             .where('discord_whitelist.deleted_at', null)
             .where('discord_whitelist.user_id', user_id)
-            .delete();
+            .update({
+                deleted_at: knex.fn.now(),
+            });
 
-        await knex('discord_whitelist_user_answers')
+        const discord_whitelist_user_answers = await knex('discord_whitelist_user_answers')
             .where('discord_whitelist_user_answers.deleted_at', null)
             .where('discord_whitelist_user_answers.user_id', user_id)
-            .delete();
+            .update({
+                deleted_at: knex.fn.now(),
+            });
     }
 }
 
@@ -666,9 +677,59 @@ async function release(message, messageContent, messageCommand, messageArgs) {
     });
 }
 
+// REVISADO
+async function clear(message, messageContent, messageCommand, messageArgs) {
+    return new Promise(async resolve => {
+        const inactiveWhitelists = await knex('discord_whitelist')
+            .innerJoin('discord_users', function () {
+                this.onNull('discord_users.deleted_at')
+                    .andOn('discord_whitelist.user_id', '=', 'discord_users.user_id')
+            })
+            .leftJoin('discord_whitelist_user_answers', function () {
+                this.onNull('discord_whitelist_user_answers.deleted_at')
+                    .andOn('discord_whitelist.user_id', '=', 'discord_whitelist_user_answers.user_id')
+            })
+            .leftJoin('discord_whitelist_question_answers', function () {
+                this.onNull('discord_whitelist_question_answers.deleted_at')
+                    .andOn('discord_whitelist_user_answers.question_id', '=', 'discord_whitelist_question_answers.question_id')
+                    .andOn('discord_whitelist_user_answers.answer_id', '=', 'discord_whitelist_question_answers.option')
+            })
+            .where('discord_whitelist.deleted_at', null)
+            .where('discord_whitelist.finished_at', null)
+            .where(knex.raw('discord_whitelist.created_at <= DATE_SUB(NOW(), INTERVAL 6 HOUR)'))
+            .select(
+                'discord_users.username'
+                , 'discord_whitelist.user_id'
+                , 'discord_whitelist.channel_id'
+                , 'discord_whitelist.user_name'
+                , 'discord_whitelist.user_email'
+                , 'discord_whitelist.user_birth'
+                , 'discord_whitelist.player_name'
+                , 'discord_whitelist.player_id'
+                , 'discord_whitelist.finished_at'
+                , knex.raw('COUNT(discord_whitelist_user_answers.question_id) AS questions')
+                , knex.raw('COUNT(IF(discord_whitelist_question_answers.is_correct = 1, 1, NULL)) AS corrects')
+            )
+            .groupBy('discord_whitelist.user_id')
+            .orderBy('discord_whitelist.created_at');
+
+        for (let i in inactiveWhitelists) {
+            const inactiveWhitelist = inactiveWhitelists[i];
+            console.log('inactiveWhitelist', inactiveWhitelist);
+
+            // apagando os dados da whitelist do usuario
+            deleteUserChannel(message, inactiveWhitelist);
+            deleteUserWhitelist(message, inactiveWhitelist);
+        }
+
+        return resolve(message);
+    });
+}
+
 module.exports = {
     reset,
     start,
     setAnswer,
     release,
+    clear,
 };

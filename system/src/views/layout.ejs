@@ -31,6 +31,11 @@
     <!-- Google Font -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <script>
+        var apiPath = '<%- apiPath %>';
+        var token = '<%- token %>';
+        var mixins = [];
+    </script>
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini fixed">
@@ -121,7 +126,13 @@
                             <i class="fa fa-users"></i> <span>Usuários</span>
                         </a>
                     </li>
+                    <li :class="{'active': currentPage === '/players'}">
+                        <a href="/#/players">
+                            <i class="fa fa-users"></i> <span>Players</span>
+                        </a>
+                    </li>
 
+                    <!--
                     <li class="treeview" :class="{
                         'active menu-open': (
                             currentPage === '/whitelist/questions'
@@ -140,6 +151,7 @@
                             <li :class="{'active': currentPage === '/whitelist/answers'}"><a href="/#/whitelist/answers"><i class="fa fa-circle-o"></i> Respostas</a></li>
                         </ul>
                     </li>
+                    -->
                 </ul>
             </section>
             <!-- /.sidebar -->
@@ -191,11 +203,6 @@
     <script src="/assets/bower_components/axios/dist/axios.min.js"></script>
     <script src="/assets/bower_components/vue/dist/vue.min.js"></script>
     <script src="/assets/js/fmroute.min.js"></script>
-    <script>
-        var apiPath = '<%- apiPath %>';
-        var token = '<%- token %>';
-        var mixins = [];
-    </script>
 
     <%- scripts %>
 

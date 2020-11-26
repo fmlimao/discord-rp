@@ -1,0 +1,131 @@
+<div v-if="currentPage === '/players'">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Players
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/#/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li class="active"><i class="fa fa-users"></i> Players</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="alert"
+            :class="{'alert-danger': pagePlayers.lists.players.error, 'alert-success': !pagePlayers.lists.players.error}"
+            v-if="pagePlayers.lists.players.messages.length" v-html="pagePlayers.lists.players.messages.join('<br>')"></div>
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Lista de Players</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body"
+                v-if="pagePlayers.lists.players.loading || (pagePlayers.lists.players.started && !pagePlayers.lists.players.loading && !pagePlayers.lists.players.data.length)">
+                <div class="alert alert-info" v-if="pagePlayers.lists.players.loading">Carregando...</div>
+                <div class="alert alert-warning"
+                    v-if="pagePlayers.lists.players.started && !pagePlayers.lists.players.loading && !pagePlayers.lists.players.data.length">
+                    Nenhum player
+                    cadastrado</div>
+            </div>
+            <div class="box-body table-responsive no-padding"
+                v-if="pagePlayers.lists.players.started && !pagePlayers.lists.players.loading && pagePlayers.lists.players.data.length">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <th class="text-right">ID</th>
+                            <th>Username</th>
+                            <th class="text-right">Carteira</th>
+                            <th class="text-right">Banco</th>
+                            <th class="text-right">PayPal</th>
+                            <th class="text-center">Extrato</th>
+                        </tr>
+                        <tr v-for="player in pagePlayers.lists.players.data">
+                            <td class="text-right">
+                                {{ player.player_id }}
+                            </td>
+                            <td>
+                                {{ player.username }}
+                            </td>
+                            <td class="text-right">
+                                {{ player.wallet_formatted }}
+                            </td>
+                            <td class="text-right">
+                                {{ player.bank_formatted }}
+                            </td>
+                            <td class="text-right">
+                                {{ player.paypal_formatted }}
+                            </td>
+                            <td class="text-center">
+                                <a :href="'/#/players/' + player.player_id + '/extrato'">
+                                    <span class="fa fa-eye"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+    </section>
+</div>
+
+<script>
+    mixins.push({
+        data: {
+
+            pagePlayers: {
+                lists: {
+                    players: {
+                        started: false,
+                        loading: false,
+                        error: false,
+                        messages: [],
+                        data: [],
+                    },
+                },
+            },
+
+        },
+        methods: {
+
+            getPlayers: function () {
+                console.log('getPlayers()');
+                var ajaxCb = (response) => {
+                    App.pagePlayers.lists.players.error = response.error;
+                    App.pagePlayers.lists.players.messages = response.messages;
+
+                    if (!response.error) {
+                        for (var i in response.content.players) {
+                            App.pagePlayers.lists.players.data.push(response.content.players[i]);
+                        }
+                    }
+
+                    App.pagePlayers.lists.players.loading = false;
+                };
+
+                App.clearPageList('pagePlayers', 'players');
+                App.pagePlayers.lists.players.started = true;
+                App.pagePlayers.lists.players.loading = true;
+
+                axios.get(`${apiPath}/players`, {
+                    headers: {
+                        'x-access-token': token,
+                    },
+                })
+                    .then(function (response) {
+                        ajaxCb(response.data);
+                    })
+                    .catch(function (error) {
+                        ajaxCb(error.response.data);
+                    });
+
+            },
+
+        },
+    });
+</script>

@@ -1,0 +1,154 @@
+<div v-if="currentPage === '/player-extrato'">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Player - Extrato
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/#/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li><a href="/#/players"><i class="fa fa-users"></i> Players</a></li>
+            <li class="active"><i class="fa fa-users"></i> Extrato</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="alert"
+            :class="{'alert-danger': pageExtrato.lists.transactions.error, 'alert-success': !pageExtrato.lists.transactions.error}"
+            v-if="pageExtrato.lists.transactions.messages.length"
+            v-html="pageExtrato.lists.transactions.messages.join('<br>')"></div>
+
+        <div class="media">
+            <div class="media-left" v-if="pageExtrato.avatar !== ''">
+                <a href="#">
+                    <img class="media-object" :src="pageExtrato.avatar" style="width: 64px;">
+                </a>
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading">Player: {{ pageExtrato.player_id }} <span v-if="pageExtrato.username !== ''"> - {{ pageExtrato.username }}</span></h4>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Extrato</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body"
+                v-if="pageExtrato.lists.transactions.loading || (pageExtrato.lists.transactions.started && !pageExtrato.lists.transactions.loading && !pageExtrato.lists.transactions.data.length)">
+                <div class="alert alert-info" v-if="pageExtrato.lists.transactions.loading">Carregando...</div>
+                <div class="alert alert-warning"
+                    v-if="pageExtrato.lists.transactions.started && !pageExtrato.lists.transactions.loading && !pageExtrato.lists.transactions.data.length">
+                    Nenhum transação
+                    cadastrada</div>
+            </div>
+            <div class="box-body table-responsive no-padding"
+                v-if="pageExtrato.lists.transactions.started && !pageExtrato.lists.transactions.loading && pageExtrato.lists.transactions.data.length">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <th width="200">Data</th>
+                            <th class="text-right">Carteira</th>
+                            <th class="text-right">Banco</th>
+                            <th class="text-right">PayPal</th>
+                        </tr>
+                        <tr v-for="transaction in pageExtrato.lists.transactions.data">
+                            <td>
+                                {{ transaction.created_at_formatted }}
+                            </td>
+                            <td class="text-right">
+                                <small class="label bg-green"
+                                    v-if="transaction.diff_wallet > 0">+{{ transaction.diff_wallet_formatted }}</small>
+                                <small class="label bg-red"
+                                    v-if="transaction.diff_wallet < 0">{{ transaction.diff_wallet_formatted }}</small>
+                                <span>{{ transaction.new_wallet_formatted }}</span>
+                            </td>
+                            <td class="text-right">
+                                <small class="label bg-green"
+                                    v-if="transaction.diff_bank > 0">+{{ transaction.diff_bank_formatted }}</small>
+                                <small class="label bg-red"
+                                    v-if="transaction.diff_bank < 0">{{ transaction.diff_bank_formatted }}</small>
+                                <span>{{ transaction.new_bank_formatted }}</span>
+                            </td>
+                            <td class="text-right">
+                                <small class="label bg-green"
+                                    v-if="transaction.diff_paypal > 0">+{{ transaction.diff_paypal_formatted }}</small>
+                                <small class="label bg-red"
+                                    v-if="transaction.diff_paypal < 0">{{ transaction.diff_paypal_formatted }}</small>
+                                <span>{{ transaction.new_paypal_formatted }}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+    </section>
+</div>
+
+<script>
+    mixins.push({
+        data: {
+
+            pageExtrato: {
+                player_id: null,
+                username: null,
+                avatar: null,
+                lists: {
+                    transactions: {
+                        started: false,
+                        loading: false,
+                        error: false,
+                        messages: [],
+                        data: [],
+                    },
+                },
+            },
+
+        },
+        methods: {
+
+            getPlayerExtract: function (player_id) {
+                App.pageExtrato.player_id = player_id;
+
+                var ajaxCb = (response) => {
+                    App.pageExtrato.lists.transactions.error = response.error;
+                    App.pageExtrato.lists.transactions.messages = response.messages;
+
+                    if (!response.error) {
+                        for (var i in response.content.transactions) {
+                            App.pageExtrato.lists.transactions.data.push(response.content.transactions[i]);
+                        }
+                    }
+
+                    App.pageExtrato.lists.transactions.loading = false;
+
+                    App.pageExtrato.username = App.pageExtrato.lists.transactions.data[0].username;
+                    App.pageExtrato.avatar = App.pageExtrato.lists.transactions.data[0].avatar;
+                };
+
+                App.clearPageList('pageExtrato', 'transactions');
+                App.pageExtrato.lists.transactions.started = true;
+                App.pageExtrato.lists.transactions.loading = true;
+
+                axios.get(`${apiPath}/players/${player_id}/extrato`, {
+                    headers: {
+                        'x-access-token': token,
+                    },
+                })
+                    .then(function (response) {
+                        ajaxCb(response.data);
+                    })
+                    .catch(function (error) {
+                        ajaxCb(error.response.data);
+                    });
+
+            },
+
+        },
+    });
+</script>

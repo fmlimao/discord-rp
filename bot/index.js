@@ -100,6 +100,7 @@ client.on('message', async message => {
         console.log(' - isCommand:', isCommand);
         console.log(' - messageCommand:', messageCommand);
         console.log(' - messageArgs:', messageArgs);
+        console.log(' - messageMentions:', messageMentions);
         console.log('-----------------------');
         message.delete();
         return;
@@ -231,24 +232,24 @@ client.on('message', async message => {
 
 
 
-    // // canal BOT CONFIG
-    // if (channel.id == process.env.DS_CHANNEL_BOT_CONFIG) {
+    // canal BOT CONFIG
+    if (channel.id == process.env.DS_CHANNEL_BOT_CONFIG) {
 
-    //     if (messageCommand === 'limpar-whitelist') {
-    //         console.log('=> COMMAND: !limpar-whitelist');
-    //         console.log('-----------------------');
+        if (messageCommand === 'limpar-whitelist') {
+            console.log('=> COMMAND: !limpar-whitelist');
+            console.log('-----------------------');
 
-    //         WhitelistManager.clear(message, messageContent, messageCommand, messageArgs)
-    //             .then(msg => {
-    //                 msg.delete();
-    //             });
+            WhitelistManager.clear(message, messageContent, messageCommand, messageArgs)
+                .then(msg => {
+                    msg.delete();
+                });
 
-    //         return;
-    //     }
+            return;
+        }
 
-    //     message.delete();
-    //     return;
-    // }
+        message.delete();
+        return;
+    }
 
 
 

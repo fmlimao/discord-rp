@@ -1,0 +1,117 @@
+<div v-if="currentPage === '/users'">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Usuários
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/#/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li class="active"><i class="fa fa-users"></i> Usuários</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="alert"
+            :class="{'alert-danger': pageUsers.lists.users.error, 'alert-success': !pageUsers.lists.users.error}"
+            v-if="pageUsers.lists.users.messages.length" v-html="pageUsers.lists.users.messages.join('<br>')"></div>
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Lista de Usuários</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body"
+                v-if="pageUsers.lists.users.loading || (pageUsers.lists.users.started && !pageUsers.lists.users.loading && !pageUsers.lists.users.data.length)">
+                <div class="alert alert-info" v-if="pageUsers.lists.users.loading">Carregando...</div>
+                <div class="alert alert-warning"
+                    v-if="pageUsers.lists.users.started && !pageUsers.lists.users.loading && !pageUsers.lists.users.data.length">
+                    Nenhum usuário
+                    cadastrado</div>
+            </div>
+            <div class="box-body table-responsive no-padding"
+                v-if="pageUsers.lists.users.started && !pageUsers.lists.users.loading && pageUsers.lists.users.data.length">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                        </tr>
+                        <tr v-for="user in pageUsers.lists.users.data">
+                            <td>
+                                {{ user.user_id }}
+                            </td>
+                            <td>
+                                {{ user.name }}
+                            </td>
+                            <td>
+                                {{ user.email }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+    </section>
+</div>
+
+<script>
+    mixins.push({
+        data: {
+
+            pageUsers: {
+                lists: {
+                    users: {
+                        started: false,
+                        loading: false,
+                        error: false,
+                        messages: [],
+                        data: [],
+                    },
+                },
+            },
+
+        },
+        methods: {
+
+            getUsers: function () {
+                console.log('getUsers()');
+                var ajaxCb = (response) => {
+                    App.pageUsers.lists.users.error = response.error;
+                    App.pageUsers.lists.users.messages = response.messages;
+
+                    if (!response.error) {
+                        for (var i in response.content.users) {
+                            App.pageUsers.lists.users.data.push(response.content.users[i]);
+                        }
+                    }
+
+                    App.pageUsers.lists.users.loading = false;
+                };
+
+                App.clearPageList('pageUsers', 'users');
+                App.pageUsers.lists.users.started = true;
+                App.pageUsers.lists.users.loading = true;
+
+                axios.get(`${apiPath}/users`, {
+                    headers: {
+                        'x-access-token': token,
+                    },
+                })
+                    .then(function (response) {
+                        ajaxCb(response.data);
+                    })
+                    .catch(function (error) {
+                        ajaxCb(error.response.data);
+                    });
+
+            },
+
+        },
+    });
+</script>

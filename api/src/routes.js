@@ -14,7 +14,10 @@ router.post('/auth', require('./controllers/auth/auth'));
 router.get('/users', middlewareAuth, require('./controllers/users/list'));
 // router.get('/users/:user_id', middlewareAuth, middlewareCheckIfUserExists, require('./controllers/users/show'));
 
-router.get('/whitelist/questions', middlewareAuth, require('./controllers/whitelist/questions/list'));
-router.get('/whitelist/answers', middlewareAuth, require('./controllers/whitelist/answers/list'));
+// router.get('/whitelist/questions', middlewareAuth, require('./controllers/whitelist/questions/list'));
+// router.get('/whitelist/answers', middlewareAuth, require('./controllers/whitelist/answers/list'));
+
+router.get('/players', middlewareAuth, require('./controllers/players/list'));
+router.get('/players/:player_id/extrato', middlewareAuth, require('./controllers/players/extrato'));
 
 module.exports = router;

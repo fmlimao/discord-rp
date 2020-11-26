@@ -40,10 +40,10 @@ const middlewareIsLogges = (isNotLoggedPath, isLoggedPath) => {
 // res.clearCookie('systemLogin');
 // return res.redirect('/login');
 
-app.use((req, res, next) => {
-    console.log('req.cookies.login', typeof req.cookies.login, req.cookies.login);
-    next();
-});
+// app.use((req, res, next) => {
+//     console.log('req.cookies.login', typeof req.cookies.login, req.cookies.login);
+//     next();
+// });
 
 app.get('/login', middlewareIsLogges(null, '/app'), (req, res) => {
     return res.render('login', {

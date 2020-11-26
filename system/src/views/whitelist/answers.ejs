@@ -1,0 +1,139 @@
+<div v-if="currentPage === '/whitelist/answers'">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Respostas dos Jogadores
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/#/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li><i class="fa fa-list-ol"></i> Whitelist</li>
+            <li class="active">Respostas dos Jogadores</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="alert"
+            :class="{'alert-danger': pageWhitelistAnswers.lists.answers.error, 'alert-success': !pageWhitelistAnswers.lists.answers.error}"
+            v-if="pageWhitelistAnswers.lists.answers.messages.length"
+            v-html="pageWhitelistAnswers.lists.answers.messages.join('<br>')"></div>
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Lista de Perguntas</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body"
+                v-if="pageWhitelistAnswers.lists.answers.loading || (pageWhitelistAnswers.lists.answers.started && !pageWhitelistAnswers.lists.answers.loading && !pageWhitelistAnswers.lists.answers.data.length)">
+                <div class="alert alert-info" v-if="pageWhitelistAnswers.lists.answers.loading">Carregando...</div>
+                <div class="alert alert-warning"
+                    v-if="pageWhitelistAnswers.lists.answers.started && !pageWhitelistAnswers.lists.answers.loading && !pageWhitelistAnswers.lists.answers.data.length">
+                    Nenhuma
+                    pergunta
+                    cadastrada</div>
+            </div>
+            <div class="box-body table-responsive no-padding"
+                v-if="pageWhitelistAnswers.lists.answers.started && !pageWhitelistAnswers.lists.answers.loading && pageWhitelistAnswers.lists.answers.data.length">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <th>ID</th>
+                            <th>Pergunta</th>
+                            <th>Tipo</th>
+                            <th>Opções</th>
+                        </tr>
+                        <tr v-for="answer in pageWhitelistAnswers.lists.answers.data">
+                            <td>
+                                {{ answer.question_id }}
+                            </td>
+                            <td>
+                                {{ answer.description }}
+                            </td>
+                            <td>
+                                <span v-if="answer.type === 'text'">Texto</span>
+                                <span v-if="answer.type === 'options'">Opções</span>
+                            </td>
+                            <td>
+                                <div v-if="answer.type === 'text'">---</div>
+                                <div v-if="answer.type === 'options'">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr v-for="a in answer.answers"
+                                                :class="{'text-success': a.is_correct, 'text-danger': !a.is_correct}">
+                                                <td width="30">
+                                                    [{{ a.option }}]
+                                                </td>
+                                                <td>
+                                                    {{ a.description }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+    </section>
+</div>
+
+<script>
+    mixins.push({
+        data: {
+
+            pageWhitelistAnswers: {
+                lists: {
+                    answers: {
+                        started: false,
+                        loading: false,
+                        error: false,
+                        messages: [],
+                        data: [],
+                    },
+                },
+            },
+
+        },
+        methods: {
+
+            getAnswers: function () {
+                // var ajaxCb = (response) => {
+                //     console.log('response', response);
+                //     App.pageWhitelistAnswers.lists.answers.error = response.error;
+                //     App.pageWhitelistAnswers.lists.answers.messages = response.messages;
+
+                //     if (!response.error) {
+                //         for (var i in response.content.answers) {
+                //             App.pageWhitelistAnswers.lists.answers.data.push(response.content.answers[i]);
+                //         }
+                //     }
+
+                //     App.pageWhitelistAnswers.lists.answers.loading = false;
+                // };
+
+                // App.clearPageList('whitelistAnswers', 'answers');
+                // App.pageWhitelistAnswers.lists.answers.started = true;
+                // App.pageWhitelistAnswers.lists.answers.loading = true;
+
+                // axios.get(`${apiPath}/whitelist/answers`, {
+                //     headers: {
+                //         'x-access-token': token,
+                //     },
+                // })
+                //     .then(function (response) {
+                //         ajaxCb(response.data);
+                //     })
+                //     .catch(function (error) {
+                //         ajaxCb(error.response.data);
+                //     });
+            },
+
+        },
+    });
+</script>

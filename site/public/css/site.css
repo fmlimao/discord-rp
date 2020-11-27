@@ -3,7 +3,7 @@
   font-style: normal;
   font-weight: 300;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/nunito/v15/XRXW3I6Li01BKofAnsSkZg.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/nunito/v16/XRXW3I6Li01BKofAnsSkZg.ttf) format('truetype');
 }
 .font-nunito {
   font-family: 'Nunito', sans-serif;
@@ -13,6 +13,21 @@
 }
 .color-logo-2 {
   color: #FAAA0E;
+}
+.font-size-14 {
+  font-size: 14px;
+}
+.font-size-18 {
+  font-size: 18px;
+}
+.font-size-22 {
+  font-size: 22px;
+}
+.font-size-26 {
+  font-size: 26px;
+}
+.font-size-30 {
+  font-size: 30px;
 }
 body::-webkit-scrollbar {
   width: 8px;
@@ -286,6 +301,21 @@ body.site {
 }
 .site .site-content .panel-list img {
   margin: auto;
+}
+.site .site-content .panel-list .price {
+  margin-top: 30px;
+  font-size: 40px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+}
+.site .site-content .panel-list .price .title {
+  font-size: 20px;
+  color: #fff;
+}
+.site .site-content .panel-list .price .value {
+  font-size: 40px;
+  color: #FAAA0E;
 }
 .site .site-content .panel-list .panel-footer {
   background-color: #2F3136;

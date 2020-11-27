@@ -6,154 +6,209 @@ var data = {
                     code: '1001',
                     title: 'VIP Bronze',
                     description: `
-                        <h4 style="margin-bottom: 20px;">=== Recebe em todas as renovações ===</h4>
-
-                        <ul>
-                            <li>Tag de VIP</li>
-                            <li>Salário: $ 2.500 a cada 40 minutos jogados</li>
-                            <li>Bonus: Limpa todos as multas acumuladas</li>
-                            <li>Bonus: Test Drive para os novos veículos</li>
-                            <li>Bonus: Desconto exclusivo em qualquer outro item do site</li>
+                        <h4 style="margin-bottom: 10px;">=== RECEBE NO ATO DA DOAÇÃO ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Salário de $ 2.500 a cada 40 minutos jogados</li>
+                            <li>$ 250.000</li>
+                            <li>Carro VIP</li>
+                            <li>+1 vaga na garagem</li>
+                            <li>Limpa todos as multas acumuladas</li>
                         </ul>
 
-                        <h4 style="margin-top: 40px; margin-bottom: 20px;">=== Recebe apenas no primeiro donate ===</h4>
+                        <h4 style="margin-bottom: 10px;">=== RECEBE EM TODAS AS RENOVAÇÕES ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Salário de $ 2.500 a cada 40 minutos jogados</li>
+                            <li>Limpa todos as multas acumuladas</li>
+                        </ul>
 
-                        <ul>
-                            <li>Bonus: $ 250.000</li>
-                            <li>Bonus: Carro VIP</li>
-                            <li>Bonus: +1 vaga na garagem</li>
+                        <h4 style="margin-bottom: 10px;">=== ENQUANTO FOR VIP, VOCÊ AINDA GANHA ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Tag de VIP</li>
+                            <li>Test Drive para os novos veículos</li>
+                            <li>Desconto exclusivo de 5% em qualquer outro item do site</li>
                         </ul>
                     `,
-                    price: 'R$ 25',
-                    image: '/assets/img/vips/bronze.png',
+                    cost: 'R$ 90,00',
+                    discount: '25%',
+                    price: 'R$ 67,50',
+                    recurringPayment: 'R$ 20,00',
+                    image: '/assets/img/vips/bronze-200.png',
                     enable: 1,
                 },
                 '1002': {
                     code: '1002',
                     title: 'VIP Prata',
                     description: `
-                        <h4 style="margin-bottom: 20px;">=== Recebe em todas as renovações ===</h4>
-
-                        <ul>
-                            <li>Tag de VIP</li>
-                            <li>Salário: $ 5.500 a cada 40 minutos jogados</li>
-                            <li>Bonus: Limpa todos as multas acumuladas</li>
+                        <h4 style="margin-bottom: 10px;">=== RECEBE NO ATO DA DOAÇÃO ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Salário de $ 5.500 a cada 40 minutos jogados</li>
+                            <li>$ 550.000</li>
+                            <li>Carro VIP</li>
+                            <li>+2 vaga na garagem</li>
+                            <li>Limpa todos as multas acumuladas</li>
                         </ul>
 
-                        <h4 style="margin-top: 40px; margin-bottom: 20px;">=== Recebe apenas no primeiro donate ===</h4>
+                        <h4 style="margin-bottom: 10px;">=== RECEBE EM TODAS AS RENOVAÇÕES ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Salário de $ 5.500 a cada 40 minutos jogados</li>
+                            <li>Limpa todos as multas acumuladas</li>
+                        </ul>
 
-                        <ul>
-                            <li>Bonus: $ 550.000</li>
-                            <li>Bonus: Carro VIP</li>
-                            <li>Bonus: +2 vaga na garagem</li>
+                        <h4 style="margin-bottom: 10px;">=== ENQUANTO FOR VIP, VOCÊ AINDA GANHA ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Tag de VIP</li>
+                            <li>Test Drive para os novos veículos</li>
+                            <li>Desconto exclusivo de 5% em qualquer outro item do site</li>
                         </ul>
                     `,
-                    price: 'R$ 50',
-                    image: '/assets/img/vips/prata.png',
+                    cost: 'R$ 126,40',
+                    discount: '30%',
+                    price: 'R$ 88,48',
+                    recurringPayment: 'R$ 38,00',
+                    image: '/assets/img/vips/prata-200.png',
                     enable: 1,
                 },
                 '1003': {
                     code: '1003',
                     title: 'VIP Ouro',
                     description: `
-                        <h4 style="margin-bottom: 20px;">=== Recebe em todas as renovações ===</h4>
-
-                        <ul>
-                            <li>Tag de VIP</li>
-                            <li>Salário: $ 12.000 a cada 40 minutos jogados</li>
-                            <li>Bonus: Limpa todos as multas acumuladas</li>
+                        <h4 style="margin-bottom: 10px;">=== RECEBE NO ATO DA DOAÇÃO ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Salário de $ 12.000 a cada 40 minutos jogados</li>
+                            <li>$ 1.200.000</li>
+                            <li>Carro VIP</li>
+                            <li>+4 vaga na garagem</li>
+                            <li>Limpa todos as multas acumuladas</li>
                         </ul>
 
-                        <h4 style="margin-top: 40px; margin-bottom: 20px;">=== Recebe apenas no primeiro donate ===</h4>
+                        <h4 style="margin-bottom: 10px;">=== RECEBE EM TODAS AS RENOVAÇÕES ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Salário de $ 12.000 a cada 40 minutos jogados</li>
+                            <li>Limpa todos as multas acumuladas</li>
+                        </ul>
 
-                        <ul>
-                            <li>Bonus: $ 1.200.000</li>
-                            <li>Bonus: Carro VIP</li>
-                            <li>Bonus: +4 vaga na garagem</li>
+                        <h4 style="margin-bottom: 10px;">=== ENQUANTO FOR VIP, VOCÊ AINDA GANHA ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Tag de VIP</li>
+                            <li>Test Drive para os novos veículos</li>
+                            <li>Desconto exclusivo de 5% em qualquer outro item do site</li>
                         </ul>
                     `,
-                    price: 'R$ 100',
-                    image: '/assets/img/vips/ouro.png',
+                    cost: 'R$ 167,40',
+                    discount: '35%',
+                    price: 'R$ 108,81',
+                    recurringPayment: 'R$ 54,00',
+                    image: '/assets/img/vips/ouro-200.png',
                     enable: 1,
                 },
                 '1004': {
                     code: '1004',
                     title: 'VIP Platina',
                     description: `
-                        <h4 style="margin-bottom: 20px;">=== Recebe em todas as renovações ===</h4>
-
-                        <ul>
-                            <li>Tag de VIP</li>
-                            <li>Salário: $ 19.500 a cada 40 minutos jogados</li>
-                            <li>Bonus: Limpa todos as multas acumuladas</li>
-                            <li>Bonus: Limpa 1 ADV</li>
-                            <li>Bonus: 1 tag personalizada</li>
+                        <h4 style="margin-bottom: 10px;">=== RECEBE NO ATO DA DOAÇÃO ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Salário de $ 19.500 a cada 40 minutos jogados</li>
+                            <li>$ 1.950.000</li>
+                            <li>Carro VIP</li>
+                            <li>+6 vaga na garagem</li>
+                            <li>Limpa todos as multas acumuladas</li>
+                            <li>Limpa 1 ADV</li>
                         </ul>
 
-                        <h4 style="margin-top: 40px; margin-bottom: 20px;">=== Recebe apenas no primeiro donate ===</h4>
+                        <h4 style="margin-bottom: 10px;">=== RECEBE EM TODAS AS RENOVAÇÕES ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Salário de $ 19.500 a cada 40 minutos jogados</li>
+                            <li>Limpa todos as multas acumuladas</li>
+                            <li>Limpa 1 ADV</li>
+                        </ul>
 
-                        <ul>
-                            <li>Bonus: $ 1.950.000</li>
-                            <li>Bonus: Carro VIP</li>
-                            <li>Bonus: +6 vaga na garagem</li>
+                        <h4 style="margin-bottom: 10px;">=== ENQUANTO FOR VIP, VOCÊ AINDA GANHA ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Tag de VIP</li>
+                            <li>1 tag personalizada</li>
+                            <li>Test Drive para os novos veículos</li>
+                            <li>Desconto exclusivo de 5% em qualquer outro item do site</li>
                         </ul>
                     `,
-                    price: 'R$ 150',
-                    image: '/assets/img/vips/platina.png',
+                    cost: 'R$ 278,00',
+                    discount: '40%',
+                    price: 'R$ 166,80',
+                    recurringPayment: 'R$ 68,00',
+                    image: '/assets/img/vips/platina-200.png',
                     enable: 1,
                 },
                 '1005': {
                     code: '1005',
                     title: 'VIP Diamante',
                     description: `
-                        <h4 style="margin-bottom: 20px;">=== Recebe em todas as renovações ===</h4>
-
-                        <ul>
-                            <li>Tag de VIP</li>
-                            <li>Salário: $ 28.000 a cada 40 minutos jogados</li>
-                            <li>Bonus: Limpa todos as multas acumuladas</li>
-                            <li>Bonus: Limpa 2 ADV</li>
-                            <li>Bonus: 2 tags personalizada</li>
+                        <h4 style="margin-bottom: 10px;">=== RECEBE NO ATO DA DOAÇÃO ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Salário de $ 28.000 a cada 40 minutos jogados</li>
+                            <li>$ 2.800.000</li>
+                            <li>Carro VIP</li>
+                            <li>Moto VIP</li>
+                            <li>+8 vaga na garagem</li>
+                            <li>Limpa todos as multas acumuladas</li>
+                            <li>Limpa 2 ADV</li>
                         </ul>
 
-                        <h4 style="margin-top: 40px; margin-bottom: 20px;">=== Recebe apenas no primeiro donate ===</h4>
+                        <h4 style="margin-bottom: 10px;">=== RECEBE EM TODAS AS RENOVAÇÕES ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Salário de $ 28.000 a cada 40 minutos jogados</li>
+                            <li>Limpa todos as multas acumuladas</li>
+                            <li>Limpa 2 ADV</li>
+                        </ul>
 
-                        <ul>
-                            <li>Bonus: $ 2.800.000</li>
-                            <li>Bonus: Carro VIP</li>
-                            <li>Bonus: Moto VIP</li>
-                            <li>Bonus: +8 vaga na garagem</li>
+                        <h4 style="margin-bottom: 10px;">=== ENQUANTO FOR VIP, VOCÊ AINDA GANHA ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Tag de VIP</li>
+                            <li>2 tag personalizada</li>
+                            <li>Test Drive para os novos veículos</li>
+                            <li>Desconto exclusivo de 5% em qualquer outro item do site</li>
                         </ul>
                     `,
-                    price: 'R$ 200',
-                    image: '/assets/img/vips/diamante.png',
+                    cost: 'R$ 480,20',
+                    discount: '45%',
+                    price: 'R$ 264,11',
+                    recurringPayment: 'R$ 128,00',
+                    image: '/assets/img/vips/diamante-200.png',
                     enable: 1,
                 },
                 '1006': {
                     code: '1006',
                     title: 'VIP Obsidian',
                     description: `
-                        <h4 style="margin-bottom: 20px;">=== Recebe em todas as renovações ===</h4>
-
-                        <ul>
-                            <li>Tag de VIP</li>
-                            <li>Salário: $ 45.000 a cada 40 minutos jogados</li>
-                            <li>Bonus: Limpa todos as multas acumuladas</li>
-                            <li>Bonus: Remove Ban e todas ADV's</li>
-                            <li>Bonus: 3 tags personalizada</li>
+                        <h4 style="margin-bottom: 10px;">=== RECEBE NO ATO DA DOAÇÃO ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Salário de $ 45.000 a cada 40 minutos jogados</li>
+                            <li>$ 4.500.000</li>
+                            <li>2 Carros VIP</li>
+                            <li>2 Motos VIP</li>
+                            <li>+10 vaga na garagem</li>
+                            <li>Limpa todos as multas acumuladas</li>
+                            <li>Remove Ban e todas ADV's</li>
                         </ul>
 
-                        <h4 style="margin-top: 40px; margin-bottom: 20px;">=== Recebe apenas no primeiro donate ===</h4>
+                        <h4 style="margin-bottom: 10px;">=== RECEBE EM TODAS AS RENOVAÇÕES ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Salário de $ 45.000 a cada 40 minutos jogados</li>
+                            <li>Limpa todos as multas acumuladas</li>
+                            <li>Remove Ban e todas ADV's</li>
+                        </ul>
 
-                        <ul>
-                            <li>Bonus: $ 4.500.000</li>
-                            <li>Bonus: 2 Carros VIPs</li>
-                            <li>Bonus: 2 Motos VIPs</li>
-                            <li>Bonus: +10 vaga na garagem</li>
+                        <h4 style="margin-bottom: 10px;">=== ENQUANTO FOR VIP, VOCÊ AINDA GANHA ===</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Tag de VIP</li>
+                            <li>3 tag personalizada</li>
+                            <li>Test Drive para os novos veículos</li>
+                            <li>Desconto exclusivo de 5% em qualquer outro item do site</li>
                         </ul>
                     `,
-                    price: 'R$ 300',
-                    image: '/assets/img/vips/obsidian.png',
+                    cost: 'R$ 883,00',
+                    discount: '50%',
+                    price: 'R$ 441,50',
+                    recurringPayment: 'R$ 240,00',
+                    image: '/assets/img/vips/obsidian-200.png',
                     enable: 1,
                 },
             },
@@ -191,8 +246,9 @@ $(function () {
                     <div class="panel-body">
                         <img src="${item.image}" class="img-responsive">
 
-                        <p class="text-center" style="text-transform: uppercase;">
-                            ${item.title}
+                        <p class="price">
+                            <span class="title">desconto:</span>
+                            <span class="value">${item.discount}</span>
                         </p>
                     </div>
 
@@ -231,35 +287,44 @@ $(function () {
         let html = '';
         if (item.enable) {
             title = `${item.title} - Código ${code}`;
-            html = `
-                <h2 style="margin-bottom: 20px; color: #FAAA0E; font-weight: bold;">Preço Promocional de Inauguração</h3>
 
-                ${item.description}
+            if (page == 'planos-vips') {
+                html = `
+                    <h2 style="margin-bottom: 20px; color: #FAAA0E; font-weight: bold;">Preço Promocional de Inauguração</h3>
 
-                <br>
+                    ${item.description}
 
-                <h4 class="color-logo-2">
-                    <b>Valor da doação: ${item.price}</b>
-                </h4>
+                    <br>
 
-                <br>
+                    <p>
+                        Se você quiser ter todos esses items separadamente, a doação seria <b><span class="color-logo-1 font-size-22">${item.cost}</span></b>
+                    </p>
 
-                <p>
-                    Para realizar a doação, basta ir em nosso servidor
-                    do discord, no canal <a href="https://discord.com/channels/765235242600103936/775896151198269450" target="_blank">DONATES</a> e
-                    informar o código do item.
-                </p>
+                    <br>
 
-                <br>
+                    <p>
+                        <b>Mas adquirindo o plano <span class="color-logo-2 font-size-22">${item.title}</span> você economiza <span class="color-logo-2 font-size-22">${item.discount}</span>,<br>doando apenas <span class="color-logo-2 font-size-22">${item.price}</span>!!!</b>
+                    </p>
 
-                <p>
-                    Copie a mensagem abaixo e cole no canal <a href="https://discord.com/channels/765235242600103936/775896151198269450" target="_blank">DONATES</a>:
-                </p>
+                    <br>
 
-                <blockquote>
-                    Olá, gostaria de fazer o meu donate para o item de código ${code}
-                </blockquote>
-            `;
+                    <p>
+                        E para manter os bônus mensais, a doação cai para <b class="color-logo-2 font-size-22">${item.recurringPayment}</b>!!!
+                    </p>
+
+                    <br>
+
+                    <p>
+                        Para realizar a doação, basta ir em nosso servidor
+                        do discord, no canal <a href="https://discord.com/channels/765235242600103936/775896151198269450" target="_blank">DONATES</a>
+                        e mandar a seguinte mensagem:
+                    </p>
+
+                    <blockquote>
+                        Olá, gostaria de fazer o meu donate para o item "${item.title}"
+                    </blockquote>
+                `;
+            }
         } else {
             title = `${item.title}`;
             html = `<h3 style="margin-bottom: 20px">Em breve mais detalhes...</h3>`;
@@ -269,7 +334,7 @@ $(function () {
         $('#modalDetailsBody').html(html);
         $('#modalDetails').modal();
     });
-    // .eq(0).trigger('click');
+        // .eq(3).trigger('click');
 
     setTimeout(function () {
         $('.loading').stop().animate({

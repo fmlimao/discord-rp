@@ -24,10 +24,10 @@ client.on('ready', () => {
     console.log(' - GUILD NAME:', guild.name);
     console.log(`----------------------`);
 
-    guild.roles.cache.map(role => {
-        console.log(' - role:', role.id, role.name);
-    });
-    console.log(`----------------------`);
+    // guild.roles.cache.map(role => {
+    //     console.log(' - role:', role.id, role.name);
+    // });
+    // console.log(`----------------------`);
 });
 
 client.on('message', async message => {

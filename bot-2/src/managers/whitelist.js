@@ -55,6 +55,25 @@ async function releaseWhitelist(message) {
         return;
     }
 
+    // inserimos ou editamos a whitelist do usuario
+    const whitelistExists = await knex('discord_whitelist')
+        .where('deleted_at', null)
+        .where('player_id', player.id)
+        .select('user_id', 'player_id', 'finished_at')
+        .first();
+
+    if (whitelistExists) {
+        const msg = [
+            `Olá ${author.username}!`,
+            `Recebemos sua Whitelist, porém parece que o ID "${playerId}" já está liberado.`,
+            `Verifique se o ID está correto. Precisa ser o ID que aparece na tela do FIVEM quando você se conecta.`,
+            `Volte ao canal da Whitelist e informe o comando corretamente, seguindo esse modelo: \`!liberar <id>\`.`,
+            `Por exemplo \`!liberar 123\``,
+        ];
+        sendMessage(author, '', msg.join('\n\n'), 0x00ff00);
+        return;
+    }
+
     // // se o ID ja estiver liberado
     // if (player.whitelisted == 1) {
     //     const msg = [

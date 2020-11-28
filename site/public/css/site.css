@@ -142,6 +142,10 @@ body.site {
   opacity: 0.5;
 }
 .maintenance .box-maintenance {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 100%;
   padding: 15px;
   text-align: center;
   text-transform: uppercase;
@@ -294,6 +298,33 @@ body.site {
   padding-top: 30px;
   box-shadow: inset 0 4px 6px -6px rgba(0, 0, 0, 0.6);
 }
+.site .site-content .alert-warning {
+  background-color: #b87b04;
+  border: 0;
+  margin-bottom: 80px;
+  font-size: 20px;
+  text-transform: uppercase;
+  text-align: center;
+  color: #fff;
+}
+.site .site-content .alert-warning a {
+  font-weight: bold;
+  font-size: 24px;
+  color: #923CCF;
+  text-decoration: underline;
+}
+.site .site-content .category {
+  margin-bottom: 80px;
+}
+.site .site-content .category .category-title {
+  margin-bottom: 40px;
+  font-size: 40px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  text-shadow: 0 4px 2px rgba(146, 60, 207, 0.4);
+  color: #FAAA0E;
+}
 .site .site-content .panel-list {
   background-color: #36393F;
   border: 0;
@@ -301,6 +332,12 @@ body.site {
 }
 .site .site-content .panel-list img {
   margin: auto;
+}
+.site .site-content .panel-list .item-title {
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  color: #FAAA0E;
 }
 .site .site-content .panel-list .price {
   margin-top: 30px;

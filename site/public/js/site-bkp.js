@@ -216,8 +216,178 @@ var data = {
                 },
             },
         },
+        'carros-vips-1': {
+            title: 'Carros VIPs 1',
+            active: 1,
+            showImage: 1,
+            items: {},
+        },
+        'carros-vips-2': {
+            title: 'Carros VIPs 2',
+            active: 1,
+            showImage: 1,
+            items: {},
+        },
+        'motos-vips': {
+            title: 'Motos VIPs',
+            active: 0,
+            showImage: 0,
+            items: {
+                '2001': {
+                    code: '2001',
+                    title: 'Moto 1',
+                    description: '<p>Descrição da moto 1</p>',
+                    price: 'R$ 50,00',
+                    image: '/assets/img/em_breve.png',
+                    active: 1,
+                },
+                '2002': {
+                    code: '2002',
+                    title: 'Moto 2',
+                    description: '<p>Descrição da moto 2</p>',
+                    price: 'R$ 50,00',
+                    image: '/assets/img/em_breve.png',
+                    active: 1,
+                },
+                '2003': {
+                    code: '2003',
+                    title: 'Moto 3',
+                    description: '<p>Descrição da moto 3</p>',
+                    price: 'R$ 50,00',
+                    image: '/assets/img/em_breve.png',
+                    active: 1,
+                },
+                '2004': {
+                    code: '2004',
+                    title: 'Moto 4',
+                    description: '<p>Descrição da moto 4</p>',
+                    price: 'R$ 50,00',
+                    image: '/assets/img/em_breve.png',
+                    active: 1,
+                },
+                '2005': {
+                    code: '2005',
+                    title: 'Moto 5',
+                    description: '<p>Descrição da moto 5</p>',
+                    price: 'R$ 50,00',
+                    image: '/assets/img/em_breve.png',
+                    active: 1,
+                },
+                '2006': {
+                    code: '2006',
+                    title: 'Moto 6',
+                    description: '<p>Descrição da moto 6</p>',
+                    price: 'R$ 50,00',
+                    image: '/assets/img/em_breve.png',
+                    active: 1,
+                },
+            },
+        },
+        'dinheiro': {
+            title: 'Dinheiro',
+            active: 0,
+            showImage: 0,
+            items: {
+                '5001': {
+                    code: '5001',
+                    title: 'R$ 250.000,00',
+                    description: '<p>R$ 250.000,00 no jogo</p>',
+                    price: 'R$ 10,00',
+                    image: '/assets/img/em_breve.png',
+                    active: 1,
+                },
+                '5002': {
+                    code: '5002',
+                    title: 'R$ 500.000,00',
+                    description: '<p>R$ 500.000,00 no jogo</p>',
+                    price: 'R$ 18,50',
+                    image: '/assets/img/em_breve.png',
+                    active: 1,
+                },
+                '5003': {
+                    code: '5003',
+                    title: 'R$ 750.000,00',
+                    description: '<p>R$ 750.000,00 no jogo</p>',
+                    price: 'R$ 25,50',
+                    image: '/assets/img/em_breve.png',
+                    active: 1,
+                },
+                '5004': {
+                    code: '5004',
+                    title: 'R$ 1.000.000,00',
+                    description: '<p>R$ 1.000.000,00 no jogo</p>',
+                    price: 'R$ 31,00',
+                    image: '/assets/img/em_breve.png',
+                    active: 1,
+                },
+                '5005': {
+                    code: '5005',
+                    title: 'R$ 2.000.000,00',
+                    description: '<p>R$ 2.000.000,00 no jogo</p>',
+                    price: 'R$ 56,00',
+                    image: '/assets/img/em_breve.png',
+                    active: 1,
+                },
+                '5006': {
+                    code: '5006',
+                    title: 'R$ 4.000.000,00',
+                    description: '<p>R$ 4.000.000,00 no jogo</p>',
+                    price: 'R$ 100,00',
+                    image: '/assets/img/em_breve.png',
+                    active: 1,
+                },
+            },
+        },
+        'outros-itens': {
+            title: 'Outros Itens',
+            active: 0,
+            showImage: 0,
+            items: {
+                '7001': {
+                    code: '7001',
+                    title: 'Limpar 1 ADV',
+                    description: '<p>Limpar 1 ADV no jogo</p>',
+                    price: 'R$ 50,00',
+                    image: '/assets/img/em_breve.png',
+                    active: 1,
+                },
+                '7002': {
+                    code: '7002',
+                    title: 'Limpar 1 BAN',
+                    description: '<p>Limpar 1 BAN no jogo</p>',
+                    price: 'R$ 200,00',
+                    image: '/assets/img/em_breve.png',
+                    active: 1,
+                },
+            },
+        },
     },
 };
+
+let id = 4000;
+for (let i = 1; i <= 11; i++) {
+    id += i;
+    data.pages['carros-vips-1'].items[id] = {
+        code: id,
+        title: `Carro ${id}`,
+        description: `<p>Descrição do carro ${id}</p>`,
+        price: 'R$ 50,00',
+        image: `/assets/img/veiculos/vip1/vip1-${i}-400-200.jpg`,
+        active: 1,
+    };
+}
+
+for (let i = 1; i <= 11; i++) {
+    id += i;
+    data.pages['carros-vips-2'].items[id] = {
+        code: id,
+        title: `Carro ${id}`,
+        description: `<p>Descrição do carro ${id}</p>`,
+        price: 'R$ 75,00',
+        image: `/assets/img/veiculos/vip2/vip2-${i}-400-200.jpg`,
+        active: 1,
+    };
+}
 
 $(function () {
 

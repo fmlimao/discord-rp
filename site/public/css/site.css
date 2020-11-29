@@ -8,6 +8,9 @@
 .font-nunito {
   font-family: 'Nunito', sans-serif;
 }
+.underline {
+  text-decoration: underline;
+}
 .color-logo-1 {
   color: #923CCF;
 }

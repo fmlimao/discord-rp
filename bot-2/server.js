@@ -7,7 +7,7 @@ const moment = require('moment');
 const { Client, MessageEmbed } = require('discord.js');
 const client = new Client();
 
-const { getMessageVars, sendMessage } = require('./src/managers/discord');
+const { getMessageVars, sendMessage, saveMessage } = require('./src/managers/discord');
 const { releaseWhitelist } = require('./src/managers/whitelist');
 
 client.on('ready', () => {
@@ -37,6 +37,7 @@ client.on('message', async message => {
         isTextChannel,
         isCommand,
         author,
+        member,
         channel,
         guild,
         messageContent,
@@ -44,6 +45,9 @@ client.on('message', async message => {
         messageCommand,
         messageArgs,
     } = getMessageVars(message);
+
+    // salvar todas as mensagens para log futuro
+    saveMessage(message);
 
     if (isBot) return;
 
@@ -123,17 +127,17 @@ client.on('message', async message => {
         return;
     }
 
-    if (channel.id == process.env.DS_CHANNEL_WHITELIST) {
-        if (messageCommand === 'liberar') {
-            console.log('=> COMMAND: !liberar');
-            console.log('-----------------------');
+    // if (channel.id == process.env.DS_CHANNEL_WHITELIST) {
+    //     if (messageCommand === 'liberar') {
+    //         console.log('=> COMMAND: !liberar');
+    //         console.log('-----------------------');
 
-            releaseWhitelist(message);
-        }
+    //         releaseWhitelist(message);
+    //     }
 
-        message.delete();
-        return;
-    }
+    //     message.delete();
+    //     return;
+    // }
 });
 
 client.login(process.env.BOT_TOKEN);

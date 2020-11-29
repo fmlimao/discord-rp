@@ -1,3 +1,5 @@
+const utf8 = require('utf8');
+const knex = require('../database/connection');
 const { MessageEmbed } = require('discord.js');
 
 function getMessageVars(message) {
@@ -7,6 +9,7 @@ function getMessageVars(message) {
     const isCommand = message.content.substr(0, 1) === process.env.BOT_PREFIX;
 
     const author = message.author;
+    const member = message.member;
     const channel = message.channel;
     const guild = message.channel.guild;
 
@@ -23,6 +26,7 @@ function getMessageVars(message) {
         isTextChannel,
         isCommand,
         author,
+        member,
         channel,
         guild,
         messageContent,
@@ -41,7 +45,54 @@ function sendMessage(to, title, body, color) {
     to.send(body);
 }
 
+async function saveMessage(message) {
+    const {
+        isBot,
+        isDm,
+        isTextChannel,
+        isCommand,
+        author,
+        member,
+        channel,
+        guild,
+        messageContent,
+        messageMentions,
+        messageCommand,
+        messageArgs,
+    } = getMessageVars(message);
+
+    let roles = '';
+    if (!isDm) {
+        roles = await member.roles.cache.map(role => {
+            return {
+                id: role.id,
+                name: role.name,
+                rawPosition: role.rawPosition,
+            };
+        });
+    }
+
+    const data = {
+        is_bot: isBot ? 1 : 0,
+        is_dm: isDm ? 1 : 0,
+        is_text_channel: isTextChannel ? 1 : 0,
+        guild_id: isDm ? null : guild.id,
+        guild_name: isDm ? null : utf8.encode(guild.name),
+        channel_id: isDm ? null : channel.id,
+        channel_name: isDm ? null : utf8.encode(channel.name),
+        author_id: author.id,
+        author_username: utf8.encode(author.username),
+        author_avatar: author.avatar,
+        member_nickname: isDm ? null : utf8.encode(member.nickname),
+        roles: isDm ? null : utf8.encode(JSON.stringify(roles)),
+        message_content: messageContent,
+    };
+
+    const id = await knex('discord_messages').insert(data);
+}
+
 module.exports = {
     getMessageVars,
     sendMessage,
+    saveMessage,
 };

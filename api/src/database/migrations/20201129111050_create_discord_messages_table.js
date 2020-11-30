@@ -25,7 +25,7 @@ module.exports = {
     },
 
     down: async function (knex) {
-        return knex.schema.dropTable('discord_whitelist');
+        return knex.schema.dropTable('discord_messages');
     },
 
 };

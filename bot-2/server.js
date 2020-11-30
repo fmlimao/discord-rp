@@ -7,10 +7,21 @@ const moment = require('moment');
 const { Client, MessageEmbed } = require('discord.js');
 const client = new Client();
 
-const { getMessageVars, sendMessage, saveMessage } = require('./src/managers/discord');
+const { getMessageVars, sendMessage, saveMessage, analyzeMessages } = require('./src/managers/discord');
 const { releaseWhitelist } = require('./src/managers/whitelist');
 
-client.on('ready', () => {
+async function jobAnalyseMessages() {
+    // console.log('jobAnalyseMessages()');
+    // console.log(`----------------------`);
+
+    await analyzeMessages();
+
+    setTimeout(function () {
+        jobAnalyseMessages();
+    }, 10000);
+}
+
+client.on('ready', async () => {
     const date = moment().format('DD/MM/YYYY HH:mm:ss');
 
     console.log(`=> Bot iniciado em ${date}`);
@@ -28,6 +39,8 @@ client.on('ready', () => {
     //     console.log(' - role:', role.id, role.name);
     // });
     // console.log(`----------------------`);
+
+    jobAnalyseMessages();
 });
 
 client.on('message', async message => {

@@ -1,3 +1,5 @@
+require('dotenv-safe').config();
+
 const knex = require('../database/connection');
 const { getMessageVars, sendMessage } = require('./discord');
 
@@ -59,7 +61,8 @@ async function releaseWhitelist(message) {
     const whitelistExists = await knex('discord_whitelist')
         .where('deleted_at', null)
         .where('player_id', player.id)
-        .select('user_id', 'player_id', 'finished_at')
+        .where('guild_id', process.env.DS_GUILD)
+        .select('member_id', 'player_id', 'finished_at')
         .first();
 
     if (whitelistExists) {
@@ -100,15 +103,17 @@ async function releaseWhitelist(message) {
     // inserimos ou editamos a whitelist do usuario
     const whitelist = await knex('discord_whitelist')
         .where('deleted_at', null)
-        .where('user_id', author.id)
-        .select('user_id', 'player_id', 'finished_at')
+        .where('guild_id', process.env.DS_GUILD)
+        .where('member_id', author.id)
+        .select('member_id', 'player_id', 'finished_at')
         .first();
 
     console.log('whitelist', whitelist);
 
     if (!whitelist) {
         await knex('discord_whitelist').insert({
-            user_id: author.id,
+            member_id: author.id,
+            guild_id: process.env.DS_GUILD,
             player_id: player.id,
             finished_at: knex.fn.now(),
         });
@@ -116,7 +121,8 @@ async function releaseWhitelist(message) {
         if (!whitelist.finished_at) {
             await knex('discord_whitelist')
                 .where('deleted_at', null)
-                .where('user_id', author.id)
+                .where('guild_id', process.env.DS_GUILD)
+                .where('member_id', author.id)
                 .update({
                     player_id: player.id,
                     finished_at: knex.fn.now(),

@@ -47,13 +47,16 @@ client.on('message', async message => {
     } = getMessageVars(message);
 
     // salvar todas as mensagens para log futuro
-    saveMessage(message);
+    // saveMessage(message);
 
     if (isBot) return;
 
     if (isDm) return;
 
     if (guild.id != process.env.DS_GUILD) return;
+
+    // salvar todas as mensagens para log futuro
+    saveMessage(message);
 
     // comandos de debug
     if (messageCommand == 'debug') {
@@ -127,17 +130,17 @@ client.on('message', async message => {
         return;
     }
 
-    // if (channel.id == process.env.DS_CHANNEL_WHITELIST) {
-    //     if (messageCommand === 'liberar') {
-    //         console.log('=> COMMAND: !liberar');
-    //         console.log('-----------------------');
+    if (channel.id == process.env.DS_CHANNEL_WHITELIST) {
+        if (messageCommand === 'liberar') {
+            console.log('=> COMMAND: !liberar');
+            console.log('-----------------------');
 
-    //         releaseWhitelist(message);
-    //     }
+            releaseWhitelist(message);
+        }
 
-    //     message.delete();
-    //     return;
-    // }
+        message.delete();
+        return;
+    }
 });
 
 client.login(process.env.BOT_TOKEN);

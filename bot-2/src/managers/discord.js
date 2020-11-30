@@ -80,15 +80,16 @@ async function saveMessage(message) {
         guild_name: isDm ? null : utf8.encode(guild.name),
         channel_id: isDm ? null : channel.id,
         channel_name: isDm ? null : utf8.encode(channel.name),
-        author_id: author.id,
-        author_username: utf8.encode(author.username),
-        author_avatar: author.avatar,
+        member_id: author.id,
+        member_username: utf8.encode(author.username),
+        member_avatar: author.avatar,
         member_nickname: isDm ? null : utf8.encode(member.nickname),
         roles: isDm ? null : utf8.encode(JSON.stringify(roles)),
         message_content: messageContent,
     };
 
-    const id = await knex('discord_messages').insert(data);
+    const id = await knex('discord_messages').insert(data);// .toString();
+    console.log('id', id);
 }
 
 module.exports = {

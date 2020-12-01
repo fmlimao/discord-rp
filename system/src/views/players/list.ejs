@@ -1,0 +1,173 @@
+<%- contentFor('body') %>
+<div>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Players
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/#/home"><i class="fa fa-home"></i> Home</a></li>
+            <li class="active"><i class="fa fa-users"></i> Players</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Data Table With Full Features</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="tablePlayers" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Avatar</th>
+                            <th>Username</th>
+                            <th>Nickname</th>
+                            <th>WL</th>
+                            <th>BAN</th>
+                            <th>Dinheiro</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+
+
+    </section>
+</div>
+
+<%- contentFor('scripts') %>
+<script>
+
+    let data = [];
+
+    function getPlayers() {
+        console.log('getPlayers()');
+
+        var ajaxCb = async (response) => {
+            if (!response.error) {
+                data = [];
+                for (var i in response.content.players) {
+                    data[i] = response.content.players[i];
+                    data[i].hasAvatar = 0;
+                }
+
+                const list = await checkImages();
+                for (let i in list.then) {
+                    const index = parseInt(list.then[i]);
+                    data[index].hasAvatar = 1;
+                }
+
+                for (let i in data) {
+                    const player = data[i];
+
+                    $('#tablePlayers tbody').append(`
+                        <tr>
+                            <td>
+                                ${player.player_id}
+                            </td>
+                            <td>
+                                ${player.hasAvatar ? `<img src="${player.avatar}" alt="" class="img-responsive img-circle img-thumbnail" style="width: 32px; padding: 1px;">` : ''}
+                            </td>
+                            <td>
+                                ${player.username ? player.username : ''}
+                            </td>
+                            <td>
+                                ${player.nickname ? player.nickname : ''}
+                            </td>
+                            <td>
+                                ${player.whitelisted}
+                            </td>
+                            <td>
+                                ${player.banned}
+                            </td>
+                            <td>
+                                ${player.money_formatted}
+                            </td>
+                            <td>
+                                <a :href="'/players/' + player.player_id">
+                                    <span class="fa fa-eye"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    `);
+                }
+
+                $('#tablePlayers').DataTable({
+                    oLanguage: {
+                        sUrl: "/assets/js/jquery.dataTables.pt-br.txt",
+                    },
+                    columnDefs: [
+                        { targets: 0, className: 'text-right' },
+                        { targets: 1, className: 'text-center', orderable: false },
+                        { targets: 6, className: 'text-right' },
+                        { targets: 4, className: 'text-center' },
+                        { targets: 5, className: 'text-center' },
+                        { targets: 7, className: 'text-center', orderable: false },
+                    ],
+                });
+
+            }
+        };
+
+        axios.get(`${apiHost}/players`, {
+            headers: {
+                'x-access-token': token,
+            },
+        })
+            .then(function (response) {
+                ajaxCb(response.data);
+            })
+            .catch(function (error) {
+                ajaxCb(error.response.data);
+            });
+    };
+
+    function checkImages(i) {
+        const list = {
+            then: [],
+            catch: [],
+        };
+        const length = data.length;
+        let count = 0;
+
+        return new Promise((resolve, reject) => {
+            for (let i in data) {
+                const avatar = data[i].avatar;
+                if (avatar) {
+                    const img = new Image();
+                    img.src = data[i].avatar;
+                    img.setAttribute('data-i', i);
+
+                    img.onload = function () {
+                        const index = this.getAttribute('data-i');
+                        list.then.push(index);
+                        count++;
+                        if (count == length) resolve(list);
+                    };
+                    img.onerror = function () {
+                        const index = this.getAttribute('data-i');
+                        list.catch.push(index);
+                        count++;
+                        if (count == length) resolve(list);
+                    };
+                } else {
+                    count++;
+                    if (count == length) resolve(list);
+                }
+            }
+        });
+    };
+
+    $(function () {
+        getPlayers();
+    })
+</script>

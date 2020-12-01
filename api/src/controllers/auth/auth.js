@@ -1,3 +1,5 @@
+require('dotenv-safe').config();
+
 const knex = require('../../database/connection');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -39,11 +41,25 @@ module.exports = async (req, res) => {
         }
 
         // Verificando se usuário ja existe
-        const user = await knex('discord_system_users')
-            .where('deleted_at', null)
-            .where('active', 1)
-            .where('email', email)
-            .select('user_id AS id', 'name', 'email', 'password')
+        const user = await knex('discord_system_users AS dsu')
+            .leftJoin('discord_guild_members AS dgm', function () {
+                this.onNull('dgm.deleted_at')
+                    .andOn('dsu.member_id', '=', 'dgm.member_id')
+                    .andOn(knex.raw('dgm.guild_id = ?', [process.env.DS_GUILD]));
+            })
+            .where('dsu.deleted_at', null)
+            .where('dsu.active', 1)
+            .where('dsu.email', email)
+            .select(
+                'dsu.user_id AS id',
+                'dsu.name',
+                'dsu.email',
+                'dsu.password',
+                'dgm.username',
+                'dgm.avatar',
+                'dgm.nickname',
+                'dgm.roles',
+            )
             .first();
 
         if (!user) {
@@ -62,6 +78,10 @@ module.exports = async (req, res) => {
             id: user.id,
             name: user.name,
             email: user.email,
+            username: user.username,
+            avatar: user.avatar,
+            nickname: user.nickname,
+            roles: user.roles,
         };
 
         const exp = Number(process.env.TOKEN_EXPIRATION_SEC);

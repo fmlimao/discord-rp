@@ -87,7 +87,7 @@
 
     <script>
 
-        var apiPath = '<%- apiPath %>';
+        var apiHost = '<%- apiHost %>';
 
         var App = new Vue({
             el: '#AppVue',
@@ -177,7 +177,7 @@
 
                     App.formLogin.loading = true;
 
-                    axios.post(`${apiPath}/auth`, {
+                    axios.post(`${apiHost}/auth`, {
                         email: App.formLogin.fields.email.value,
                         password: App.formLogin.fields.password.value,
                     })

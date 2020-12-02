@@ -1,8 +1,9 @@
-function generateStars(value) {
+function generateStars(value, max) {
+    if (typeof max == 'undefined') max = 5;
     const html = [];
 
     for (let i = 0; i < value; i++) html.push('<span class="fa fa-star color-logo-2"></span>');
-    for (let i = value; i < 5; i++) html.push('<span class="fa fa-star-o color-ds-3"></span>');
+    for (let i = value; i < max; i++) html.push('<span class="fa fa-star-o color-ds-3"></span>');
 
     return html.join(' ');
 }
@@ -532,7 +533,7 @@ const motos = {
         name: 'BMW R1250',
         velocidade: 5,
         torque: 5,
-        prestigio: 5,
+        prestigio: 6,
         resistencia: 4,
     },
 
@@ -625,19 +626,19 @@ for (let i = 1; i <= 7; i++) {
 
             <ul>
                 <li>
-                    ${generateStars(motos[i].velocidade)}
+                    ${generateStars(motos[i].velocidade, i == 7 ? 6 : 5)}
                     Velocidade
                 </li>
                 <li>
-                    ${generateStars(motos[i].torque)}
+                    ${generateStars(motos[i].torque, i == 7 ? 6 : 5)}
                     Torque
                 </li>
                 <li>
-                    ${generateStars(motos[i].prestigio)}
+                    ${generateStars(motos[i].prestigio, i == 7 ? 6 : 5)}
                     Prestígio
                 </li>
                 <li>
-                    ${generateStars(motos[i].resistencia)}
+                    ${generateStars(motos[i].resistencia, i == 7 ? 6 : 5)}
                     Resistência
                 </li>
             </ul>

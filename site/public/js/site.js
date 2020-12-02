@@ -21,7 +21,7 @@ var data = {
                     description: `
                         <h4 style="margin-bottom: 10px;">=== RECEBE NO ATO DA DOAÇÃO ===</h4>
                         <ul style="margin-bottom: 20px;">
-                            <li>Salário de $ 2.500 a cada 40 minutos jogados</li>
+                            <li>Salário de $ 2.500 a cada 40 minutos jogados (válido por 30 dias)</li>
                             <li>$ 250.000</li>
                             <li>Carro VIP Classe B</li>
                             <li>+1 vaga na garagem</li>
@@ -30,7 +30,7 @@ var data = {
 
                         <h4 style="margin-bottom: 10px;">=== RECEBE EM TODAS AS RENOVAÇÕES ===</h4>
                         <ul style="margin-bottom: 20px;">
-                            <li>Salário de $ 2.500 a cada 40 minutos jogados</li>
+                            <li>Salário de $ 2.500 a cada 40 minutos jogados (válido por 30 dias)</li>
                             <li>Limpa todos as multas acumuladas</li>
                         </ul>
 
@@ -54,7 +54,7 @@ var data = {
                     description: `
                         <h4 style="margin-bottom: 10px;">=== RECEBE NO ATO DA DOAÇÃO ===</h4>
                         <ul style="margin-bottom: 20px;">
-                            <li>Salário de $ 5.500 a cada 40 minutos jogados</li>
+                            <li>Salário de $ 5.500 a cada 40 minutos jogados (válido por 30 dias)</li>
                             <li>$ 550.000</li>
                             <li>Carro VIP Classe B</li>
                             <li>+2 vaga na garagem</li>
@@ -63,7 +63,7 @@ var data = {
 
                         <h4 style="margin-bottom: 10px;">=== RECEBE EM TODAS AS RENOVAÇÕES ===</h4>
                         <ul style="margin-bottom: 20px;">
-                            <li>Salário de $ 5.500 a cada 40 minutos jogados</li>
+                            <li>Salário de $ 5.500 a cada 40 minutos jogados (válido por 30 dias)</li>
                             <li>Limpa todos as multas acumuladas</li>
                         </ul>
 
@@ -87,7 +87,7 @@ var data = {
                     description: `
                         <h4 style="margin-bottom: 10px;">=== RECEBE NO ATO DA DOAÇÃO ===</h4>
                         <ul style="margin-bottom: 20px;">
-                            <li>Salário de $ 12.000 a cada 40 minutos jogados</li>
+                            <li>Salário de $ 12.000 a cada 40 minutos jogados (válido por 30 dias)</li>
                             <li>$ 1.200.000</li>
                             <li>Carro VIP Classe B</li>
                             <li>+4 vaga na garagem</li>
@@ -96,7 +96,7 @@ var data = {
 
                         <h4 style="margin-bottom: 10px;">=== RECEBE EM TODAS AS RENOVAÇÕES ===</h4>
                         <ul style="margin-bottom: 20px;">
-                            <li>Salário de $ 12.000 a cada 40 minutos jogados</li>
+                            <li>Salário de $ 12.000 a cada 40 minutos jogados (válido por 30 dias)</li>
                             <li>Limpa todos as multas acumuladas</li>
                         </ul>
 
@@ -120,7 +120,7 @@ var data = {
                     description: `
                         <h4 style="margin-bottom: 10px;">=== RECEBE NO ATO DA DOAÇÃO ===</h4>
                         <ul style="margin-bottom: 20px;">
-                            <li>Salário de $ 19.500 a cada 40 minutos jogados</li>
+                            <li>Salário de $ 19.500 a cada 40 minutos jogados (válido por 30 dias)</li>
                             <li>$ 1.950.000</li>
                             <li>Carro VIP Classe A</li>
                             <li>+6 vaga na garagem</li>
@@ -130,7 +130,7 @@ var data = {
 
                         <h4 style="margin-bottom: 10px;">=== RECEBE EM TODAS AS RENOVAÇÕES ===</h4>
                         <ul style="margin-bottom: 20px;">
-                            <li>Salário de $ 19.500 a cada 40 minutos jogados</li>
+                            <li>Salário de $ 19.500 a cada 40 minutos jogados (válido por 30 dias)</li>
                             <li>Limpa todos as multas acumuladas</li>
                             <li>Limpa 1 ADV</li>
                         </ul>
@@ -156,7 +156,7 @@ var data = {
                     description: `
                         <h4 style="margin-bottom: 10px;">=== RECEBE NO ATO DA DOAÇÃO ===</h4>
                         <ul style="margin-bottom: 20px;">
-                            <li>Salário de $ 28.000 a cada 40 minutos jogados</li>
+                            <li>Salário de $ 28.000 a cada 40 minutos jogados (válido por 30 dias)</li>
                             <li>$ 2.800.000</li>
                             <li>Carro VIP Classe A</li>
                             <li>Moto VIP</li>
@@ -167,7 +167,7 @@ var data = {
 
                         <h4 style="margin-bottom: 10px;">=== RECEBE EM TODAS AS RENOVAÇÕES ===</h4>
                         <ul style="margin-bottom: 20px;">
-                            <li>Salário de $ 28.000 a cada 40 minutos jogados</li>
+                            <li>Salário de $ 28.000 a cada 40 minutos jogados (válido por 30 dias)</li>
                             <li>Limpa todos as multas acumuladas</li>
                             <li>Limpa 2 ADV</li>
                         </ul>
@@ -193,7 +193,7 @@ var data = {
                     description: `
                         <h4 style="margin-bottom: 10px;">=== RECEBE NO ATO DA DOAÇÃO ===</h4>
                         <ul style="margin-bottom: 20px;">
-                            <li>Salário de $ 45.000 a cada 40 minutos jogados</li>
+                            <li>Salário de $ 45.000 a cada 40 minutos jogados (válido por 30 dias)</li>
                             <li>$ 4.500.000</li>
                             <li>2 Carros VIP Classe A</li>
                             <li>2 Motos VIP</li>
@@ -204,7 +204,7 @@ var data = {
 
                         <h4 style="margin-bottom: 10px;">=== RECEBE EM TODAS AS RENOVAÇÕES ===</h4>
                         <ul style="margin-bottom: 20px;">
-                            <li>Salário de $ 45.000 a cada 40 minutos jogados</li>
+                            <li>Salário de $ 45.000 a cada 40 minutos jogados (válido por 30 dias)</li>
                             <li>Limpa todos as multas acumuladas</li>
                             <li>Remove Ban e todas ADV's</li>
                         </ul>

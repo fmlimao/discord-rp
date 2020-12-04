@@ -349,6 +349,7 @@ body.site {
   margin: auto;
 }
 .site .site-content .panel-list .item-title {
+  font-size: 24px;
   font-weight: bold;
   text-align: center;
   text-transform: uppercase;
@@ -366,7 +367,7 @@ body.site {
   color: #fff;
 }
 .site .site-content .panel-list .price .value {
-  font-size: 40px;
+  font-size: 36px;
   color: #FAAA0E;
 }
 .site .site-content .panel-list .panel-footer {

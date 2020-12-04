@@ -376,13 +376,13 @@ const carsClassB = {
         resistencia: 3,
     },
 
-    '10': {
-        name: 'EVOQUE',
-        velocidade: 2,
-        estabilidade: 2,
-        prestigio: 3,
-        resistencia: 3,
-    },
+    // '10': {
+    //     name: 'EVOQUE',
+    //     velocidade: 2,
+    //     estabilidade: 2,
+    //     prestigio: 3,
+    //     resistencia: 3,
+    // },
 
 };
 
@@ -540,7 +540,7 @@ const motos = {
 };
 
 let id = 4000;
-for (let i = 1; i <= 10; i++) {
+for (let i = 1; i <= 9; i++) {
     id += i;
     data.pages['carros-classe-b'].items[id] = {
         code: id,

@@ -50,6 +50,9 @@ body::-webkit-scrollbar {
 body::-webkit-scrollbar-track {
   background-color: #36393F;
 }
+body::-webkit-scrollbar-corner {
+  background-color: #36393F;
+}
 body::-webkit-scrollbar-thumb {
   background-color: #923CCF;
 }

@@ -16,7 +16,7 @@ app.set('views', path.join(__dirname, './src/views'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(logger('dev'));
-app.use(helmet());
+// app.use(helmet());
 // app.use(cookieParser());
 
 app.get('/', (req, res) => {

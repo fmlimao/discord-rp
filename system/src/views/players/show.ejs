@@ -53,13 +53,14 @@
                     <table id="tableTransactions" class="table table-bordered table-striped">
                         <thead>
                             <tr>
+                                <th>#</th>
                                 <th>Data</th>
-                                <th class="text-right">Carteira</th>
-                                <th class="text-right">Carteira (Diff)</th>
-                                <th class="text-right">Banco</th>
-                                <th class="text-right">Banco (Diff)</th>
-                                <th class="text-right">PayPal</th>
-                                <th class="text-right">PayPal (Diff)</th>
+                                <th>Carteira</th>
+                                <th>Carteira (Diff)</th>
+                                <th>Banco</th>
+                                <th>Banco (Diff)</th>
+                                <th>PayPal</th>
+                                <th>PayPal (Diff)</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -159,11 +160,9 @@
                 console.log('getPlayerTransactions()');
 
                 var ajaxCb = async (response) => {
-                    // console.log('response', response);
 
                     for (var i in response.content.transactions) {
                         var transaction = response.content.transactions[i];
-                        console.log('transaction', transaction);
 
                         var new_wallet_label = '';
                         if (transaction.diff_wallet > 0) new_wallet_label = `<small class="label bg-green">+${transaction.diff_wallet_formatted}</small>`;
@@ -179,6 +178,9 @@
 
                         $('#tableTransactions tbody').append(`
                             <tr>
+                                <td>
+                                    ${transaction.transaction_id}
+                                </td>
                                 <td>
                                     ${transaction.created_at_formatted}
                                 </td>
@@ -210,12 +212,12 @@
                         },
                         columnDefs: [
                             { targets: 0, className: 'text-right' },
-                            { targets: 1, className: 'text-right' },
                             { targets: 2, className: 'text-right' },
                             { targets: 3, className: 'text-right' },
                             { targets: 4, className: 'text-right' },
                             { targets: 5, className: 'text-right' },
                             { targets: 6, className: 'text-right' },
+                            { targets: 7, className: 'text-right' },
                         ],
                     });
 

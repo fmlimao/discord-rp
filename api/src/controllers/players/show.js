@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
     let ret = req.ret;
 
     try {
-        ret.addContent('user', req.user);
+        ret.addContent('player', req.player);
     } catch (err) {
         ret = require('../../helpers/error-handler')(err, ret);
     }

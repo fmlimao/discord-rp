@@ -10,11 +10,6 @@ module.exports = async (req, res) => {
 
         const transactions = (await knex.raw(`
             SELECT
-                vumt.user_id AS player_id,
-                dgm.username,
-                dgm.avatar,
-                dgm.nickname,
-                dgm.roles,
                 vumt.id AS transaction_id,
                 vumt.old_wallet,vumt.new_wallet,
                 vumt.old_bank,vumt.new_bank,
@@ -27,56 +22,56 @@ module.exports = async (req, res) => {
             LEFT JOIN discord_whitelist AS dw ON (dw.deleted_at IS NULL AND vumt.user_id = dw.player_id AND dw.guild_id = ?)
             LEFT JOIN discord_guild_members AS dgm ON (dgm.deleted_at IS NULL AND dw.member_id = dgm.member_id AND dw.guild_id = dgm.guild_id)
             WHERE vumt.user_id = ?
-            ORDER BY vumt.user_id, vumt.created_at, vumt.id
+            ORDER BY vumt.created_at, vumt.id
             ;
         `, [process.env.DS_GUILD, player_id]))[0];
 
         if (!transactions.length) {
             ret.setCode(404);
-            throw new Error('Usuário não encontrado.');
+            throw new Error('Player não encontrado.');
         }
 
-        const playerData = {};
+        // const playerData = {};
 
         let beforeIndex = null;
         for (let i in transactions) {
             const transaction = transactions[i];
 
-            if (i == 0) {
-                playerData.player_id = '';
-                if (transaction.player_id) playerData.player_id = transaction.player_id;
+            // if (i == 0) {
+            //     playerData.player_id = '';
+            //     if (transaction.player_id) playerData.player_id = transaction.player_id;
 
-                playerData.username = '';
-                if (transaction.username) playerData.username = utf8.decode(transaction.username);
+            //     playerData.username = '';
+            //     if (transaction.username) playerData.username = utf8.decode(transaction.username);
 
-                playerData.avatar = '';
-                if (transaction.avatar) playerData.avatar = transaction.avatar;
+            //     playerData.avatar = '';
+            //     if (transaction.avatar) playerData.avatar = transaction.avatar;
 
-                playerData.nickname = '';
-                if (transaction.nickname) playerData.nickname = utf8.decode(transaction.nickname);
+            //     playerData.nickname = '';
+            //     if (transaction.nickname) playerData.nickname = utf8.decode(transaction.nickname);
 
-                playerData.roles = [];
-                if (transaction.roles) {
-                    playerData.roles = JSON.parse(transaction.roles);
+            //     playerData.roles = [];
+            //     if (transaction.roles) {
+            //         playerData.roles = JSON.parse(transaction.roles);
 
-                    playerData.roles.sort((a, b) => {
-                        if (a.rawPosition < b.rawPosition) return 1;
-                        if (a.rawPosition > b.rawPosition) return -1;
-                        return 0;
-                    });
+            //         playerData.roles.sort((a, b) => {
+            //             if (a.rawPosition < b.rawPosition) return 1;
+            //             if (a.rawPosition > b.rawPosition) return -1;
+            //             return 0;
+            //         });
 
-                    playerData.roles = playerData.roles.map(role => {
-                        role.name = utf8.decode(role.name);
-                        return role;
-                    });
-                }
-            }
+            //         playerData.roles = playerData.roles.map(role => {
+            //             role.name = utf8.decode(role.name);
+            //             return role;
+            //         });
+            //     }
+            // }
 
-            delete transaction.player_id;
-            delete transaction.username;
-            delete transaction.avatar;
-            delete transaction.nickname;
-            delete transaction.roles;
+            // delete transaction.player_id;
+            // delete transaction.username;
+            // delete transaction.avatar;
+            // delete transaction.nickname;
+            // delete transaction.roles;
 
             transaction.has_wallet = transaction.old_wallet != null;
             transaction.old_wallet = transaction.old_wallet == null ? 0 : parseInt(transaction.old_wallet);
@@ -149,7 +144,7 @@ module.exports = async (req, res) => {
             beforeIndex = i;
         }
 
-        ret.addContent('playerData', playerData);
+        // ret.addContent('playerData', playerData);
         ret.addContent('transactions', transactions);
     } catch (err) {
         ret = require('../../helpers/error-handler')(err, ret);

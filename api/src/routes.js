@@ -4,7 +4,8 @@ const router = express.Router();
 
 /* Middlewares */
 const middlewareAuth = require('./middlewares/auth');
-const middlewareCheckIfUserExists = require('./middlewares/check-if-user-exists');
+const middlewareCheckIfPlayerExists = require('./middlewares/check-if-player-exists');
+// const middlewareCheckIfUserExists = require('./middlewares/check-if-user-exists');
 
 router.get('/', require('./controllers/home'));
 
@@ -18,6 +19,7 @@ router.get('/users', middlewareAuth, require('./controllers/users/list'));
 // router.get('/whitelist/answers', middlewareAuth, require('./controllers/whitelist/answers/list'));
 
 router.get('/players', middlewareAuth, require('./controllers/players/list'));
-router.get('/players/:player_id/extrato', middlewareAuth, require('./controllers/players/extrato'));
+router.get('/players/:player_id', middlewareAuth, middlewareCheckIfPlayerExists, require('./controllers/players/show'));
+router.get('/players/:player_id/transactions', middlewareAuth, require('./controllers/players/transactions'));
 
 module.exports = router;

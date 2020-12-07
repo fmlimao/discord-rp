@@ -6,7 +6,7 @@
             Players
         </h1>
         <ol class="breadcrumb">
-            <li><a href="/#/home"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
             <li class="active"><i class="fa fa-users"></i> Players</li>
         </ol>
     </section>
@@ -16,7 +16,7 @@
 
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title">Data Table With Full Features</h3>
+                <h3 class="box-title">Lista de Usuários</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -93,7 +93,7 @@
                                 ${player.money_formatted}
                             </td>
                             <td>
-                                <a :href="'/players/' + player.player_id">
+                                <a href="/players/${player.player_id}">
                                     <span class="fa fa-eye"></span>
                                 </a>
                             </td>

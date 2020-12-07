@@ -1,0 +1,259 @@
+<%- contentFor('body') %>
+<div>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Player<span v-if="player.error == false"> - {{ player.data.username }}</span>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="/players"><i class="fa fa-users"></i> Players</a></li>
+            <li class="active">Player<span v-if="player.error == false"> - {{ player.data.username }}</span></li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="alert alert-danger" v-if="player.error" v-html="player.messages.join('<br>')"></div>
+
+        <div v-if="player.error == false">
+
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Dados do Usuário</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="tablePlayer" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Avatar</th>
+                                <th>Username</th>
+                                <th>Nickname</th>
+                                <th>WL</th>
+                                <th>BAN</th>
+                                <th>Dinheiro</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Extrato</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="tableTransactions" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th class="text-right">Carteira</th>
+                                <th class="text-right">Carteira (Diff)</th>
+                                <th class="text-right">Banco</th>
+                                <th class="text-right">Banco (Diff)</th>
+                                <th class="text-right">PayPal</th>
+                                <th class="text-right">PayPal (Diff)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+        </div>
+
+</div>
+
+</section>
+</div>
+
+<%- contentFor('scripts') %>
+<script>
+
+    var player_id = '<%- player_id %>';
+
+    mixins.push({
+
+        data: {
+            player: {
+                error: null,
+                messages: [],
+                data: {},
+            },
+        },
+
+        methods: {
+            init: function () {
+                App.getPlayer();
+            },
+
+            getPlayer: function () {
+                console.log('getPlayer()');
+
+                var ajaxCb = async (response) => {
+
+                    App.player.error = response.error;
+                    App.player.messages = response.messages;
+
+                    if (response.error) return;
+
+                    App.getPlayerTransactions();
+
+                    App.player.data = response.content.player;
+                    var hasAvatar = await checkImage();
+                    App.player.data.hasAvatar = hasAvatar;
+
+                    var player = App.player.data;
+
+                    $('#tablePlayer tbody').append(`
+                        <tr>
+                            <td>
+                                ${player.player_id}
+                            </td>
+                            <td>
+                                ${player.hasAvatar ? `<img src="${player.avatar}" alt="" class="img-responsive img-circle img-thumbnail" style="width: 32px; padding: 1px;">` : ''}
+                            </td>
+                            <td>
+                                ${player.username ? player.username : ''}
+                            </td>
+                            <td>
+                                ${player.nickname ? player.nickname : ''}
+                            </td>
+                            <td>
+                                ${player.whitelisted}
+                            </td>
+                            <td>
+                                ${player.banned}
+                            </td>
+                            <td>
+                                ${player.money_formatted}
+                            </td>
+                        </tr>
+                    `);
+
+                };
+
+                axios.get(`${apiHost}/players/${player_id}`, {
+                    headers: {
+                        'x-access-token': token,
+                    },
+                })
+                    .then(function (response) {
+                        ajaxCb(response.data);
+                    })
+                    .catch(function (error) {
+                        ajaxCb(error.response.data);
+                    });
+            },
+
+            getPlayerTransactions: function () {
+                console.log('getPlayerTransactions()');
+
+                var ajaxCb = async (response) => {
+                    // console.log('response', response);
+
+                    for (var i in response.content.transactions) {
+                        var transaction = response.content.transactions[i];
+                        console.log('transaction', transaction);
+
+                        var new_wallet_label = '';
+                        if (transaction.diff_wallet > 0) new_wallet_label = `<small class="label bg-green">+${transaction.diff_wallet_formatted}</small>`;
+                        if (transaction.diff_wallet < 0) new_wallet_label = `<small class="label bg-red">${transaction.diff_wallet_formatted}</small>`;
+
+                        var new_bank_label = '';
+                        if (transaction.diff_bank > 0) new_bank_label = `<small class="label bg-green">+${transaction.diff_bank_formatted}</small>`;
+                        if (transaction.diff_bank < 0) new_bank_label = `<small class="label bg-red">${transaction.diff_bank_formatted}</small>`;
+
+                        var new_paypal_label = '';
+                        if (transaction.diff_paypal > 0) new_paypal_label = `<small class="label bg-green">+${transaction.diff_paypal_formatted}</small>`;
+                        if (transaction.diff_paypal < 0) new_paypal_label = `<small class="label bg-red">${transaction.diff_paypal_formatted}</small>`;
+
+                        $('#tableTransactions tbody').append(`
+                            <tr>
+                                <td>
+                                    ${transaction.created_at_formatted}
+                                </td>
+                                <td>
+                                    <span>${transaction.new_wallet_formatted}</span>
+                                </td>
+                                <td>
+                                    ${new_wallet_label}
+                                </td>
+                                <td>
+                                    <span>${transaction.new_bank_formatted}</span>
+                                </td>
+                                <td>
+                                    ${new_bank_label}
+                                </td>
+                                <td>
+                                    <span>${transaction.new_paypal_formatted}</span>
+                                </td>
+                                <td>
+                                    ${new_paypal_label}
+                                </td>
+                            </tr>
+                        `);
+                    }
+
+                    $('#tableTransactions').DataTable({
+                        oLanguage: {
+                            sUrl: "/assets/js/jquery.dataTables.pt-br.txt",
+                        },
+                        columnDefs: [
+                            { targets: 0, className: 'text-right' },
+                            { targets: 1, className: 'text-right' },
+                            { targets: 2, className: 'text-right' },
+                            { targets: 3, className: 'text-right' },
+                            { targets: 4, className: 'text-right' },
+                            { targets: 5, className: 'text-right' },
+                            { targets: 6, className: 'text-right' },
+                        ],
+                    });
+
+                };
+
+                axios.get(`${apiHost}/players/${player_id}/transactions`, {
+                    headers: {
+                        'x-access-token': token,
+                    },
+                })
+                    .then(function (response) {
+                        ajaxCb(response.data);
+                    })
+                    .catch(function (error) {
+                        ajaxCb(error.response.data);
+                    });
+            },
+
+        },
+
+    });
+
+    function checkImage(i) {
+        return new Promise((resolve, reject) => {
+            const avatar = App.player.data.avatar;
+            if (avatar) {
+                const img = new Image();
+                img.src = avatar;
+
+                img.onload = function () {
+                    resolve(1);
+                };
+                img.onerror = function () {
+                    resolve(0);
+                };
+            } else {
+                resolve(0);
+            }
+        });
+    };
+</script>

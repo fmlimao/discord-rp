@@ -31,11 +31,6 @@
     <!-- Google Font -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-    <script>
-        var apiHost = '<%- apiHost %>';
-        var token = '<%- token %>';
-        var mixins = [];
-    </script>
 </head>
 
 <body class="hold-transition skin-purple sidebar-mini">
@@ -195,6 +190,12 @@
 
     <script src="/assets/bower_components/axios/dist/axios.min.js"></script>
     <script src="/assets/bower_components/vue/dist/vue.min.js"></script>
+
+    <script>
+        var apiHost = '<%- apiHost %>';
+        var token = '<%- token %>';
+        var mixins = [];
+    </script>
 
     <%- scripts %>
 

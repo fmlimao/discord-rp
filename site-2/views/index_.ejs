@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <h1><%= title %></h1>
+  <p>Welcome to <%= title %></p>
+
+  <% if (user) { %>
+  <div>
+    <ul>
+      <li>username: <%= user.username %></li>
+      <li>nick: <%= user.nick %></li>
+      <li>hasGuild: <%= user.hasGuild %></li>
+      <li>whitelist: <%= user.whitelist %></li>
+      <li>
+        <img src="<%= user.avatarUrl %>" alt="">
+      </li>
+    </ul>
+  </div>
+  <% } %>
+
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/users">Usuários</a></li>
+    <li><a href="/verify-whitelist">Verificar Whitelist</a></li>
+    <li><a href="/auth/logout">Sair</a></li>
+  </ul>
+</body>
+
+</html>

@@ -2,31 +2,11 @@
 <html lang="pt-BR">
 
 <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VLVYKGVQ7N"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-VLVYKGVQ7N');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy"
-        content="script-src 'self' https://apis.google.com https://www.googletagmanager.com">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/img/favicon/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff">
-    <meta name="author" content="Fow RJ Roleplay">
-    <meta name="keywords" content="servidor,roleplay,rp,gta,rio de janeiro,rJ">
-    <meta name="description" content="Servidor de Roleplay de GTA baseado na cidade do Rio de Janeiro">
-
     <title>Flow RJ Roleplay</title>
 
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/buttons.css">
     <link rel="stylesheet" href="/css/site.css">
 
@@ -44,23 +24,16 @@
     <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
     <link rel="manifest" href="/img/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/img/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <meta name="author" content="Fow RJ Roleplay" />
+    <meta name="keywords" content="servidor,roleplay,rp,gta,rio de janeiro,rJ" />
+    <meta name="description" content="Servidor de Roleplay de GTA baseado na cidade do Rio de Janeiro" />
 </head>
 
 <body class="site">
-
-    <% if (user) { %>
-    <div class="box-user">
-        <!-- <div class="container"> -->
-            <div class="avatar">
-                <img src="<%= user.avatarUrl %>" alt="<%= user.nick %>" class="img-responsive">
-            </div>
-
-            <div class="nick"><%= user.nick %></div>
-
-            <div class="clearfix"></div>
-        <!-- </div> -->
-    </div>
-    <% } %>
 
     <div class="invite">
         Acesse nosso <a href="http://discord.gg/tzdhgprV2R" class="underline" target="_blank">Servidor do Discord</a>
@@ -71,32 +44,50 @@
 
         <div class="container">
             <div class="logo">
-                <img src="/img/logo.png" alt="Flow RP" class="img-responsive" style="width: 400px; margin: auto;">
+                <img src="/img/logo.png" alt="Flow RP" class="img-responsive"
+                    style="width: 400px; margin: auto;">
             </div>
         </div>
     </header>
 
+    <div class="menu">
+        <div class="container">
+            <ul class="nav nav-pills hidden-xs" style="width: 135px; margin: auto;">
+                <li><a href="/">Voltar para o site</a></li>
+            </ul>
+
+            <nav class="navbar navbar-default hidden-sm hidden-md hidden-lg">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/">Voltar para o site</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
     <div class="site-content">
         <div class="container">
 
-            <div class="alert alert-warning">
-                Galerinha, iremos liberar mais itens aqui no site durante os próximos dias,
-                então não perca os avisos que daremos em nosso <a href="http://discord.gg/tzdhgprV2R"
-                    target="_blank">Servidor do Discord</a>
-            </div>
+            <h2 class="title-404">Um erro inesperado aconteceu!</h2>
 
         </div>
     </div>
 
     <footer>
-        <p>
-            <a href="http://discord.gg/tzdhgprV2R" class="underline" target="_blank">Flow RJ RP</a> - Todos os direitos
-            reservados.
-        </p>
-        <p>
-            Acesse nosso <a href="http://discord.gg/tzdhgprV2R" class="underline" target="_blank">Servidor do
-                Discord</a>
-        </p>
+        <a href="http://discord.gg/tzdhgprV2R" target="_blank">Flow RJ RP</a> - Todos os direitos reservados.
     </footer>
 
     <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-labelledby="modalDetailsLabel">

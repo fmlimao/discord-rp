@@ -24,28 +24,28 @@
 @color-logo-2: #FAAA0E;
 
 .color-ds-1 {
-    color: @color-ds-1;
+    color: @color-ds-1 !important;
 }
 
 .color-ds-2 {
-    color: @color-ds-2;
+    color: @color-ds-2 !important;
 }
 
 .color-ds-3 {
-    color: @color-ds-3;
+    color: @color-ds-3 !important;
 }
 
 .color-ds-4 {
-    color: @color-ds-4;
+    color: @color-ds-4 !important;
 }
 
 
 .color-logo-1 {
-    color: @color-logo-1;
+    color: @color-logo-1 !important;
 }
 
 .color-logo-2 {
-    color: @color-logo-2;
+    color: @color-logo-2 !important;
 }
 
 .font-size-14 {
@@ -277,29 +277,34 @@ body {
     .box-user {
         z-index: 999;
         position: fixed;
-        top: 30px;
-        right: 0;
+        top: 16px;
+        right: 16px;
         background-color: darken(@color-logo-1, 35%);
-        border: 1px solid @color-ds-3;
-        border-top-left-radius: 37px;
-        border-bottom-left-radius: 37px;
-        padding: 8px;
-        box-shadow: 0 4px 4px rgba(0, 0, 0, .4);
+        border-radius: 16px;
+        padding: 2px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
+        overflow: hidden;
+        opacity: .5;
+        .transit(300ms);
 
-        // .nick {
-        //     float: left;
-        //     height: 40px;
-        //     line-height: 40px;
-        //     padding-left: 15px;
-        //     font-size: 14px;
-        // }
+        &:hover {
+            opacity: 1;
+        }
+
+        .nick {
+            float: left;
+            height: 28px;
+            line-height: 28px;
+            padding: 0 8px;
+            font-size: 14px;
+        }
 
         .avatar {
-            // float: left;
-            border: 1px solid darken(@color-logo-1, 25%);
+            float: left;
             border-radius: 50%;
-            width: 56px;
-            height: 56px;
+            width: 28px;
+            height: 28px;
+            overflow: hidden;
         }
     }
 
@@ -312,12 +317,6 @@ body {
         font-size: 16px;
         color: #fff;
         .transit(300ms);
-
-        // &:hover {
-        //     background-color: darken(@color-ds-3, 0%);
-        //     padding-top: 15px;
-        //     padding-bottom: 15px;
-        // }
 
         a {
             color: #fff;
@@ -583,8 +582,12 @@ body {
     }
 
     .title-404 {
-        margin-bottom: 400px;
+        padding-bottom: 400px;
         text-align: center;
         text-transform: uppercase;
+
+        h2 {
+            margin-bottom: 40px;
+        }
     }
 }

@@ -72,8 +72,10 @@ const generateUserData = async (req) => {
   auth.id = userData.id;
   auth.username = userData.username;
   auth.avatar = userData.avatar;
-  auth.avatarUrl = `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.jpg`;
+  if (auth.avatar) auth.avatarUrl = `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.jpg`;
+  else auth.avatarUrl = `https://cdn.discordapp.com/embed/avatars/${userData.discriminator % 5}.png`;
   auth.email = userData.email;
+  auth.discriminator = userData.discriminator;
 
   const userGuilds = await getDiscordUserGuilds(req);
   const hasGuild = !!userGuilds.filter(guild => guild.id == guild_id).length;
@@ -93,7 +95,7 @@ const generateUserData = async (req) => {
 const tokenAndGuildVerifyMiddleware = async (req, res, next) => {
   if (
     !req.cookies.token
-    || !req.cookies.guild
+    // || !req.cookies.guild
   ) return res.redirect(oauth2_url);
 
   return next();
@@ -147,14 +149,7 @@ app.get('/auth/callback', async (req, res) => {
       token_type: tokenData.token_type,
     };
 
-    const guild = {
-      id: tokenData.guild.id,
-      name: tokenData.guild.name,
-      icon: tokenData.guild.icon,
-    };
-
     res.cookie('token', token);
-    res.cookie('guild', guild);
 
     return res.redirect('/get-auth');
   } catch (error) {

@@ -1,4 +1,4 @@
-const { getDiscordTokenData } = require('../../helpers/discord');
+const { getDiscordTokenData, generateDiscordUserData } = require('../../helpers/discord');
 const { clearAllCookies } = require('../../helpers/cookies');
 
 module.exports = async (req, res) => {
@@ -13,11 +13,14 @@ module.exports = async (req, res) => {
             token_type: tokenData.token_type,
         };
 
-        res.cookie('token', token);
+        const userData = await generateDiscordUserData(token);
 
-        return res.redirect('/auth/get');
+        res.cookie('token', token);
+        res.cookie('user', userData);
+
+        return res.redirect('/');
     } catch (error) {
         clearAllCookies(res);
-        return res.redirect('/');
+        return res.redirect('/error');
     }
 };

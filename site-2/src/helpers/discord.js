@@ -23,26 +23,26 @@ const getDiscordTokenData = async (code) => {
     ).data;
 };
 
-const getDiscordUserData = async (req) => {
+const getDiscordUserData = async (token) => {
     return (
         await axios.get(
             'https://discord.com/api/users/@me',
             {
                 headers: {
-                    'authorization': `${req.cookies.token.token_type} ${req.cookies.token.access_token}`,
+                    'authorization': `${token.token_type} ${token.access_token}`,
                 },
             }
         )
     ).data;
 };
 
-const getDiscordUserGuilds = async (req) => {
+const getDiscordUserGuilds = async (token) => {
     return (
         await axios.get(
             'https://discord.com/api/users/@me/guilds',
             {
                 headers: {
-                    'authorization': `${req.cookies.token.token_type} ${req.cookies.token.access_token}`,
+                    'authorization': `${token.token_type} ${token.access_token}`,
                 },
             }
         )
@@ -63,10 +63,10 @@ const getDiscordUserGuildMember = async (user_id) => {
 };
 
 
-const generateDiscordUserData = async (req) => {
+const generateDiscordUserData = async (token) => {
     const auth = {};
 
-    const userData = await getDiscordUserData(req);
+    const userData = await getDiscordUserData(token);
 
     auth.id = userData.id;
     auth.username = userData.username;
@@ -76,7 +76,7 @@ const generateDiscordUserData = async (req) => {
     auth.email = userData.email;
     auth.discriminator = userData.discriminator;
 
-    const userGuilds = await getDiscordUserGuilds(req);
+    const userGuilds = await getDiscordUserGuilds(token);
     const hasGuild = !!userGuilds.filter(guild => guild.id == process.env.GUILD_ID).length;
     auth.hasGuild = hasGuild;
     auth.nick = '';

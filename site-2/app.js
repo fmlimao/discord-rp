@@ -26,9 +26,13 @@ app.get('/auth/logout', require('./src/routes/auth/logout'));
 
 app.get('/auth/callback', require('./src/routes/auth/callback'));
 
+app.get('/checkout/item', require('./src/routes/checkout/item'));
+
+app.get('/error', require('./src/routes/error'));
+
 app.use(tokenAndGuildVerifyMiddleware);
 
-app.get('/auth/get', require('./src/routes/auth/get'));
+// app.get('/auth/get', require('./src/routes/auth/get'));
 
 app.use(userVerifyMiddleware);
 

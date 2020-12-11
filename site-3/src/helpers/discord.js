@@ -78,7 +78,7 @@ const generateDiscordUserData = async (token) => {
 
     const userGuilds = await getDiscordUserGuilds(token);
     const hasGuild = !!userGuilds.filter(guild => guild.id == process.env.GUILD_ID).length;
-    auth.roles = userGuildMember.roles;
+    // auth.roles = userGuildMember.roles;
     auth.hasGuild = hasGuild;
     auth.nick = '';
     auth.whitelist = false;

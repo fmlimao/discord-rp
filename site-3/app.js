@@ -32,7 +32,7 @@ app.get('/auth/logout', require('./src/routes/auth/logout'));
 
 // app.get('/error', require('./src/routes/error'));
 
-app.use(tokenAndGuildVerifyMiddleware);
+// app.use(tokenAndGuildVerifyMiddleware);
 
 // // app.get('/auth/get', require('./src/routes/auth/get'));
 

@@ -1,0 +1,93 @@
+.btn-dark-3 {
+    color: #FFFFFF;
+    background-color: #202225;
+    border-color: #202225;
+}
+
+.btn-dark-3:hover,
+.btn-dark-3:focus,
+.btn-dark-3:active,
+.btn-dark-3.active,
+.open .dropdown-toggle.btn-dark-3 {
+    color: #FFFFFF;
+    background-color: #393E45;
+    border-color: #202225;
+}
+
+.btn-dark-3:active,
+.btn-dark-3.active,
+.open .dropdown-toggle.btn-dark-3 {
+    background-image: none;
+}
+
+.btn-dark-3.disabled,
+.btn-dark-3[disabled],
+fieldset[disabled] .btn-dark-3,
+.btn-dark-3.disabled:hover,
+.btn-dark-3[disabled]:hover,
+fieldset[disabled] .btn-dark-3:hover,
+.btn-dark-3.disabled:focus,
+.btn-dark-3[disabled]:focus,
+fieldset[disabled] .btn-dark-3:focus,
+.btn-dark-3.disabled:active,
+.btn-dark-3[disabled]:active,
+fieldset[disabled] .btn-dark-3:active,
+.btn-dark-3.disabled.active,
+.btn-dark-3[disabled].active,
+fieldset[disabled] .btn-dark-3.active {
+    background-color: #202225;
+    border-color: #202225;
+}
+
+.btn-dark-3 .badge {
+    color: #202225;
+    background-color: #FFFFFF;
+}
+
+/* ------------------------------ */
+
+.btn-purple {
+    color: #FFFFFF;
+    background-color: #00BF00;
+    border-color: #00BF00;
+}
+
+.btn-purple:hover,
+.btn-purple:focus,
+.btn-purple:active,
+.btn-purple.active,
+.open .dropdown-toggle.btn-purple {
+    color: #FFFFFF;
+    background-color: #009800;
+    border-color: #00BF00;
+}
+
+.btn-purple:active,
+.btn-purple.active,
+.open .dropdown-toggle.btn-purple {
+    background-image: none;
+}
+
+.btn-purple.disabled,
+.btn-purple[disabled],
+fieldset[disabled] .btn-purple,
+.btn-purple.disabled:hover,
+.btn-purple[disabled]:hover,
+fieldset[disabled] .btn-purple:hover,
+.btn-purple.disabled:focus,
+.btn-purple[disabled]:focus,
+fieldset[disabled] .btn-purple:focus,
+.btn-purple.disabled:active,
+.btn-purple[disabled]:active,
+fieldset[disabled] .btn-purple:active,
+.btn-purple.disabled.active,
+.btn-purple[disabled].active,
+fieldset[disabled] .btn-purple.active {
+    background-color: #00BF00;
+    border-color: #00BF00;
+}
+
+.btn-purple .badge {
+    color: #00BF00;
+    background-color: #FFFFFF;
+}

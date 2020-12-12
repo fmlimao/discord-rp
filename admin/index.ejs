@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Moderator</title>
+</head>
+
+<body>
+
+    <h1>Discord Moderator</h1>
+
+    <hr>
+
+    <% if (!user) { %>
+
+    <p>Você está deslogado</p>
+    <p><a href="/auth/login">Login</a></p>
+
+    <% } else { %>
+
+    <p>Você está logado</p>
+    <p><a href="/auth/logout">Logout</a></p>
+
+    <% } %>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js" integrity="sha512-BKbSR+cfyxLdMAsE0naLReFSLg8/pjbgfxHh/k/kUC82Hy7r6HtR5hLhobaln2gcTvzkyyehrdREdjpsQwy2Jw==" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

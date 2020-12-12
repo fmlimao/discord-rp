@@ -118,19 +118,33 @@ const generateDiscordUserData = async (token) => {
     else auth.user.avatarUrl = `https://cdn.discordapp.com/embed/avatars/${userData.discriminator % 5}.png`;
 
     auth.user.hasGuild = false;
-    auth.user.roles = [];
     auth.user.nick = '';
-    auth.user.director = false;
-    auth.user.manager = false;
+    auth.user.isDirector = false;
+    auth.user.isManager = false;
+    auth.user.isLider = false;
+    auth.user.isModerator = false;
+    auth.user.isSuport = false;
+    auth.user.isLevel1 = false;
+    auth.user.isLevel2 = false;
+    auth.user.isLevel3 = false;
+    auth.user.isStaff = false;
+    auth.user.roles = [];
 
     try {
         const userGuildMember = await getDiscordUserGuildMember(userData.id);
 
         auth.user.hasGuild = true;
-        auth.user.roles = userGuildMember.roles;
         auth.user.nick = userGuildMember.nick ? userGuildMember.nick : '';
-        auth.user.director = !!userGuildMember.roles.filter(role_id => role_id == process.env.ROLE_DIRECTOR_ID).length;
-        auth.user.manager = !!userGuildMember.roles.filter(role_id => role_id == process.env.ROLE_MANAGER_ID).length;
+        auth.user.isDirector = !!userGuildMember.roles.filter(role_id => role_id == process.env.ROLE_DIRECTOR_ID).length;
+        auth.user.isManager = !!userGuildMember.roles.filter(role_id => role_id == process.env.ROLE_MANAGER_ID).length;
+        auth.user.isLider = !!userGuildMember.roles.filter(role_id => role_id == process.env.ROLE_LIDER_ID).length;
+        auth.user.isModerator = !!userGuildMember.roles.filter(role_id => role_id == process.env.ROLE_MODERATOR_ID).length;
+        auth.user.isSuport = !!userGuildMember.roles.filter(role_id => role_id == process.env.ROLE_SUPORT_ID).length;
+        auth.user.isLevel1 = !!userGuildMember.roles.filter(role_id => role_id == process.env.ROLE_LEVEL_1_ID).length;
+        auth.user.isLevel2 = !!userGuildMember.roles.filter(role_id => role_id == process.env.ROLE_LEVEL_2_ID).length;
+        auth.user.isLevel3 = !!userGuildMember.roles.filter(role_id => role_id == process.env.ROLE_LEVEL_3_ID).length;
+        auth.user.isStaff = !!userGuildMember.roles.filter(role_id => role_id == process.env.ROLE_STAFF_ID).length;
+        auth.user.roles = userGuildMember.roles;
 
         const guildData = await getDiscordUserGuild(token);
 

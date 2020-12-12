@@ -1,7 +1,4 @@
 module.exports = (req, res, next) => {
-    const user = req.cookies.user;
-    user.nick = user.nick ? user.nick : user.username;
-    return res.render('error-404', {
-        user: req.cookies.user
-    });
+    if (res.locals.token) return res.render('app/error-404');
+    else return res.render('error-404');
 }

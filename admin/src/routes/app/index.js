@@ -1,3 +1,3 @@
 module.exports = (req, res) => {
-    res.redirect('/app/home');
+    res.redirect('/app/dashboard');
 };

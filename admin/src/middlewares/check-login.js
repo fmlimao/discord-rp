@@ -1,8 +1,9 @@
 const { generateDiscordUserData } = require('../helpers/discord');
 
 module.exports = async (req, res, next) => {
-    req.user = null;
-    req.guild = null;
+    res.locals.token = null;
+    res.locals.user = null;
+    res.locals.guild = null;
 
     try {
         if (!req.cookies.token) {
@@ -14,16 +15,14 @@ module.exports = async (req, res, next) => {
 
         const userData = await generateDiscordUserData(token);
 
-        req.user = userData.user;
-        req.guild = userData.guild;
+        res.locals.token = req.cookies.token;
+        res.locals.user = userData.user;
+        res.locals.guild = userData.guild;
+    } catch (error) { }
 
-        if (!req.user.director) {
-            return res.render('app/unauthorized');
-        }
-    } catch (error) {
-        // return res.json(error);
-        return res.redirect('/auth/logout');
-    }
+    res.locals.tokenJson = JSON.stringify(res.locals.token);
+    res.locals.userJson = JSON.stringify(res.locals.user);
+    res.locals.guildJson = JSON.stringify(res.locals.guild);
 
     next();
 };

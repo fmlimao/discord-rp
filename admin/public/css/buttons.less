@@ -1,0 +1,134 @@
+@btn-matrix-background: #00BF00;
+@btn-matrix-border: #00BF00;
+@btn-matrix-color: #fff;
+@btn-matrix-active: #FAAA0E;
+
+.button-variant(@color; @background; @border) {
+    color: @color;
+    background-color: @background;
+    border-color: @border;
+
+    &:focus,
+    &.focus {
+        color: @color;
+        background-color: darken(@background, 10%);
+        border-color: darken(@border, 25%);
+    }
+
+    &:hover {
+        color: @color;
+        background-color: darken(@background, 10%);
+        border-color: darken(@border, 12%);
+    }
+
+    &:active,
+    &.active,
+    .open>.dropdown-toggle& {
+        color: @color;
+        background-color: darken(@background, 10%);
+        border-color: darken(@border, 12%);
+
+        &:hover,
+        &:focus,
+        &.focus {
+            color: @color;
+            background-color: darken(@background, 17%);
+            border-color: darken(@border, 25%);
+        }
+    }
+
+    &:active,
+    &.active,
+    .open>.dropdown-toggle& {
+        background-image: none;
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+
+        &:hover,
+        &:focus,
+        &.focus {
+            background-color: @background;
+            border-color: @border;
+        }
+    }
+
+    .badge {
+        color: @background;
+        background-color: @color;
+    }
+}
+
+.btn-matrix {
+    color: @btn-matrix-color;
+    background-color: @btn-matrix-background;
+    border-color: @btn-matrix-border;
+    outline: none;
+
+    &:focus,
+    &.focus,
+    .nav>li>&:focus,
+    .nav>li>&.focus {
+        color: @btn-matrix-color;
+        background-color: darken(@btn-matrix-background, 10%);
+        border-color: darken(@btn-matrix-border, 25%);
+        outline: none;
+    }
+
+    &:hover,
+    .nav>li>&:hover {
+        color: @btn-matrix-color;
+        background-color: darken(@btn-matrix-background, 10%);
+        border-color: darken(@btn-matrix-border, 12%);
+        outline: none;
+    }
+
+    &:active,
+    &.active,
+    .nav>li>&:active,
+    .nav>li>&.active,
+    .open>.dropdown-toggle& {
+        color: @btn-matrix-color;
+        background-color: darken(@btn-matrix-active, 10%);
+        border-color: darken(@btn-matrix-active, 12%);
+        outline: none;
+
+        &:hover,
+        &:focus,
+        &.focus {
+            color: @btn-matrix-color;
+            background-color: darken(@btn-matrix-active, 17%);
+            border-color: darken(@btn-matrix-active, 25%);
+            outline: none;
+        }
+    }
+
+    &:active,
+    &.active,
+    .nav>li>&:active,
+    .nav>li>&.active,
+    .open>.dropdown-toggle& {
+        background-image: none;
+    }
+
+    &.disabled,
+    &[disabled],
+    .nav>li>&.disabled,
+    .nav>li>&[disabled],
+    fieldset[disabled] & {
+
+        &:hover,
+        &:focus,
+        &.focus {
+            background-color: @btn-matrix-background;
+            border-color: @btn-matrix-border;
+        }
+    }
+
+    .badge {
+        color: @btn-matrix-background;
+        background-color: @btn-matrix-color;
+    }
+}

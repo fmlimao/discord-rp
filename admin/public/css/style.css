@@ -1,0 +1,36 @@
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/nunito/v16/XRXW3I6Li01BKofAnsSkZg.ttf) format('truetype');
+}
+.font-nunito {
+  font-family: 'Nunito', sans-serif;
+}
+.text-underline {
+  text-decoration: underline;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+body {
+  background-color: #000;
+  background-image: url('../img/bg/pattern-3.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+}
+.top-menu {
+  margin-top: 30px;
+}
+.logo {
+  text-align: center;
+}
+.logo img {
+  width: 240px;
+}

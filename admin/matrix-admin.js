@@ -5,6 +5,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const expressLayouts = require('express-ejs-layouts');
 
 const app = express();
 
@@ -16,16 +17,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', require('./src/routes/index'));
+app.use(require('./src/middlewares/check-login'));
 
+app.get('/', require('./src/routes/index'));
 app.get('/auth/login', require('./src/routes/auth/login'));
 app.get('/auth/logout', require('./src/routes/auth/logout'));
 app.get('/auth/callback', require('./src/routes/auth/callback'));
 
-app.use(require('./src/middlewares/check-login'));
+app.use(require('./src/middlewares/validate-login'));
+app.use(require('./src/middlewares/generate-menu'));
+
+app.use('/app', expressLayouts);
+app.set('layout', 'app/layout');
 
 app.get('/app', require('./src/routes/app/index'));
-app.get('/app/home', require('./src/routes/app/home'));
+app.get('/app/dashboard', require('./src/routes/app/dashboard'));
 
 app.use(require('./src/middlewares/error-404'));
 app.use(require('./src/middlewares/error-500'));

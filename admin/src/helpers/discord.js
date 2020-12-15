@@ -114,8 +114,7 @@ const generateDiscordUserData = async (token) => {
     const userData = await getDiscordUserData(token);
 
     auth.user = userData;
-    if (auth.user.avatar) auth.user.avatarUrl = `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.jpg`;
-    else auth.user.avatarUrl = `https://cdn.discordapp.com/embed/avatars/${userData.discriminator % 5}.png`;
+    auth.user.avatarUrl = generateUserAvatar(auth.user);
 
     auth.user.hasGuild = false;
     auth.user.nick = '';
@@ -158,34 +157,68 @@ const generateDiscordUserData = async (token) => {
             auth.guild.avatar = '';
         }
 
-        auth.user.roles = auth.user.roles.map(role_id => {
-            let role = null;
-
-            for (let i in auth.guild.roles) {
-                if (auth.guild.roles[i].id == role_id) {
-                    role = auth.guild.roles[i];
-                    break;
-                }
-            }
-
-            return role;
-        });
-
-        auth.user.roles.sort((a, b) => {
-            if (a.position > b.position) return -1;
-            if (a.position < b.position) return 1;
-            else return 0;
-        })
-
-        auth.guild.roles.sort((a, b) => {
-            if (a.position > b.position) return -1;
-            if (a.position < b.position) return 1;
-            else return 0;
-        });
+        auth.user.roles = generateUserRoles(auth.user.roles, auth.guild.roles);
+        auth.user.roles.sort(sortRoles);
+        auth.guild.roles.sort(sortRoles);
     } catch (e) {
     }
 
     return auth;
+};
+
+const generateUserAvatar = (user) => {
+    let avatarUrl = `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`;
+    if (user.avatar) avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.jpg`;
+
+    return avatarUrl;
+};
+
+const generateUserRoles = (user_roles, guild_roles, callback) => {
+    if (typeof callback === 'undefined') callback = role => role;
+
+    return user_roles.map(role_id => {
+        let role = null;
+
+        for (let i in guild_roles) {
+            if (guild_roles[i].id == role_id) {
+                role = guild_roles[i];
+                break;
+            }
+        }
+
+        return callback(role);
+    });
+};
+
+const sortRoles = (a, b) => {
+    if (a.position > b.position) return -1;
+    if (a.position < b.position) return 1;
+    else return 0;
+};
+
+const getDiscordGuildMembers = async (limit, after) => {
+    if (typeof limit === 'undefined') limit = 1;
+    if (typeof after === 'undefined') after = 0;
+    return new Promise((resolve, reject) => {
+        axios.get(
+            `https://discord.com/api/guilds/${process.env.GUILD_ID}/members`,
+            {
+                params: {
+                    limit,
+                    after,
+                },
+                headers: {
+                    'authorization': `Bot ${process.env.BOT_TOKEN}`,
+                },
+            }
+        )
+            .then(response => {
+                resolve(response.data);
+            })
+            .catch(error => {
+                reject(error.response.data);
+            });
+    });
 };
 
 module.exports = {
@@ -194,4 +227,8 @@ module.exports = {
     getDiscordUserGuilds,
     getDiscordUserGuildMember,
     generateDiscordUserData,
+    generateUserAvatar,
+    generateUserRoles,
+    sortRoles,
+    getDiscordGuildMembers,
 };

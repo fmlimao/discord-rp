@@ -13,6 +13,7 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "express-ejs-layouts": "^2.5.0",
+    "locutus": "^2.0.14",
     "morgan": "~1.9.1",
     "utf8": "^3.0.0"
   }

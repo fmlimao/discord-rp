@@ -8,21 +8,23 @@ module.exports = (req, res, next) => {
     // Dashboard
     menu.push({
         label: 'Dashboard',
+        icon: 'fa fa-dashboard',
         path: '/app/dashboard',
         selected: res.locals.url == '/app/dashboard',
     });
 
-    // Comandos
-    if (
-        res.locals.user.isDirector
-        // || res.locals.user.isDirector
-    ) {
-        menu.push({
-            label: 'Comandos',
-            path: '/app/commands',
-            selected: res.locals.url == '/app/commands',
-        });
-    }
+    // // Comandos
+    // if (
+    //     res.locals.user.isDirector
+    //     // || res.locals.user.isDirector
+    // ) {
+    //     menu.push({
+    //         label: 'Comandos',
+    //         icon: 'fa fa-dashboard',
+    //         path: '/app/commands',
+    //         selected: res.locals.url == '/app/commands',
+    //     });
+    // }
 
     // Players
     if (
@@ -30,6 +32,7 @@ module.exports = (req, res, next) => {
     ) {
         menu.push({
             label: 'Players',
+            icon: 'fa fa-users',
             path: '/app/players',
             selected: res.locals.url == '/app/players',
         });

@@ -1,4 +1,4 @@
-console.clear();
+// console.clear();
 require('dotenv-safe').config();
 
 const express = require('express');
@@ -32,6 +32,7 @@ app.set('layout', 'app/layout');
 
 app.get('/app', require('./src/routes/app/index'));
 app.get('/app/dashboard', require('./src/routes/app/dashboard'));
+app.get('/app/players', require('./src/routes/app/players/list'));
 
 app.use(require('./src/middlewares/error-404'));
 app.use(require('./src/middlewares/error-500'));

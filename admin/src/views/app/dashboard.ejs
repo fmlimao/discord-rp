@@ -1,38 +1,25 @@
 <%- contentFor('body') %>
-<div class="logo">
-    <h1 class="page-header">Matrix - Dashboard</h1>
-</div>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        <i class="fa fa-dashboard"></i> Dashboard
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#">Home</a></li>
+        <li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
+    </ol>
+</section>
 
-<div>
-    <div class="media">
-        <div class="media-left">
-            <a href="#">
-                <img class="media-object" :src="user.avatarUrl"
-                    :alt="(user.nick ? user.nick : user.username) + ' #' + user.discriminator" style="width: 64px;">
-            </a>
-        </div>
-        <div class="media-body">
-            <h4 class="media-heading">
-                {{ user.nick ? user.nick : user.username }} #{{ user.discriminator }}
-            </h4>
+<!-- Main content -->
+<section class="content">
 
-            <div>
-                <span v-for="role in user.roles" class="label label-default pull-left" :style="'background-color: #' + role.color.toString(16).padStart(6, '0') + '; margin-right: 8px; margin-bottom: 8px;'">
-                    {{ role.name }}
-                </span>
-
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </div>
-
-</div>
+</section>
+<!-- /.content -->
 
 
 <%- contentFor('scripts') %>
 <script>
     mixins.push({
-        data: {
-        },
+        data: {},
     });
 </script>

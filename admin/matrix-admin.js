@@ -1,4 +1,4 @@
-// console.clear();
+console.clear();
 require('dotenv-safe').config();
 
 const express = require('express');
@@ -25,16 +25,15 @@ app.get('/auth/logout', require('./src/routes/auth/logout'));
 app.get('/auth/callback', require('./src/routes/auth/callback'));
 
 app.use(require('./src/middlewares/validate-login'));
-app.use(require('./src/middlewares/generate-menu'));
 
 app.use('/app', expressLayouts);
 app.set('layout', 'app/layout');
 
-app.get('/app', require('./src/routes/app/index'));
-app.get('/app/dashboard', require('./src/routes/app/dashboard'));
-app.get('/app/players', require('./src/routes/app/players/list'));
+app.use(require('./src/middlewares/manage-roles'));
 
-app.use(require('./src/middlewares/error-404'));
+app.use('/app', require('./src/routes/app'));
+
+// app.use(require('./src/middlewares/error-404'));
 app.use(require('./src/middlewares/error-500'));
 
 app.listen(process.env.APP_PORT, () => {

@@ -15,6 +15,10 @@ module.exports = async (req, res, next) => {
 
         const userData = await generateDiscordUserData(token);
 
+        // return res.json({
+        //     userData,
+        // });
+
         res.locals.token = req.cookies.token;
         res.locals.user = userData.user;
         res.locals.guild = userData.guild;

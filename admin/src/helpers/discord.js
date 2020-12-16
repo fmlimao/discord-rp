@@ -1,5 +1,14 @@
 const axios = require('axios');
 
+const {
+    intToHex,
+    inverseColor,
+    hexToRgb,
+    rgbToHex,
+    rgbToHsl,
+    hslToRgb,
+} = require('./helpers');
+
 const getDiscordTokenData = async (code) => {
     return new Promise((resolve, reject) => {
         const data = {
@@ -221,6 +230,60 @@ const getDiscordGuildMembers = async (limit, after) => {
     });
 };
 
+const formatMember = (member, guildRoles) => {
+    if (typeof guildRoles === 'undefined') guildRoles = [];
+
+    const avatarUrl = generateUserAvatar(member.user);
+    const fullUsername = '@' + member.user.username + '#' + member.user.discriminator;
+    const fullNick = member.nick ? member.nick : fullUsername;
+    const rolesIds = member.roles;
+    let playerId = '';
+    if (member.nick) {
+        const reversedNick = member.nick.split('').reverse().join('');
+        const index = reversedNick.indexOf('|');
+        playerId = reversedNick.substr(0, index).trim().split('').reverse().join('');
+    }
+
+    member.roles = generateUserRoles(member.roles, guildRoles, role => {
+        const hex = intToHex(role.color);
+
+        return {
+            id: role.id,
+            name: role.name,
+            color: hex,
+            position: role.position,
+        };
+    });
+    member.roles.sort(sortRoles);
+
+    return {
+        id: member.user.id,
+        username: member.user.username,
+        nick: member.nick,
+        discriminator: member.user.discriminator,
+        fullUsername,
+        fullNick,
+        avatar: member.user.avatar,
+        avatarUrl,
+        playerId,
+        roles: member.roles,
+        rolesIds,
+    };
+};
+
+const sortUserByRole = (a, b, roleId) => {
+    const aHasRole = a.rolesIds.indexOf(roleId) !== -1;
+    const bHasRole = b.rolesIds.indexOf(roleId) !== -1;
+
+    if (aHasRole && !bHasRole) return -1;
+    else if (!aHasRole && bHasRole) return 1;
+    else if (aHasRole && bHasRole) {
+        if (a.usernameNick < b.usernameNick) return -1;
+        else if (a.usernameNick > b.usernameNick) return 1;
+        else return 0;
+    } else return null;
+};
+
 module.exports = {
     getDiscordTokenData,
     getDiscordUserData,
@@ -231,4 +294,6 @@ module.exports = {
     generateUserRoles,
     sortRoles,
     getDiscordGuildMembers,
+    formatMember,
+    sortUserByRole,
 };

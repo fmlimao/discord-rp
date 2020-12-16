@@ -21,9 +21,9 @@ module.exports = async (req, res) => {
                 else return 0;
             });
 
-        return res.json({
-            members
-        });
+        // return res.json({
+        //     members
+        // });
 
         res.render('app/players/list', {
             members,

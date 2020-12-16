@@ -14,16 +14,16 @@ module.exports = (req, res, next) => {
     });
 
     // Players
-    // if (
-    //     res.locals.user.isStaff
-    // ) {
-    //     menu.push({
-    //         label: 'Players',
-    //         icon: 'fa fa-users',
-    //         path: '/app/players',
-    //         selected: res.locals.url == '/app/players',
-    //     });
-    // }
+    if (
+        res.locals.user.isStaff
+    ) {
+        menu.push({
+            label: 'Players',
+            icon: 'fa fa-users',
+            path: '/app/players',
+            selected: res.locals.url == '/app/players',
+        });
+    }
 
     // Regras
     if (

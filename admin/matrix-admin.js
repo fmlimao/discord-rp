@@ -24,6 +24,8 @@ app.get('/auth/login', require('./src/routes/auth/login'));
 app.get('/auth/logout', require('./src/routes/auth/logout'));
 app.get('/auth/callback', require('./src/routes/auth/callback'));
 
+app.use('/api', require('./src/routes/api'));
+
 app.use(require('./src/middlewares/validate-login'));
 
 app.use('/app', expressLayouts);

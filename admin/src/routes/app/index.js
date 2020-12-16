@@ -9,7 +9,7 @@ router.get('/dashboard', require('./dashboard'));
 
 router.get('/players', require('./players/list'));
 
-router.get('/rules', require('./rules'));
+router.use('/rules', require('./rules'));
 
 router.use(require('./error-404'));
 router.use(require('./error-500'));

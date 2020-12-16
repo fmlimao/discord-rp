@@ -26,7 +26,7 @@
 
 1. As advertências serão aplicadas quando houver violação de qualquer uma das regras da cidade. Será aplicada uma **advertência**, cuja vigência será de 30 (trinta) dias corridos em tempo real (tempo de Nárnia). Havendo nova infração, em vigência da primeira **advertência**, será aplicada segunda **advertência**, 	com remoção de qualquer cargo que o advertido estiver exercendo, cuja vigência será de mais 30 (trinta) dias corridos em tempo real a partir da segunda **advertência**. Havendo nova infração no prazo de vigência da segunda **advertência** será aplicado **BANIMENTO** do mesmo;
 
-
+---
 
 ## REGRAS DO DISCORD
 
@@ -44,7 +44,7 @@
 
 1. Ao entrar no servidor, você está de acordo com todos os parceiros e patrocinadores que poderão ser promovidos de maneira direta e indireta dentro da cidade.
 
-
+---
 
 ## REGRAS DA CIDADE
 
@@ -271,7 +271,10 @@ As regras gerais, visam o bom RP e bom convívio dentro do servidor, servindo co
 
 1. Corridas (Veja as regras de Corridas Legais e Ilegais nos canais de Corrida da cidade)
 
+---
+
 > Este documento poderá ser atualizado sempre que necessário.
 >
 > As regras contidas aqui não são opcionais. Devem ser seguidas para o bom RP de todos.
 
+`v2.0.0`

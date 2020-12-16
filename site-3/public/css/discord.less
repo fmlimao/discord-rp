@@ -1,5 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap');
+
 @color-ds-1: #202225;
 @color-ds-2: #36393F;
+@color-ds-3: #2F3136;
+
+.font-nunito {
+    font-family: 'Nunito', sans-serif;
+}
+
+.transit(@time) {
+    -webkit-transition: all @time ease;
+    -moz-transition: all @time ease;
+    -ms-transition: all @time ease;
+    -o-transition: all @time ease;
+    transition: all @time ease;
+}
 
 .inner {
     position: relative;
@@ -13,56 +28,85 @@ body {
     padding: 0;
     height: 100%;
     background-color: @color-ds-2;
+    .font-nunito;
+    color: #fff;
 }
-
-@box-left-width: 72px;
-@box-left-image-width: 48px;
 
 div.box-left {
     position: fixed;
     top: 0;
     left: 0;
-    bottom: 0;
+    right: 0;
+    height: 72px;
     background-color: @color-ds-1;
-    width: @box-left-width;
-    padding-top: (@box-left-width - @box-left-image-width) / 2;
+    .transit(300ms);
+
+    @media screen and (min-width: 768px) {
+        top: 0;
+        left: 0;
+        right: auto;
+        bottom: 0;
+        height: auto;
+        width: 72px;
+    }
 
     >.guild {
         position: relative;
-        //     width: @box-left-image-width;
-        //     height: @box-left-image-width;
-        //     border-radius: 12px;
-        //     overflow: hidden;
 
-        img {
-            margin-left: (@box-left-width - @box-left-image-width) / 2;
-            width: @box-left-image-width;
-            height: @box-left-image-width;
-            border-radius: 12px;
-            overflow: hidden;
+        .logo {
+            float: left;
+            width: 72px;
+            height: 72px;
+            padding: 12px;
+
+            img {
+                width: 48px;
+                height: 48px;
+                border-radius: 12px;
+                overflow: hidden;
+            }
         }
 
-        div {
-            position: absolute;
-            top: 4px;
-            left: 0;
-            background: #fff;
-            width: 4px;
-            height: 40px;
-            border-top-right-radius: 4px;
-            border-bottom-right-radius: 4px;
+        .name {
+            float: left;
+            text-transform: uppercase;
+            height: 72px;
+            line-height: 72px;
+            font-size: 18px;
+
+            @media screen and (min-width: 768px) {
+                display: none;
+            }
+        }
+
+        .selected {
+            @media screen and (min-width: 768px) {
+                position: absolute;
+                top: 16px;
+                left: 0;
+                background-color: #fff;
+                width: 4px;
+                height: 40px;
+                border-top-right-radius: 4px;
+                border-bottom-right-radius: 4px;
+            }
         }
     }
 }
 
 div.box-content {
     position: fixed;
-    top: 0;
-    left: 72px;
+    top: 72px;
+    left: 0;
     right: 0;
     bottom: 0;
-    color: #fff;
     overflow: hidden;
+    .transit(300ms);
+
+    @media screen and (min-width: 768px) {
+        top: 0;
+        left: 72px;
+    }
 
     >.inner {
         >.title {
@@ -70,7 +114,8 @@ div.box-content {
             top: 0;
             left: 0;
             right: 0;
-            border-bottom: 1px solid darken(@color-ds-2, 8%);
+            background-color: @color-ds-3;
+            border-bottom: 1px solid @color-ds-3;
             height: 48px;
             line-height: 48px;
             padding: 0 15px;
@@ -91,45 +136,79 @@ div.box-content {
             }
 
             &::-webkit-scrollbar-track {
-                background-color: darken(@color-ds-2, 5%);
+                background-color: @color-ds-3;
                 border-radius: 4px;
             }
 
             &::-webkit-scrollbar-corner {
-                background-color: darken(@color-ds-2, 5%);
+                background-color: @color-ds-3;
             }
 
             &::-webkit-scrollbar-thumb {
-                background-color: darken(@color-ds-2, 10%);
+                background-color: @color-ds-1;
                 border-radius: 4px;
             }
 
-            h1,
-            h2,
-            h3 {
-                // padding-bottom: 15px;
-                // margin-bottom: 30px;
-                // border-bottom: 1px solid darken(@color-ds-2, 8%);
-                display: block;
-                padding: 15px;
-                margin-bottom: 30px;
+            .header {
+                display: none;
+                margin-bottom: 120px;
+                text-align: center;
 
-                background-color: darken(@color-ds-2, 5%);
-                border-left: 4px solid darken(@color-ds-2, 10%);
-                border-radius: 4px;
-            }
+                @media screen and (min-width: 768px) {
+                    display: block;
+                }
 
-            >ol {
-                margin-bottom: 60px;
-
-                >li {
-                    margin-bottom: 30px;
+                h1 {
+                    text-transform: uppercase;
                 }
             }
 
-            b,
-            strong {
-                color: #00b0f4;
+            .markdown {
+
+                h1,
+                h2,
+                h3,
+                blockquote {
+                    display: block;
+                    padding: 15px;
+                    margin-bottom: 30px;
+
+                    background-color: @color-ds-3;
+                    border-left: 4px solid @color-ds-1;
+                    border-radius: 4px;
+                }
+
+                >ol {
+                    margin-bottom: 60px;
+
+                    >li {
+                        margin-bottom: 30px;
+
+                        ol,
+                        ul {
+                            li {
+                                color: #bbb;
+                            }
+                        }
+                    }
+                }
+
+                b,
+                strong {
+                    color: #00b0f4;
+                }
+
+                hr {
+                    border-width: 4px;
+                    border-radius: 2px;
+                    border-color: @color-ds-3;
+                }
+
+                code {
+                    background-color: @color-ds-3;
+                    border: 1px solid @color-ds-1;
+                    color: #fff;
+                }
             }
         }
     }

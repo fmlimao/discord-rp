@@ -23,6 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', require('./src/routes/index'));
+app.get('/regras', require('./src/routes/rules'));
 
 app.get('/auth/callback', require('./src/routes/auth/callback'));
 

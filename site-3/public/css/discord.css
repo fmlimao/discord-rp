@@ -153,7 +153,6 @@ div.box-content > .inner > .body .header h1 {
 }
 div.box-content > .inner > .body .markdown h1,
 div.box-content > .inner > .body .markdown h2,
-div.box-content > .inner > .body .markdown h3,
 div.box-content > .inner > .body .markdown blockquote {
   display: block;
   padding: 15px;
@@ -161,6 +160,14 @@ div.box-content > .inner > .body .markdown blockquote {
   background-color: #2F3136;
   border-left: 4px solid #202225;
   border-radius: 4px;
+}
+div.box-content > .inner > .body .markdown h3 {
+  display: block;
+  padding-left: 8px;
+  margin-bottom: 30px;
+  border-left: 4px solid #202225;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
 }
 div.box-content > .inner > .body .markdown > ol {
   margin-bottom: 60px;

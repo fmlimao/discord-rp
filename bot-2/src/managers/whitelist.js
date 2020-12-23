@@ -141,8 +141,15 @@ async function releaseWhitelist(message) {
     const msg = [
         `Olá ${author.username}!`,
         `Recebemos sua Whitelist, e liberamos o ID "${playerId}".`,
+        `Agradecemos por você escolher nossa Cidade!!!`,
         `Agora você pode visualizar nossos canais. Aproveite para solicitar um emprego ou fazer alguma sugestão nos canais indicados.`,
-        `Bom jogo para você, e lembre-se: mantenha um bom RP e seja gentil com todos no servidor =)`,
+        `Esperamos que você se divirta muito! E caso precise, pode chamar alguem da nossa Staff para te ajudar.`,
+        `Temos um grupo exclusivo no Whatsapp. Fique à vontade para entrar nele e conversar com todos os demais jogadores.`,
+        `Temos também um site onde você pode encontrar os melhores carros, e temos também os Planos VIPS!`,
+        `Lembre-se de ler as nossas regras, e respeitar todo mundo, tanto na Cidade quanto no Discord =)`,
+        `Link para o grupo do Whatsapp: https://chat.whatsapp.com/FBUINItGvG62n4Ral6pzaD`,
+        `Link para o Site: http://matrixroleplay.com.br/`,
+        `Link para as Regras: http://matrixroleplay.com.br/regras`,
     ];
     sendMessage(author, '', msg.join('\n\n'), 0x00ff00);
     return;

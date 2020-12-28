@@ -207,6 +207,32 @@ As regras gerais, visam o bom RP e bom convívio dentro do servidor, servindo co
 
 1. Milícia: Visto que a milícia é composta por policiais e ex-policiais, para fazer parte da Facção Milícia na cidade, o jogador precisará ter passado pelo menos duas semanas (tempo de nárnia) como policial. Após esse período ele poderá entrar para a milícia seguindo as regras da facção, sendo um policial ainda, ou não. Caso seja descoberto, sofrerá penas dentro do RP como exoneração e prisão. A Milícia não poderá ter membros que não atendem esses requisitos.
 
+### NOVAS FACÇÕES
+
+1. Toda Facção nova deverá começar do zero. Não terá farm de drogas, desmanches ou produção de armas. Os membros deverão, por esforço próprio, alcançar os seus objetivos, que no caso são **armas**, **dinheiro**, **membros** e **dominação** de favelas/comunidades, que hoje estão sob o poder do Crime Organizado.
+
+1. Novas facções só poderão ser estabelecidas se forem aprovadas pelos **Diretores**. Caso uma facção seja criada sem essa autorização a mesma não terá direito à canais no Discord, baú no mapa, ou mesmo direito a realizar invasão para dominação de território.
+
+1. Para a criação de uma facção, é necessário possuir o item **Chave de Facção**, que pode ser adquidiro no **Site**.
+
+1. Para a criação de uma facção, é necessário ter, no mínimo:
+    - 1 Líder
+    - 1 Braço Direito
+    - 3 Membros
+
+1. O local do baú para essa nova facção deverá ser escolhido pelo **Líder** em um lugar no mapa fora das favelas rivais e fora de residências. Este local deverá passar por aprovação dos **Diretores**.
+
+### FAVELAS / COMUNIDADES
+
+1. Existem 3 favelas no mapa, e cada uma representa uma farm diferente de drogas:
+    - Favela Verde: **Maconha**
+    - Favela Roxa: **Meta**
+    - Favela Amarela: **Coca**
+
+1. Nenhuma favela possui proprietário fixo. Para possuir uma favela, é necessário "invadir e conquistar" ela primeiro. Mais detalhes estão no tópico **"INVASÕES / DOMINAÇÃO"**.
+
+1. Apenas a Facção que possua determinada favela poderá usufruir da farm correspondente a ela.
+
 ### RESGATE DE PRISIONEIROS
 
 1. Todo o espaço da Penitenciária (seus muros, portões e espaço interno) é considerado Safe-Zone. **Nenhum ataque a Penitenciária é permitido**.
@@ -375,4 +401,4 @@ As regras gerais, visam o bom RP e bom convívio dentro do servidor, servindo co
 >
 > As regras contidas aqui não são opcionais. Devem ser seguidas para o bom RP de todos.
 
-`v2.1.1`
+`v2.2.0`
